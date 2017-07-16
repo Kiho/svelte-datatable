@@ -4,6 +4,8 @@ This project was created by the [Svelte REPL](https://svelte.technology/repl).
 
 Data Table component was converted to Svelte from [MicroDroid/vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable) project. 
 
+[See demo here at Heroku(slow)](https://safe-springs-35306.herokuapp.com/)
+
 ## Features
  - Sorting, with numerical sorting
  - Pagination
