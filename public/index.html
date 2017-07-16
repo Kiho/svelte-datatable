@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf8'>
+  <meta name='viewport' content='width=device-width'>
+
+  <title>Svelte DataTable</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel='stylesheet' href='app.css'>
+</head>
+<body>
+  <data-table></data-table>
+  <script src='app.js'></script>
+  <script>
+    var columndata = [ // Array of objects
+        {
+            label: 'First Name', // Column name
+            field: 'fname', // Field name from row
+            numeric: false, // Affects sorting
+            html: false, // Escapes output if false.
+        }, {
+            label: 'Last Name',
+            field: 'lname',
+            numeric: false,
+            html: false,
+        }, {
+            label: 'Age',
+            field: 'age',
+            numeric: true,
+            html: false,
+        }, {
+            label: 'State',
+            field: 'state',
+            numeric: false,
+            html: false,
+        }, {
+            label: 'Action',
+            field: function (data) {
+                    return '<a href="#customers/' + data.id + '" class="waves-effect waves-light btn nopadding">Edit</a>';
+                },
+            numeric: false,
+            html: true,
+        }
+    ];
+
+    var data = [{
+        "fname": "Gale",
+        "lname": "Mcmyne",
+        "age": 16,
+        "state": "RI",
+    }, {
+        "fname": "Tighe",
+        "lname": "Walls",
+        "age": 43,
+        "state": "AL",
+    }, {
+        "fname": "Anuj",
+        "lname": "Wittcop",
+        "age": 16,
+        "state": "MO",
+    }, {
+        "fname": "Elisha",
+        "lname": "Mahan",
+        "age": 28,
+        "state": "MA",
+    }, {
+        "fname": "Sutman",
+        "lname": "Kiab",
+        "age": 18,
+        "state": "ME",
+    }, {
+        "fname": "Wazir",
+        "lname": "Odonoghue",
+        "age": 27,
+        "state": "ND",
+    }, {
+        "fname": "Renardo",
+        "lname": "Schuessler",
+        "age": 5,
+        "state": "OK",
+    }, {
+        "fname": "Colleen",
+        "lname": "Schotuen",
+        "age": 33,
+        "state": "DE",
+    }, {
+        "fname": "Natalia",
+        "lname": "Sacks",
+        "age": 24,
+        "state": "FL",
+    }, {
+        "fname": "Kamaniee",
+        "lname": "Knaus",
+        "age": 11,
+        "state": "ID",
+    }, {
+        "fname": "Deena",
+        "lname": "Downing",
+        "age": 39,
+        "state": "NM",
+    }, {
+        "fname": "Gueorgui",
+        "lname": "Downing",
+        "age": 22,
+        "state": "LA",
+    }, {
+        "fname": "Toya",
+        "lname": "Wallace",
+        "age": 19,
+        "state": "MD",
+    }, {
+        "fname": "Deborah",
+        "lname": "Morrison",
+        "age": 14,
+        "state": "VT",
+    }, {
+        "fname": "Nerissa",
+        "lname": "Wade",
+        "age": 7,
+        "state": "DE",
+    }, {
+        "fname": "Glenn",
+        "lname": "Bommi",
+        "age": 8,
+        "state": "MO",
+    }, {
+        "fname": "Kate",
+        "lname": "Azcunaga",
+        "age": 25,
+        "state": "ME",
+    }, {
+        "fname": "Jesse",
+        "lname": "Ingham",
+        "age": 50,
+        "state": "OK",
+    }, {
+        "fname": "Gateri",
+        "lname": "Sergent",
+        "age": 50,
+        "state": "MA",
+    }, {
+        "fname": "Marian",
+        "lname": "Malmfeldt",
+        "age": 50,
+        "state": "DC",
+    }];
+            
+    var dataTable = new app.DataTable({
+        target: document.querySelector('data-table'),
+        data: {
+            title: 'Customers',
+            columns: columndata,
+        }
+    });
+    
+    
+    dataTable.set({rows: data});        
+  </script>
+</body>
+</html>
