@@ -1149,6 +1149,800 @@ var proto = {
 	set: set
 };
 
+function recompute ( state, newState, oldState, isInitial ) {
+	if ( isInitial || ( 'selected' in newState && differs( state.selected, oldState.selected ) ) || ( 'pageCount' in newState && differs( state.pageCount, oldState.pageCount ) ) || ( 'pageRange' in newState && differs( state.pageRange, oldState.pageRange ) ) || ( 'marginPages' in newState && differs( state.marginPages, oldState.marginPages ) ) ) {
+		state.pages = newState.pages = template$1.computed.pages( state.selected, state.pageCount, state.pageRange, state.marginPages );
+	}
+}
+
+var template$1 = (function () {
+
+const splitObject = o => Object.keys(o).map(e => (o[e]));  
+
+return {
+    data: () => ({
+        selected: 0,
+        pageCount: 0,
+        initialPage: 0,
+        forcePage: 0,
+        clickHandler:() => { },
+        pageRange: 3,
+        marginPages: 1,
+        prevText: 'Prev',
+        nextText: 'Next',
+        containerClass: '',
+        pageClass: '',
+        pageLinkClass:'',
+        prevClass: '',
+        prevLinkClass: '',
+        nextClass: '',
+        nextLinkClass: '',
+        noLiSurround: false,
+        // pages: []
+    }),
+    oncreate: function() {
+        this.observe('forcePage', forcePage => {
+            if (forcePage !== this.get('selected')) {
+                this.set({selected: forcePage});
+            }
+        });       
+    },
+    computed: {
+        pages: (selected, pageCount, pageRange, marginPages) => {
+            let items = {};
+            if (pageCount <= pageRange) {
+                for (let index = 0; index < pageCount; index++) {
+                    let page = {
+                    index: index,
+                    content: index + 1,
+                    selected: index === selected
+                    };
+                    items[index] = page;
+                }
+            } else {
+                let leftPart = pageRange / 2;
+                let rightPart = pageRange - leftPart;
+        
+                if (selected < leftPart) {
+                    leftPart = selected;
+                    rightPart = pageRange - leftPart;
+                } else if (selected > pageCount - pageRange / 2) {
+                    rightPart = pageCount - selected;
+                    leftPart = pageRange - rightPart;
+                }
+    
+                // items logic extracted into this function
+                let mapItems = index => {
+                    let page = {
+                        index: index,
+                        content: index + 1,
+                        selected: index === selected
+                    };
+        
+                    if (index <= marginPages - 1 || index >= pageCount - marginPages) {
+                        items[index] = page;
+                        return
+                    }
+        
+                    let breakView = {
+                        content: '...',
+                        disabled: true
+                    };
+        
+                    if ((selected - leftPart) > marginPages && items[marginPages] !== breakView) {
+                        items[marginPages] = breakView;
+                    }
+        
+                    if ((selected + rightPart) < (pageCount - marginPages - 1) && items[pageCount - marginPages - 1] !== breakView) {
+                        items[pageCount - marginPages - 1] = breakView;
+                    }
+        
+                    let overCount = selected + rightPart - pageCount + 1;
+        
+                    if (overCount > 0 && index === selected - leftPart - overCount) {
+                        items[index] = page;
+                    }
+        
+                    if ((index >= selected - leftPart) && (index <= selected + rightPart)) {
+                        items[index] = page;
+                        return
+                    }
+                };
+    
+                // 1st - loop thru low end of margin pages
+                for (let i = 0; i < marginPages; i++) {
+                    mapItems(i);
+                }
+        
+                // 2nd - loop thru high end of margin pages
+                for (let i = pageCount - 1; i >= pageCount - marginPages; i--) {
+                    mapItems(i);
+                }
+        
+                // 3rd - loop thru selected range
+                let selectedRangeLow = 0;
+                if (selected - pageRange > 0) {
+                    selectedRangeLow = selected - pageRange;
+                }
+        
+                let selectedRangeHigh = pageCount;
+                if (selected + pageRange < pageCount) {
+                    selectedRangeHigh = selected + pageRange;
+                }
+        
+                for (let i = selectedRangeLow; i < selectedRangeHigh; i++) {
+                    mapItems(i);
+                }
+            }
+            return splitObject(items);
+        }
+    },
+    methods: {
+        handlePageSelected(selectedIndex) {
+            let {selected, clickHandler} = this.get();
+            if (selected === selectedIndex) return;
+                
+            this.set({selected: selected = selectedIndex});
+            clickHandler(selected + 1);
+        },
+        prevPage() {
+            let {selected, clickHandler} = this.get();
+            if (selected <= 0) return;
+    
+            this.set({selected: selected--});
+            clickHandler(selected + 1);
+        },
+        nextPage() {
+            let {selected, pageCount, clickHandler} = this.get();
+            if (selected >= pageCount - 1) return;
+    
+            this.set({selected: selected++});
+            clickHandler(selected + 1);
+        }
+    },
+    helpers: {
+        lastPageSelected(selected, pageCount) {
+            return (selected === pageCount - 1) || (pageCount === 0);
+        },  
+        firstPageSelected(selected) {
+            return selected === 0;
+        },
+    }
+}
+}());
+
+function create_main_fragment$1 ( state, component ) {
+	var if_block_anchor;
+
+	function get_block ( state ) {
+		if ( !state.noLiSurround ) return create_if_block$1;
+		return create_if_block_3$1;
+	}
+
+	var current_block = get_block( state );
+	var if_block = current_block( state, component );
+
+	return {
+		create: function () {
+			if_block.create();
+			if_block_anchor = createComment();
+		},
+
+		mount: function ( target, anchor ) {
+			if_block.mount( target, anchor );
+			insertNode( if_block_anchor, target, anchor );
+		},
+
+		update: function ( changed, state ) {
+			if ( current_block === ( current_block = get_block( state ) ) && if_block ) {
+				if_block.update( changed, state );
+			} else {
+				if_block.unmount();
+				if_block.destroy();
+				if_block = current_block( state, component );
+				if_block.create();
+				if_block.mount( if_block_anchor.parentNode, if_block_anchor );
+			}
+		},
+
+		unmount: function () {
+			if_block.unmount();
+			detachNode( if_block_anchor );
+		},
+
+		destroy: function () {
+			if_block.destroy();
+		}
+	};
+}
+
+function create_each_block$1 ( state, each_block_value, page, page_index, component ) {
+	var li;
+
+	function get_block ( state, each_block_value, page, page_index ) {
+		if ( page.disabled ) return create_if_block_1$1;
+		return create_if_block_2$1;
+	}
+
+	var current_block = get_block( state, each_block_value, page, page_index );
+	var if_block_1 = current_block( state, each_block_value, page, page_index, component );
+
+	return {
+		create: function () {
+			li = createElement( 'li' );
+			if_block_1.create();
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( li, target, anchor );
+			if_block_1.mount( li, null );
+		},
+
+		update: function ( changed, state, each_block_value, page, page_index ) {
+			if ( current_block === ( current_block = get_block( state, each_block_value, page, page_index ) ) && if_block_1 ) {
+				if_block_1.update( changed, state, each_block_value, page, page_index );
+			} else {
+				if_block_1.unmount();
+				if_block_1.destroy();
+				if_block_1 = current_block( state, each_block_value, page, page_index, component );
+				if_block_1.create();
+				if_block_1.mount( li, null );
+			}
+		},
+
+		unmount: function () {
+			detachNode( li );
+			if_block_1.unmount();
+		},
+
+		destroy: function () {
+			if_block_1.destroy();
+		}
+	};
+}
+
+function create_if_block_1$1 ( state, each_block_value, page, page_index, component ) {
+	var a, text_value, text;
+
+	return {
+		create: function () {
+			a = createElement( 'a' );
+			text = createText( text_value = page.content );
+			this.hydrate();
+		},
+
+		hydrate: function ( nodes ) {
+			a.className = "pageLinkClass";
+			a.tabIndex = "0";
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( a, target, anchor );
+			appendNode( text, a );
+		},
+
+		update: function ( changed, state, each_block_value, page, page_index ) {
+			if ( text_value !== ( text_value = page.content ) ) {
+				text.data = text_value;
+			}
+		},
+
+		unmount: function () {
+			detachNode( a );
+		},
+
+		destroy: noop
+	};
+}
+
+function create_if_block_2$1 ( state, each_block_value, page, page_index, component ) {
+	var a, text_value, text;
+
+	return {
+		create: function () {
+			a = createElement( 'a' );
+			text = createText( text_value = page.content );
+			this.hydrate();
+		},
+
+		hydrate: function ( nodes ) {
+			a.className = "pageLinkClass";
+			a.tabIndex = "0";
+			addListener( a, 'click', click_handler$1 );
+
+			a._svelte = {
+				component: component,
+				each_block_value: each_block_value,
+				page_index: page_index
+			};
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( a, target, anchor );
+			appendNode( text, a );
+		},
+
+		update: function ( changed, state, each_block_value, page, page_index ) {
+			a._svelte.each_block_value = each_block_value;
+			a._svelte.page_index = page_index;
+
+			if ( text_value !== ( text_value = page.content ) ) {
+				text.data = text_value;
+			}
+		},
+
+		unmount: function () {
+			detachNode( a );
+		},
+
+		destroy: function () {
+			removeListener( a, 'click', click_handler$1 );
+		}
+	};
+}
+
+function create_each_block_1$1 ( state, each_block_value, page_1, page_index, component ) {
+	var if_block_2_anchor;
+
+	function get_block ( state, each_block_value, page_1, page_index ) {
+		if ( page_1.disabled ) return create_if_block_4$1;
+		return create_if_block_5$1;
+	}
+
+	var current_block = get_block( state, each_block_value, page_1, page_index );
+	var if_block_2 = current_block( state, each_block_value, page_1, page_index, component );
+
+	return {
+		create: function () {
+			if_block_2.create();
+			if_block_2_anchor = createComment();
+		},
+
+		mount: function ( target, anchor ) {
+			if_block_2.mount( target, anchor );
+			insertNode( if_block_2_anchor, target, anchor );
+		},
+
+		update: function ( changed, state, each_block_value, page_1, page_index ) {
+			if ( current_block === ( current_block = get_block( state, each_block_value, page_1, page_index ) ) && if_block_2 ) {
+				if_block_2.update( changed, state, each_block_value, page_1, page_index );
+			} else {
+				if_block_2.unmount();
+				if_block_2.destroy();
+				if_block_2 = current_block( state, each_block_value, page_1, page_index, component );
+				if_block_2.create();
+				if_block_2.mount( if_block_2_anchor.parentNode, if_block_2_anchor );
+			}
+		},
+
+		unmount: function () {
+			if_block_2.unmount();
+			detachNode( if_block_2_anchor );
+		},
+
+		destroy: function () {
+			if_block_2.destroy();
+		}
+	};
+}
+
+function create_if_block_4$1 ( state, each_block_value, page_1, page_index, component ) {
+	var a, a_class_value, text_value, text;
+
+	return {
+		create: function () {
+			a = createElement( 'a' );
+			text = createText( text_value = page_1.content );
+			this.hydrate();
+		},
+
+		hydrate: function ( nodes ) {
+			a.className = a_class_value = "pageLinkClass " + ( page_1.selected ? 'active' : '' ) + " " + ( page_1.disabled ? 'disabled' : '' );
+			a.tabIndex = "0";
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( a, target, anchor );
+			appendNode( text, a );
+		},
+
+		update: function ( changed, state, each_block_value, page_1, page_index ) {
+			if ( a_class_value !== ( a_class_value = "pageLinkClass " + ( page_1.selected ? 'active' : '' ) + " " + ( page_1.disabled ? 'disabled' : '' ) ) ) {
+				a.className = a_class_value;
+			}
+
+			if ( text_value !== ( text_value = page_1.content ) ) {
+				text.data = text_value;
+			}
+		},
+
+		unmount: function () {
+			detachNode( a );
+		},
+
+		destroy: noop
+	};
+}
+
+function create_if_block_5$1 ( state, each_block_value, page_1, page_index, component ) {
+	var a, a_class_value, text_value, text;
+
+	return {
+		create: function () {
+			a = createElement( 'a' );
+			text = createText( text_value = page_1.content );
+			this.hydrate();
+		},
+
+		hydrate: function ( nodes ) {
+			a.className = a_class_value = "pageLinkClass " + ( page_1.selected ? 'active' : '' ) + " " + ( page_1.disabled ? 'disabled' : '' );
+			a.tabIndex = "0";
+			addListener( a, 'click', click_handler_1$1 );
+
+			a._svelte = {
+				component: component,
+				each_block_value: each_block_value,
+				page_index: page_index
+			};
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( a, target, anchor );
+			appendNode( text, a );
+		},
+
+		update: function ( changed, state, each_block_value, page_1, page_index ) {
+			if ( a_class_value !== ( a_class_value = "pageLinkClass " + ( page_1.selected ? 'active' : '' ) + " " + ( page_1.disabled ? 'disabled' : '' ) ) ) {
+				a.className = a_class_value;
+			}
+
+			a._svelte.each_block_value = each_block_value;
+			a._svelte.page_index = page_index;
+
+			if ( text_value !== ( text_value = page_1.content ) ) {
+				text.data = text_value;
+			}
+		},
+
+		unmount: function () {
+			detachNode( a );
+		},
+
+		destroy: function () {
+			removeListener( a, 'click', click_handler_1$1 );
+		}
+	};
+}
+
+function create_if_block$1 ( state, component ) {
+	var ul, ul_class_value, li, li_class_value, a, a_class_value, slot, text_value, text, each_block_anchor, li_1, li_1_class_value, a_1, slot_1, text_2_value, text_2;
+
+	function click_handler ( event ) {
+		component.prevPage();
+	}
+
+	var each_block_value = state.pages;
+
+	var each_block_iterations = [];
+
+	for ( var i = 0; i < each_block_value.length; i += 1 ) {
+		each_block_iterations[i] = create_each_block$1( state, each_block_value, each_block_value[i], i, component );
+	}
+
+	function click_handler_1 ( event ) {
+		component.nextPage();
+	}
+
+	return {
+		create: function () {
+			ul = createElement( 'ul' );
+			li = createElement( 'li' );
+			a = createElement( 'a' );
+			slot = createElement( 'slot' );
+			text = createText( text_value = state.prevText );
+
+			for ( var i = 0; i < each_block_iterations.length; i += 1 ) {
+				each_block_iterations[i].create();
+			}
+
+			each_block_anchor = createComment();
+			li_1 = createElement( 'li' );
+			a_1 = createElement( 'a' );
+			slot_1 = createElement( 'slot' );
+			text_2 = createText( text_2_value = state.nextText );
+			this.hydrate();
+		},
+
+		hydrate: function ( nodes ) {
+			setAttribute( ul, 'svelte-3005581307', '' );
+			ul.className = ul_class_value = state.containerClass;
+			li.className = li_class_value = "prevClass " + ( template$1.helpers.firstPageSelected(state.selected) ? state.disabled : '' );
+			a.className = a_class_value = state.prevLinkClass;
+			a.tabIndex = "0";
+			addListener( a, 'click', click_handler );
+			setAttribute( slot, 'name', "prevContent" );
+			li_1.className = li_1_class_value = "nextClass " + ( template$1.helpers.lastPageSelected(state.selected, state.pageCount) ? 'disabled' : '' );
+			a_1.className = "nextLinkClass";
+			a_1.tabIndex = "0";
+			addListener( a_1, 'click', click_handler_1 );
+			setAttribute( slot_1, 'name', "nextContent" );
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( ul, target, anchor );
+			appendNode( li, ul );
+			appendNode( a, li );
+			appendNode( slot, a );
+			appendNode( text, slot );
+
+			for ( var i = 0; i < each_block_iterations.length; i += 1 ) {
+				each_block_iterations[i].mount( ul, null );
+			}
+
+			appendNode( each_block_anchor, ul );
+			appendNode( li_1, ul );
+			appendNode( a_1, li_1 );
+			appendNode( slot_1, a_1 );
+			appendNode( text_2, slot_1 );
+		},
+
+		update: function ( changed, state ) {
+			if ( ul_class_value !== ( ul_class_value = state.containerClass ) ) {
+				ul.className = ul_class_value;
+			}
+
+			if ( li_class_value !== ( li_class_value = "prevClass " + ( template$1.helpers.firstPageSelected(state.selected) ? state.disabled : '' ) ) ) {
+				li.className = li_class_value;
+			}
+
+			if ( a_class_value !== ( a_class_value = state.prevLinkClass ) ) {
+				a.className = a_class_value;
+			}
+
+			if ( text_value !== ( text_value = state.prevText ) ) {
+				text.data = text_value;
+			}
+
+			var each_block_value = state.pages;
+
+			if ( 'pages' in changed ) {
+				for ( var i = 0; i < each_block_value.length; i += 1 ) {
+					if ( each_block_iterations[i] ) {
+						each_block_iterations[i].update( changed, state, each_block_value, each_block_value[i], i );
+					} else {
+						each_block_iterations[i] = create_each_block$1( state, each_block_value, each_block_value[i], i, component );
+						each_block_iterations[i].create();
+						each_block_iterations[i].mount( ul, each_block_anchor );
+					}
+				}
+
+				for ( ; i < each_block_iterations.length; i += 1 ) {
+					each_block_iterations[i].unmount();
+					each_block_iterations[i].destroy();
+				}
+				each_block_iterations.length = each_block_value.length;
+			}
+
+			if ( li_1_class_value !== ( li_1_class_value = "nextClass " + ( template$1.helpers.lastPageSelected(state.selected, state.pageCount) ? 'disabled' : '' ) ) ) {
+				li_1.className = li_1_class_value;
+			}
+
+			if ( text_2_value !== ( text_2_value = state.nextText ) ) {
+				text_2.data = text_2_value;
+			}
+		},
+
+		unmount: function () {
+			detachNode( ul );
+
+			for ( var i = 0; i < each_block_iterations.length; i += 1 ) {
+				each_block_iterations[i].unmount();
+			}
+		},
+
+		destroy: function () {
+			removeListener( a, 'click', click_handler );
+
+			destroyEach( each_block_iterations, false, 0 );
+
+			removeListener( a_1, 'click', click_handler_1 );
+		}
+	};
+}
+
+function create_if_block_3$1 ( state, component ) {
+	var div, div_class_value, a, a_class_value, slot, text_value, text, text_1, text_2, a_1, a_1_class_value, slot_1, text_3_value, text_3;
+
+	function click_handler_1 ( event ) {
+		component.prevPage();
+	}
+
+	var each_block_value = state.pages;
+
+	var each_block_1_iterations = [];
+
+	for ( var i = 0; i < each_block_value.length; i += 1 ) {
+		each_block_1_iterations[i] = create_each_block_1$1( state, each_block_value, each_block_value[i], i, component );
+	}
+
+	function click_handler_2 ( event ) {
+		component.nextPage();
+	}
+
+	return {
+		create: function () {
+			div = createElement( 'div' );
+			a = createElement( 'a' );
+			slot = createElement( 'slot' );
+			text = createText( text_value = state.prevText );
+			text_1 = createText( "\r\n        " );
+
+			for ( var i = 0; i < each_block_1_iterations.length; i += 1 ) {
+				each_block_1_iterations[i].create();
+			}
+
+			text_2 = createText( "\r\n        " );
+			a_1 = createElement( 'a' );
+			slot_1 = createElement( 'slot' );
+			text_3 = createText( text_3_value = state.nextText );
+			this.hydrate();
+		},
+
+		hydrate: function ( nodes ) {
+			setAttribute( div, 'svelte-3005581307', '' );
+			div.className = div_class_value = state.containerClass;
+			a.className = a_class_value = "prevLinkClass, " + ( template$1.helpers.firstPageSelected(state.selected) ? state.disabled : '' );
+			a.tabIndex = "0";
+			addListener( a, 'click', click_handler_1 );
+			setAttribute( slot, 'name', "prevContent" );
+			a_1.className = a_1_class_value = "nextLinkClass " + ( template$1.helpers.lastPageSelected(state.selected, state.pageCount) ? 'disabled' : '' );
+			a_1.tabIndex = "0";
+			addListener( a_1, 'click', click_handler_2 );
+			setAttribute( slot_1, 'name', "nextContent" );
+		},
+
+		mount: function ( target, anchor ) {
+			insertNode( div, target, anchor );
+			appendNode( a, div );
+			appendNode( slot, a );
+			appendNode( text, slot );
+			appendNode( text_1, div );
+
+			for ( var i = 0; i < each_block_1_iterations.length; i += 1 ) {
+				each_block_1_iterations[i].mount( div, null );
+			}
+
+			appendNode( text_2, div );
+			appendNode( a_1, div );
+			appendNode( slot_1, a_1 );
+			appendNode( text_3, slot_1 );
+		},
+
+		update: function ( changed, state ) {
+			if ( div_class_value !== ( div_class_value = state.containerClass ) ) {
+				div.className = div_class_value;
+			}
+
+			if ( a_class_value !== ( a_class_value = "prevLinkClass, " + ( template$1.helpers.firstPageSelected(state.selected) ? state.disabled : '' ) ) ) {
+				a.className = a_class_value;
+			}
+
+			if ( text_value !== ( text_value = state.prevText ) ) {
+				text.data = text_value;
+			}
+
+			var each_block_value = state.pages;
+
+			if ( 'pages' in changed ) {
+				for ( var i = 0; i < each_block_value.length; i += 1 ) {
+					if ( each_block_1_iterations[i] ) {
+						each_block_1_iterations[i].update( changed, state, each_block_value, each_block_value[i], i );
+					} else {
+						each_block_1_iterations[i] = create_each_block_1$1( state, each_block_value, each_block_value[i], i, component );
+						each_block_1_iterations[i].create();
+						each_block_1_iterations[i].mount( div, text_2 );
+					}
+				}
+
+				for ( ; i < each_block_1_iterations.length; i += 1 ) {
+					each_block_1_iterations[i].unmount();
+					each_block_1_iterations[i].destroy();
+				}
+				each_block_1_iterations.length = each_block_value.length;
+			}
+
+			if ( a_1_class_value !== ( a_1_class_value = "nextLinkClass " + ( template$1.helpers.lastPageSelected(state.selected, state.pageCount) ? 'disabled' : '' ) ) ) {
+				a_1.className = a_1_class_value;
+			}
+
+			if ( text_3_value !== ( text_3_value = state.nextText ) ) {
+				text_3.data = text_3_value;
+			}
+		},
+
+		unmount: function () {
+			detachNode( div );
+
+			for ( var i = 0; i < each_block_1_iterations.length; i += 1 ) {
+				each_block_1_iterations[i].unmount();
+			}
+		},
+
+		destroy: function () {
+			removeListener( a, 'click', click_handler_1 );
+
+			destroyEach( each_block_1_iterations, false, 0 );
+
+			removeListener( a_1, 'click', click_handler_2 );
+		}
+	};
+}
+
+function click_handler$1 ( event ) {
+	var component = this._svelte.component;
+	var each_block_value = this._svelte.each_block_value, page_index = this._svelte.page_index, page = each_block_value[page_index];
+	component.handlePageSelected(page.index);
+}
+
+function click_handler_1$1 ( event ) {
+	var component = this._svelte.component;
+	var each_block_value = this._svelte.each_block_value, page_index = this._svelte.page_index, page_1 = each_block_value[page_index];
+	component.handlePageSelected(page_1.index);
+}
+
+function Paginate ( options ) {
+	options = options || {};
+	this._state = assign( template$1.data(), options.data );
+	recompute( this._state, this._state, {}, true );
+
+	this._observers = {
+		pre: Object.create( null ),
+		post: Object.create( null )
+	};
+
+	this._handlers = Object.create( null );
+
+	this._root = options._root || this;
+	this._yield = options._yield;
+
+	this._torndown = false;
+
+	this._fragment = create_main_fragment$1( this._state, this );
+
+	if ( options.target ) {
+		this._fragment.create();
+		this._fragment.mount( options.target, null );
+	}
+
+	if ( options._root ) {
+		options._root._oncreate.push( template$1.oncreate.bind( this ) );
+	} else {
+		template$1.oncreate.call( this );
+	}
+}
+
+assign( Paginate.prototype, template$1.methods, proto );
+
+Paginate.prototype._set = function _set ( newState ) {
+	var oldState = this._state;
+	this._state = assign( {}, oldState, newState );
+	recompute( this._state, newState, oldState, false );
+	dispatchObservers( this, this._observers.pre, newState, oldState );
+	this._fragment.update( newState, this._state );
+	dispatchObservers( this, this._observers.post, newState, oldState );
+};
+
+Paginate.prototype.teardown = Paginate.prototype.destroy = function destroy ( detach ) {
+	this.fire( 'destroy' );
+
+	if ( detach !== false ) this._fragment.unmount();
+	this._fragment.destroy();
+	this._fragment = null;
+
+	this._state = {};
+	this._torndown = true;
+};
+
 var template = (function () {
 	function dig(obj, selector) {
         var result = obj;
@@ -1174,6 +1968,7 @@ var template = (function () {
 
 	return {
 		data: () => ({
+			selectedPage: 1,
 			currentPage: 1,
 			currentPerPage: 10,
 			sortColumn: -1,
@@ -1196,11 +1991,10 @@ var template = (function () {
 			exactSearch: false,
 			paginate: true,
 			exportable: true,
-			printable: true,			
+			printable: true,		
 		}),
 
 		methods: {
-
 			setPage(reload, currentPage, offset = 0) {
 				if (reload) {
 					this.set({currentPage: currentPage + offset});
@@ -1406,12 +2200,21 @@ var template = (function () {
 		},
 
         helpers: {
-            collect
+			collect,
+			// setPage(instance, reload, currentPage, offset = 0) {
+			// 	if (reload) {
+			// 		instance.set({currentPage: currentPage + offset});
+			// 		instance.processRows(instance.get('rows'));
+			// 	}
+			// },
         },
 
 		oncreate: function() {
 			this.observe('rows', rows => {
 				this.processRows(rows);
+			});
+			this.observe('selectedPage', selected => {
+				this.setPage(true, selected + 1);
             });
 			this.observe('searchInput', searchInput => {
 				this.searchData(searchInput);
@@ -1501,7 +2304,7 @@ function create_main_fragment ( state, component ) {
 		},
 
 		hydrate: function ( nodes ) {
-			setAttribute( div, 'svelte-3325321468', '' );
+			setAttribute( div, 'svelte-647291077', '' );
 			div.className = "material-table";
 			div_1.className = "table-header";
 			span.className = "table-title";
@@ -2264,27 +3067,45 @@ function create_each_block_4 ( state, each_block_value, option, x, component ) {
 }
 
 function create_if_block_7 ( state, component ) {
-	var div, div_1, label, span, text, text_1, select, text_4, div_2, text_5_value, text_5, text_6, text_7_value, text_7, text_8, text_9_value, text_9, text_11, div_3, ul, li, a, i, text_12, li_1, a_1, i_1, text_15;
+	var div, div_1, label, span, text, text_1, select, text_4, div_2, text_5_value, text_5, text_6, text_7_value, text_7, text_8, text_9_value, text_9, text_11, div_3, paginate_1_updating = false;
 
 	var each_block_value = state.perPageOptions;
 
 	var each_block_4_iterations = [];
 
-	for ( var i_2 = 0; i_2 < each_block_value.length; i_2 += 1 ) {
-		each_block_4_iterations[i_2] = create_each_block_4( state, each_block_value, each_block_value[i_2], i_2, component );
+	for ( var i = 0; i < each_block_value.length; i += 1 ) {
+		each_block_4_iterations[i] = create_each_block_4( state, each_block_value, each_block_value[i], i, component );
 	}
 
 	function change_handler ( event ) {
 		component.onTableLength((event));
 	}
 
-	function click_handler_3 ( event ) {
-		component.previousPage(event);
-	}
+	var paginate_1_initial_data = {
+		marginPages: 2,
+		pageRange: 4,
+		containerClass: "pagination",
+		pageCount: state.rows.length / state.currentPerPage
+	};
+	if ( 'selectedPage' in state ) paginate_1_initial_data.selected = state.selectedPage;
+	var paginate_1 = new Paginate({
+		_root: component._root,
+		data: paginate_1_initial_data
+	});
 
-	function click_handler_4 ( event ) {
-		component.nextPage(event);
-	}
+	component._bindings.push( function () {
+		if ( paginate_1._torndown ) return;
+		paginate_1.observe( 'selected', function ( value ) {
+			if ( paginate_1_updating ) return;
+			paginate_1_updating = true;
+			component._set({ selectedPage: value });
+			paginate_1_updating = false;
+		}, { init: differs( paginate_1.get( 'selected' ), state.selectedPage ) });
+	});
+
+	paginate_1._context = {
+		state: state
+	};
 
 	return {
 		create: function () {
@@ -2296,8 +3117,8 @@ function create_if_block_7 ( state, component ) {
 			text_1 = createText( "\n\t\t\t\t" );
 			select = createElement( 'select' );
 
-			for ( var i_2 = 0; i_2 < each_block_4_iterations.length; i_2 += 1 ) {
-				each_block_4_iterations[i_2].create();
+			for ( var i = 0; i < each_block_4_iterations.length; i += 1 ) {
+				each_block_4_iterations[i].create();
 			}
 
 			text_4 = createText( "\n\t\t" );
@@ -2309,15 +3130,7 @@ function create_if_block_7 ( state, component ) {
 			text_9 = createText( text_9_value = state.processedRows.length );
 			text_11 = createText( "\n\t\t" );
 			div_3 = createElement( 'div' );
-			ul = createElement( 'ul' );
-			li = createElement( 'li' );
-			a = createElement( 'a' );
-			i = createElement( 'i' );
-			text_12 = createText( "chevron_left" );
-			li_1 = createElement( 'li' );
-			a_1 = createElement( 'a' );
-			i_1 = createElement( 'i' );
-			text_15 = createText( "chevron_right" );
+			paginate_1._fragment.create();
 			this.hydrate();
 		},
 
@@ -2327,17 +3140,6 @@ function create_if_block_7 ( state, component ) {
 			select.className = "browser-default";
 			addListener( select, 'change', change_handler );
 			div_2.className = "datatable-info";
-			ul.className = "material-pagination";
-			a.href = "javascript:undefined";
-			a.className = "waves-effect btn-flat";
-			a.tabIndex = "0";
-			addListener( a, 'click', click_handler_3 );
-			i.className = "material-icons";
-			a_1.href = "javascript:undefined";
-			a_1.className = "waves-effect btn-flat";
-			a_1.tabIndex = "0";
-			addListener( a_1, 'click', click_handler_4 );
-			i_1.className = "material-icons";
 		},
 
 		mount: function ( target, anchor ) {
@@ -2349,8 +3151,8 @@ function create_if_block_7 ( state, component ) {
 			appendNode( text_1, label );
 			appendNode( select, label );
 
-			for ( var i_2 = 0; i_2 < each_block_4_iterations.length; i_2 += 1 ) {
-				each_block_4_iterations[i_2].mount( select, null );
+			for ( var i = 0; i < each_block_4_iterations.length; i += 1 ) {
+				each_block_4_iterations[i].mount( select, null );
 			}
 
 			appendNode( text_4, div );
@@ -2362,34 +3164,26 @@ function create_if_block_7 ( state, component ) {
 			appendNode( text_9, div_2 );
 			appendNode( text_11, div );
 			appendNode( div_3, div );
-			appendNode( ul, div_3 );
-			appendNode( li, ul );
-			appendNode( a, li );
-			appendNode( i, a );
-			appendNode( text_12, i );
-			appendNode( li_1, ul );
-			appendNode( a_1, li_1 );
-			appendNode( i_1, a_1 );
-			appendNode( text_15, i_1 );
+			paginate_1._fragment.mount( div_3, null );
 		},
 
 		update: function ( changed, state ) {
 			var each_block_value = state.perPageOptions;
 
 			if ( 'perPageOptions' in changed || 'currentPerPage' in changed ) {
-				for ( var i_2 = 0; i_2 < each_block_value.length; i_2 += 1 ) {
-					if ( each_block_4_iterations[i_2] ) {
-						each_block_4_iterations[i_2].update( changed, state, each_block_value, each_block_value[i_2], i_2 );
+				for ( var i = 0; i < each_block_value.length; i += 1 ) {
+					if ( each_block_4_iterations[i] ) {
+						each_block_4_iterations[i].update( changed, state, each_block_value, each_block_value[i], i );
 					} else {
-						each_block_4_iterations[i_2] = create_each_block_4( state, each_block_value, each_block_value[i_2], i_2, component );
-						each_block_4_iterations[i_2].create();
-						each_block_4_iterations[i_2].mount( select, null );
+						each_block_4_iterations[i] = create_each_block_4( state, each_block_value, each_block_value[i], i, component );
+						each_block_4_iterations[i].create();
+						each_block_4_iterations[i].mount( select, null );
 					}
 				}
 
-				for ( ; i_2 < each_block_4_iterations.length; i_2 += 1 ) {
-					each_block_4_iterations[i_2].unmount();
-					each_block_4_iterations[i_2].destroy();
+				for ( ; i < each_block_4_iterations.length; i += 1 ) {
+					each_block_4_iterations[i].unmount();
+					each_block_4_iterations[i].destroy();
 				}
 				each_block_4_iterations.length = each_block_value.length;
 			}
@@ -2405,13 +3199,27 @@ function create_if_block_7 ( state, component ) {
 			if ( text_9_value !== ( text_9_value = state.processedRows.length ) ) {
 				text_9.data = text_9_value;
 			}
+
+			if ( !paginate_1_updating && 'selectedPage' in changed ) {
+				paginate_1_updating = true;
+				paginate_1._set({ selected: state.selectedPage });
+				paginate_1_updating = false;
+			}
+
+			paginate_1._context.state = state;
+
+			var paginate_1_changes = {};
+
+			if ( 'rows' in changed||'currentPerPage' in changed ) paginate_1_changes.pageCount = state.rows.length / state.currentPerPage;
+
+			if ( Object.keys( paginate_1_changes ).length ) paginate_1.set( paginate_1_changes );
 		},
 
 		unmount: function () {
 			detachNode( div );
 
-			for ( var i_2 = 0; i_2 < each_block_4_iterations.length; i_2 += 1 ) {
-				each_block_4_iterations[i_2].unmount();
+			for ( var i = 0; i < each_block_4_iterations.length; i += 1 ) {
+				each_block_4_iterations[i].unmount();
 			}
 		},
 
@@ -2419,8 +3227,7 @@ function create_if_block_7 ( state, component ) {
 			destroyEach( each_block_4_iterations, false, 0 );
 
 			removeListener( select, 'change', change_handler );
-			removeListener( a, 'click', click_handler_3 );
-			removeListener( a_1, 'click', click_handler_4 );
+			paginate_1.destroy( false );
 		}
 	};
 }
@@ -2456,6 +3263,8 @@ function DataTable ( options ) {
 	this._yield = options._yield;
 
 	this._torndown = false;
+	this._oncreate = [];
+	this._bindings = [];
 
 	this._fragment = create_main_fragment( this._state, this );
 
@@ -2463,6 +3272,9 @@ function DataTable ( options ) {
 		this._fragment.create();
 		this._fragment.mount( options.target, null );
 	}
+
+	callAll(this._oncreate);
+	callAll(this._bindings);
 
 	if ( options._root ) {
 		options._root._oncreate.push( template.oncreate.bind( this ) );
@@ -2479,6 +3291,8 @@ DataTable.prototype._set = function _set ( newState ) {
 	dispatchObservers( this, this._observers.pre, newState, oldState );
 	this._fragment.update( newState, this._state );
 	dispatchObservers( this, this._observers.post, newState, oldState );
+	callAll(this._oncreate);
+	callAll(this._bindings);
 };
 
 DataTable.prototype.teardown = DataTable.prototype.destroy = function destroy ( detach ) {

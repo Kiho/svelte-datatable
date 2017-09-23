@@ -100,18 +100,14 @@
 				-{{Math.min(processedRows.length, currentPerPage * currentPage)}} of {{processedRows.length}}
 		</div>
 		<div>
-			<ul class="material-pagination">
-				<li>
-					<a href="javascript:undefined" class="waves-effect btn-flat" on:click="previousPage(event)" tabindex="0">
-						<i class="material-icons">chevron_left</i>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:undefined" class="waves-effect btn-flat" on:click="nextPage(event)" tabindex="0">
-						<i class="material-icons">chevron_right</i>
-					</a>
-				</li>
-			</ul>
+			<Paginate
+				pageCount={{ rows.length / currentPerPage}}
+				marginPages="2"
+				pageRange="4"
+				containerClass="pagination"
+				bind:selected="selectedPage"
+				>				
+			</Paginate>
 		</div>
 	</div>
 {{/if}}
@@ -119,6 +115,7 @@
 
 <script>
 	import Fuse from 'fuse.js';
+	import Paginate from './paginate.html';
 
     function dig(obj, selector) {
         var result = obj;
@@ -143,7 +140,9 @@
 	}
 
 	export default {
+		components: { Paginate },
 		data: () => ({
+			selectedPage: 1,
 			currentPage: 1,
 			currentPerPage: 10,
 			sortColumn: -1,
@@ -166,11 +165,10 @@
 			exactSearch: false,
 			paginate: true,
 			exportable: true,
-			printable: true,			
+			printable: true,		
 		}),
 
 		methods: {
-
 			setPage(reload, currentPage, offset = 0) {
 				if (reload) {
 					this.set({currentPage: currentPage + offset});
@@ -376,12 +374,21 @@
 		},
 
         helpers: {
-            collect
+			collect,
+			// setPage(instance, reload, currentPage, offset = 0) {
+			// 	if (reload) {
+			// 		instance.set({currentPage: currentPage + offset});
+			// 		instance.processRows(instance.get('rows'));
+			// 	}
+			// },
         },
 
 		oncreate: function() {
 			this.observe('rows', rows => {
 				this.processRows(rows);
+			});
+			this.observe('selectedPage', selected => {
+				this.setPage(true, selected + 1);
             });
 			this.observe('searchInput', searchInput => {
 				this.searchData(searchInput);
