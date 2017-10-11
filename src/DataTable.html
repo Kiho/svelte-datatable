@@ -101,7 +101,7 @@
 		</div>
 		<div>
 			<Paginate
-				pageCount={{ rows.length / currentPerPage}}
+				pageCount={{ Math.ceil(rows.length / currentPerPage) }}
 				marginPages="2"
 				pageRange="4"
 				containerClass="pagination"
@@ -375,12 +375,6 @@
 
         helpers: {
 			collect,
-			// setPage(instance, reload, currentPage, offset = 0) {
-			// 	if (reload) {
-			// 		instance.set({currentPage: currentPage + offset});
-			// 		instance.processRows(instance.get('rows'));
-			// 	}
-			// },
         },
 
 		oncreate: function() {
