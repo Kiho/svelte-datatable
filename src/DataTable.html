@@ -40,7 +40,7 @@
 	<div>
 		<div id="search-input-container">
 			<label>
-				<input type="search" id="search-input" class="form-control" placeholder="Search data"
+				<input type="search" id="search-input" ref:searchInput class="form-control" placeholder="Search data"
 					bind:value="searchInput">
 			</label>
 		</div>
@@ -104,9 +104,14 @@
 				pageCount={{ Math.ceil(rows.length / currentPerPage) }}
 				marginPages="2"
 				pageRange="4"
-				containerClass="pagination"
+				containerClass="material-pagination"
+				pageLinkClass="waves-effect btn-flat"
+				prevLinkClass="waves-effect btn-flat nopadding"
+				nextLinkClass="waves-effect btn-flat nopadding"
 				bind:selected="selectedPage"
-				>				
+				>
+				<i class="material-icons" slot="prevContent">chevron_left</i>
+				<i class="material-icons" slot="nextContent">chevron_right</i>			
 			</Paginate>
 		</div>
 	</div>
@@ -215,6 +220,9 @@
 
 			search: function(e) {
 				this.set({searching: !this.get('searching')});
+				setTimeout(() => {
+					this.refs.searchInput.focus();
+				}, 100);
 			},
 
 			click: function(row) {
@@ -451,7 +459,7 @@
 		justify-content: flex-end;
 		-webkit-align-items: center;
 		align-items: center;
-		font-size: 12px !important;
+		font-size: 13px !important;
 		color: rgba(0, 0, 0, 0.54);
 	}
 	.table-footer .datatable-length {
@@ -462,7 +470,7 @@
 		outline: none;
 	}
 	.table-footer label {
-		font-size: 12px;
+		font-size: 13px;
 		color: rgba(0, 0, 0, 0.54);
 		display: -webkit-flex;
 		display: flex;
@@ -499,14 +507,14 @@
 	.table-footer .material-pagination li a {
 		color: rgba(0, 0, 0, 0.54);
 		padding: 0 8px;
-		font-size: 24px;
+		font-size: 15px;
 	}
 	.table-footer .select-wrapper input.select-dropdown {
 		margin: 0;
 		border-bottom: none;
 		height: auto;
 		line-height: normal;
-		font-size: 12px;
+		font-size: 13px;
 		width: 40px;
 		text-align: right;
 	}

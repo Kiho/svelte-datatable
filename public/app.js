@@ -1,1 +1,3414 @@
-!function(e){"use strict";function t(){}function n(e){for(var t,n,a=1,r=arguments.length;a<r;a++){n=arguments[a];for(t in n)e[t]=n[t]}return e}function a(e,t){t.appendChild(e)}function r(e,t,n){t.insertBefore(e,n)}function o(e){e.parentNode.removeChild(e)}function s(e,t){for(;e.nextSibling&&e.nextSibling!==t;)e.parentNode.removeChild(e.nextSibling)}function i(e,t,n){for(var a=n;a<e.length;a+=1)e[a]&&e[a].destroy(t)}function c(e){return document.createElement(e)}function u(e){return document.createTextNode(e)}function l(){return document.createComment("")}function h(e,t,n){e.addEventListener(t,n,!1)}function d(e,t,n){e.removeEventListener(t,n,!1)}function f(e,t,n){e.setAttribute(t,n)}function g(e,t){return e!==t||e&&"object"==typeof e||"function"==typeof e}function p(e,t,n,a){for(var r in t)if(r in n){var o=n[r],s=a[r];if(g(o,s)){var i=t[r];if(!i)continue;for(var c=0;c<i.length;c+=1){var u=i[c];u.__calling||(u.__calling=!0,u.call(e,o,s),u.__calling=!1)}}}}function v(e){for(;e&&e.length;)e.pop()()}function m(e,t,n,a){(a||"selected"in t&&g(e.selected,n.selected)||"pageCount"in t&&g(e.pageCount,n.pageCount)||"pageRange"in t&&g(e.pageRange,n.pageRange)||"marginPages"in t&&g(e.marginPages,n.marginPages))&&(e.pages=t.pages=V.computed.pages(e.selected,e.pageCount,e.pageRange,e.marginPages))}function _(e,t){function n(e){return e.noLiSurround?S:w}var a,s=n(e),i=s(e,t);return{create:function(){i.create(),a=l()},mount:function(e,t){i.mount(e,t),r(a,e,t)},update:function(e,r){s===(s=n(r))&&i?i.update(e,r):(i.unmount(),i.destroy(),(i=s(r,t)).create(),i.mount(a.parentNode,a))},unmount:function(){i.unmount(),o(a)},destroy:function(){i.destroy()}}}function y(e,t,n,a,s){function i(e,t,n,a){return n.disabled?b:k}var u,l=i(0,0,n),h=l(e,t,n,a,s);return{create:function(){u=c("li"),h.create()},mount:function(e,t){r(u,e,t),h.mount(u,null)},update:function(e,t,n,a,r){l===(l=i(0,0,a))&&h?h.update(e,t,n,a,r):(h.unmount(),h.destroy(),(h=l(t,n,a,r,s)).create(),h.mount(u,null))},unmount:function(){o(u),h.unmount()},destroy:function(){h.destroy()}}}function b(e,n,s,i,l){var h,d,f,g;return{create:function(){h=c("a"),g=u(f=s.content),this.hydrate()},hydrate:function(t){h.className=d=e.pageLinkClass,h.tabIndex="0"},mount:function(e,t){r(h,e,t),a(g,h)},update:function(e,t,n,a,r){d!==(d=t.pageLinkClass)&&(h.className=d),f!==(f=a.content)&&(g.data=f)},unmount:function(){o(h)},destroy:t}}function k(e,t,n,s,i){var l,f,g,p;return{create:function(){l=c("a"),p=u(g=n.content),this.hydrate()},hydrate:function(n){l.className=f=e.pageLinkClass,l.tabIndex="0",h(l,"click",L),l._svelte={component:i,each_block_value:t,page_index:s}},mount:function(e,t){r(l,e,t),a(p,l)},update:function(e,t,n,a,r){f!==(f=t.pageLinkClass)&&(l.className=f),l._svelte.each_block_value=n,l._svelte.page_index=r,g!==(g=a.content)&&(p.data=g)},unmount:function(){o(l)},destroy:function(){d(l,"click",L)}}}function P(e,t,n,a,s){function i(e,t,n,a){return n.disabled?x:C}var c,u=i(0,0,n),h=u(e,t,n,a,s);return{create:function(){h.create(),c=l()},mount:function(e,t){h.mount(e,t),r(c,e,t)},update:function(e,t,n,a,r){u===(u=i(0,0,a))&&h?h.update(e,t,n,a,r):(h.unmount(),h.destroy(),(h=u(t,n,a,r,s)).create(),h.mount(c.parentNode,c))},unmount:function(){h.unmount(),o(c)},destroy:function(){h.destroy()}}}function x(e,n,s,i,l){var h,d,f,g;return{create:function(){h=c("a"),g=u(f=s.content),this.hydrate()},hydrate:function(t){h.className=d=e.pageLinkClass+" "+(s.selected?e.activeClass:"")+" "+(s.disabled?e.disabledClass:""),h.tabIndex="0"},mount:function(e,t){r(h,e,t),a(g,h)},update:function(e,t,n,a,r){d!==(d=t.pageLinkClass+" "+(a.selected?t.activeClass:"")+" "+(a.disabled?t.disabledClass:""))&&(h.className=d),f!==(f=a.content)&&(g.data=f)},unmount:function(){o(h)},destroy:t}}function C(e,t,n,s,i){var l,f,g,p;return{create:function(){l=c("a"),p=u(g=n.content),this.hydrate()},hydrate:function(a){l.className=f=e.pageLinkClass+" "+(n.selected?e.activeClass:"")+" "+(n.disabled?e.disabledClass:""),l.tabIndex="0",h(l,"click",N),l._svelte={component:i,each_block_value:t,page_index:s}},mount:function(e,t){r(l,e,t),a(p,l)},update:function(e,t,n,a,r){f!==(f=t.pageLinkClass+" "+(a.selected?t.activeClass:"")+" "+(a.disabled?t.disabledClass:""))&&(l.className=f),l._svelte.each_block_value=n,l._svelte.page_index=r,g!==(g=a.content)&&(p.data=g)},unmount:function(){o(l)},destroy:function(){d(l,"click",N)}}}function w(e,t){function n(e){t.prevPage()}function s(e){t.nextPage()}for(var g,p,v,m,_,b,k,P,x,C,w,S,L,N,M,T,O,I=e.pages,A=[],R=0;R<I.length;R+=1)A[R]=y(e,I,I[R],R,t);return{create:function(){g=c("ul"),v=c("li"),_=c("a"),k=c("slot"),x=u(P=e.prevText);for(var t=0;t<A.length;t+=1)A[t].create();C=l(),w=c("li"),L=c("a"),M=c("slot"),O=u(T=e.nextText),this.hydrate()},hydrate:function(t){f(g,"svelte-3739190921",""),g.className=p=e.containerClass,v.className=m=e.prevClass+" "+(V.helpers.firstPageSelected(e.selected)?e.disabledClass:""),_.className=b=e.prevLinkClass,_.tabIndex="0",h(_,"click",n),f(k,"name","prevContent"),w.className=S=e.nextClass+" "+(V.helpers.lastPageSelected(e.selected,e.pageCount)?e.disabledClass:""),L.className=N=e.nextLinkClass,L.tabIndex="0",h(L,"click",s),f(M,"name","nextContent")},mount:function(e,t){r(g,e,t),a(v,g),a(_,v),a(k,_),a(x,k);for(var n=0;n<A.length;n+=1)A[n].mount(g,null);a(C,g),a(w,g),a(L,w),a(M,L),a(O,M)},update:function(e,n){p!==(p=n.containerClass)&&(g.className=p),m!==(m=n.prevClass+" "+(V.helpers.firstPageSelected(n.selected)?n.disabledClass:""))&&(v.className=m),b!==(b=n.prevLinkClass)&&(_.className=b),P!==(P=n.prevText)&&(x.data=P);var a=n.pages;if("pages"in e||"pageLinkClass"in e){for(var r=0;r<a.length;r+=1)A[r]?A[r].update(e,n,a,a[r],r):(A[r]=y(n,a,a[r],r,t),A[r].create(),A[r].mount(g,C));for(;r<A.length;r+=1)A[r].unmount(),A[r].destroy();A.length=a.length}S!==(S=n.nextClass+" "+(V.helpers.lastPageSelected(n.selected,n.pageCount)?n.disabledClass:""))&&(w.className=S),N!==(N=n.nextLinkClass)&&(L.className=N),T!==(T=n.nextText)&&(O.data=T)},unmount:function(){o(g);for(var e=0;e<A.length;e+=1)A[e].unmount()},destroy:function(){d(_,"click",n),i(A,!1,0),d(L,"click",s)}}}function S(e,t){function n(e){t.prevPage()}function s(e){t.nextPage()}for(var l,g,p,v,m,_,y,b,k,x,C,w,S,L,N=e.pages,M=[],T=0;T<N.length;T+=1)M[T]=P(e,N,N[T],T,t);return{create:function(){l=c("div"),p=c("a"),m=c("slot"),y=u(_=e.prevText),b=u("\r\n    ");for(var t=0;t<M.length;t+=1)M[t].create();k=u("\r\n    "),x=c("a"),w=c("slot"),L=u(S=e.nextText),this.hydrate()},hydrate:function(t){f(l,"svelte-3739190921",""),l.className=g=e.containerClass,p.className=v=e.prevLinkClass+" "+(V.helpers.firstPageSelected(e.selected)?e.disabledClass:""),p.tabIndex="0",h(p,"click",n),f(m,"name","prevContent"),x.className=C=e.nextLinkClass+" "+(V.helpers.lastPageSelected(e.selected,e.pageCount)?e.disabledClass:""),x.tabIndex="0",h(x,"click",s),f(w,"name","nextContent")},mount:function(e,t){r(l,e,t),a(p,l),a(m,p),a(y,m),a(b,l);for(var n=0;n<M.length;n+=1)M[n].mount(l,null);a(k,l),a(x,l),a(w,x),a(L,w)},update:function(e,n){g!==(g=n.containerClass)&&(l.className=g),v!==(v=n.prevLinkClass+" "+(V.helpers.firstPageSelected(n.selected)?n.disabledClass:""))&&(p.className=v),_!==(_=n.prevText)&&(y.data=_);var a=n.pages;if("pages"in e||"pageLinkClass"in e||"activeClass"in e||"disabledClass"in e){for(var r=0;r<a.length;r+=1)M[r]?M[r].update(e,n,a,a[r],r):(M[r]=P(n,a,a[r],r,t),M[r].create(),M[r].mount(l,k));for(;r<M.length;r+=1)M[r].unmount(),M[r].destroy();M.length=a.length}C!==(C=n.nextLinkClass+" "+(V.helpers.lastPageSelected(n.selected,n.pageCount)?n.disabledClass:""))&&(x.className=C),S!==(S=n.nextText)&&(L.data=S)},unmount:function(){o(l);for(var e=0;e<M.length;e+=1)M[e].unmount()},destroy:function(){d(p,"click",n),i(M,!1,0),d(x,"click",s)}}}function L(e){var t=this._svelte.component,n=this._svelte.each_block_value[this._svelte.page_index];t.handlePageSelected(n.index)}function N(e){var t=this._svelte.component,n=this._svelte.each_block_value[this._svelte.page_index];t.handlePageSelected(n.index)}function M(e){e=e||{},this._state=n(V.data(),e.data),m(this._state,this._state,{},!0),this._observers={pre:Object.create(null),post:Object.create(null)},this._handlers=Object.create(null),this._root=e._root||this,this._yield=e._yield,this._torndown=!1,this._fragment=_(this._state,this),e.target&&(this._fragment.create(),this._fragment.mount(e.target,null)),e._root?e._root._oncreate.push(V.oncreate.bind(this)):V.oncreate.call(this)}function T(e,t){for(var n,s,l,h,d,g,p,v,m,_,y,b,k,P,x,C,w,S,L=e.customButtons,N=[],M=0;M<L.length;M+=1)N[M]=O(e,L,L[M],M,t);for(var T=e.printable&&A(e,t),I=e.exportable&&R(e,t),D=e.searchable&&j(e,t),H=e.searching&&F(e,t),B=e.columns,K=[],M=0;M<B.length;M+=1)K[M]=E(e,B,B[M],M,t);for(var J=e.paginated,Y=[],M=0;M<J.length;M+=1)Y[M]=z(e,J,J[M],M,t);var q=e.paginate&&$(e,t);return{create:function(){n=c("div"),s=c("div"),l=c("span"),d=u(h=e.title),g=u("\n\t\t"),p=c("div");for(t=0;t<N.length;t+=1)N[t].create();v=u("\n\t\t\t"),T&&T.create(),m=u("\n\t\t\t"),I&&I.create(),_=u("\n\t\t\t"),D&&D.create(),y=u("\n\t"),H&&H.create(),b=u("\n\n    "),k=c("table"),P=c("thead"),x=c("tr");for(t=0;t<K.length;t+=1)K[t].create();C=u("\n\n        "),w=c("tbody");for(var t=0;t<Y.length;t+=1)Y[t].create();S=u("\n"),q&&q.create(),this.hydrate()},hydrate:function(e){f(n,"svelte-1634663699",""),n.className="material-table",s.className="table-header",l.className="table-title",p.className="actions",f(k,"ref","table"),k.className="table table-striped table-hover"},mount:function(e,t){r(n,e,t),a(s,n),a(l,s),a(d,l),a(g,s),a(p,s);for(o=0;o<N.length;o+=1)N[o].mount(p,null);a(v,p),T&&T.mount(p,null),a(m,p),I&&I.mount(p,null),a(_,p),D&&D.mount(p,null),a(y,n),H&&H.mount(n,null),a(b,n),a(k,n),a(P,k),a(x,P);for(o=0;o<K.length;o+=1)K[o].mount(x,null);a(C,k),a(w,k);for(var o=0;o<Y.length;o+=1)Y[o].mount(w,null);a(S,n),q&&q.mount(n,null)},update:function(e,a){h!==(h=a.title)&&(d.data=h);var r=a.customButtons;if("customButtons"in e){for(i=0;i<r.length;i+=1)N[i]?N[i].update(e,a,r,r[i],i):(N[i]=O(a,r,r[i],i,t),N[i].create(),N[i].mount(p,v));for(;i<N.length;i+=1)N[i].unmount(),N[i].destroy();N.length=r.length}a.printable?T||((T=A(a,t)).create(),T.mount(p,m)):T&&(T.unmount(),T.destroy(),T=null),a.exportable?I||((I=R(a,t)).create(),I.mount(p,_)):I&&(I.unmount(),I.destroy(),I=null),a.searchable?D||((D=j(a,t)).create(),D.mount(p,null)):D&&(D.unmount(),D.destroy(),D=null),a.searching?H?H.update(e,a):((H=F(a,t)).create(),H.mount(n,b)):H&&(H.unmount(),H.destroy(),H=null);var o=a.columns;if("sortable"in e||"sortColumn"in e||"sortType"in e||"columns"in e){for(i=0;i<o.length;i+=1)K[i]?K[i].update(e,a,o,o[i],i):(K[i]=E(a,o,o[i],i,t),K[i].create(),K[i].mount(x,null));for(;i<K.length;i+=1)K[i].unmount(),K[i].destroy();K.length=o.length}var s=a.paginated;if("clickable"in e||"columns"in e||"paginated"in e){for(var i=0;i<s.length;i+=1)Y[i]?Y[i].update(e,a,s,s[i],i):(Y[i]=z(a,s,s[i],i,t),Y[i].create(),Y[i].mount(w,null));for(;i<Y.length;i+=1)Y[i].unmount(),Y[i].destroy();Y.length=s.length}a.paginate?q?q.update(e,a):((q=$(a,t)).create(),q.mount(n,null)):q&&(q.unmount(),q.destroy(),q=null)},unmount:function(){o(n);for(e=0;e<N.length;e+=1)N[e].unmount();T&&T.unmount(),I&&I.unmount(),D&&D.unmount(),H&&H.unmount();for(e=0;e<K.length;e+=1)K[e].unmount();for(var e=0;e<Y.length;e+=1)Y[e].unmount();q&&q.unmount()},destroy:function(){i(N,!1,0),T&&T.destroy(),I&&I.destroy(),D&&D.destroy(),H&&H.destroy(),i(K,!1,0),i(Y,!1,0),q&&q.destroy()}}}function O(e,t,n,a,s){var i,c=!n.hide&&I(e,t,n,a,s);return{create:function(){c&&c.create(),i=l()},mount:function(e,t){c&&c.mount(e,t),r(i,e,t)},update:function(e,t,n,a,r){a.hide?c&&(c.unmount(),c.destroy(),c=null):c?c.update(e,t,n,a,r):((c=I(t,n,a,r,s)).create(),c.mount(i.parentNode,i))},unmount:function(){c&&c.unmount(),o(i)},destroy:function(){c&&c.destroy()}}}function I(e,t,n,s,i){var l,f,g,p;return{create:function(){l=c("a"),f=c("i"),p=u(g=n.icon),this.hydrate()},hydrate:function(e){l.href="javascript:undefined",l.className="waves-effect btn-flat nopadding",h(l,"click",J),f.className="material-icons"},mount:function(e,t){r(l,e,t),a(f,l),a(p,f)},update:function(e,t,n,a,r){g!==(g=a.icon)&&(p.data=g)},unmount:function(){o(l)},destroy:function(){d(l,"click",J)}}}function A(e,t){function n(e){t.print()}var s,i,l;return{create:function(){s=c("a"),i=c("i"),l=u("print"),this.hydrate()},hydrate:function(e){s.href="javascript:undefined",s.className="waves-effect btn-flat nopadding",h(s,"click",n),i.className="material-icons"},mount:function(e,t){r(s,e,t),a(i,s),a(l,i)},unmount:function(){o(s)},destroy:function(){d(s,"click",n)}}}function R(e,t){function n(e){t.exportExcel()}var s,i,l;return{create:function(){s=c("a"),i=c("i"),l=u("description"),this.hydrate()},hydrate:function(e){s.href="javascript:undefined",s.className="waves-effect btn-flat nopadding",f(s,"v-if","this.exportable"),h(s,"click",n),i.className="material-icons"},mount:function(e,t){r(s,e,t),a(i,s),a(l,i)},unmount:function(){o(s)},destroy:function(){d(s,"click",n)}}}function j(e,t){function n(e){t.search()}var s,i,l;return{create:function(){s=c("a"),i=c("i"),l=u("search"),this.hydrate()},hydrate:function(e){s.href="javascript:undefined",s.className="waves-effect btn-flat nopadding",h(s,"click",n),i.className="material-icons"},mount:function(e,t){r(s,e,t),a(i,s),a(l,i)},unmount:function(){o(s)},destroy:function(){d(s,"click",n)}}}function F(e,t){function n(){f=!0,t._set({searchInput:l.value}),f=!1}var s,i,u,l,f=!1;return{create:function(){s=c("div"),i=c("div"),u=c("label"),l=c("input"),this.hydrate()},hydrate:function(e){i.id="search-input-container",l.type="search",l.id="search-input",l.className="form-control",l.placeholder="Search data",h(l,"input",n)},mount:function(t,n){r(s,t,n),a(i,s),a(u,i),a(l,u),l.value=e.searchInput},update:function(e,t){f||(l.value=t.searchInput)},unmount:function(){o(s)},destroy:function(){d(l,"input",n)}}}function E(e,t,n,s,i){var l,f,g,p,v;return{create:function(){l=c("th"),v=u(p=n.label),this.hydrate()},hydrate:function(a){l.className=f=(e.sortable?"sorting ":"")+"\n                        "+(e.sortColumn===s?"desc"===e.sortType?"sorting-desc":"sorting-asc":"")+"\n                        "+(n.numeric?" numeric":""),l.style.cssText=g="width: "+(n.width?n.width:"auto"),h(l,"click",Y),l._svelte={component:i,each_block_value_1:t,x:s}},mount:function(e,t){r(l,e,t),a(v,l)},update:function(e,t,n,a,r){f!==(f=(t.sortable?"sorting ":"")+"\n                        "+(t.sortColumn===r?"desc"===t.sortType?"sorting-desc":"sorting-asc":"")+"\n                        "+(a.numeric?" numeric":""))&&(l.className=f),g!==(g="width: "+(a.width?a.width:"auto"))&&(l.style.cssText=g),l._svelte.each_block_value_1=n,l._svelte.x=r,p!==(p=a.label)&&(v.data=p)},unmount:function(){o(l)},destroy:function(){d(l,"click",Y)}}}function z(e,t,n,a,s){for(var u,l,f=e.columns,g=[],p=0;p<f.length;p+=1)g[p]=D(e,t,n,a,f,f[p],p,s);return{create:function(){u=c("tr");for(var e=0;e<g.length;e+=1)g[e].create();this.hydrate()},hydrate:function(n){u.className=l=e.clickable?"clickable":"",h(u,"click",q),u._svelte={component:s,each_block_value_2:t,y:a}},mount:function(e,t){r(u,e,t);for(var n=0;n<g.length;n+=1)g[n].mount(u,null)},update:function(e,t,n,a,r){l!==(l=t.clickable?"clickable":"")&&(u.className=l),u._svelte.each_block_value_2=n,u._svelte.y=r;var o=t.columns;if("columns"in e||"paginated"in e){for(var i=0;i<o.length;i+=1)g[i]?g[i].update(e,t,n,a,r,o,o[i],i):(g[i]=D(t,n,a,r,o,o[i],i,s),g[i].create(),g[i].mount(u,null));for(;i<g.length;i+=1)g[i].unmount(),g[i].destroy();g.length=o.length}},unmount:function(){o(u);for(var e=0;e<g.length;e+=1)g[e].unmount()},destroy:function(){d(u,"click",q),i(g,!1,0)}}}function D(e,t,n,a,s,i,u,l){function h(e,t,n,a,r,o,s){return o.html?H:B}var d,f=h(0,0,0,0,0,i),g=f(e,t,n,a,s,i,u,l);return{create:function(){d=c("td"),g.create()},mount:function(e,t){r(d,e,t),g.mount(d,null)},update:function(e,t,n,a,r,o,s,i){f===(f=h(0,0,0,0,0,s))&&g?g.update(e,t,n,a,r,o,s,i):(g.unmount(),g.destroy(),(g=f(t,n,a,r,o,s,i,l)).create(),g.mount(d,null))},unmount:function(){o(d),g.unmount()},destroy:function(){g.destroy()}}}function H(e,n,a,i,u,l,h,d){var f,g,p;return{create:function(){g=c("noscript"),p=c("noscript")},mount:function(e,t){r(g,e,t),r(p,e,t),g.insertAdjacentHTML("afterend",f=W.helpers.collect(a,l.field))},update:function(e,t,n,a,r,o,i,c){f!==(f=W.helpers.collect(a,i.field))&&(s(g,p),g.insertAdjacentHTML("afterend",f=W.helpers.collect(a,i.field)))},unmount:function(){s(g,p),o(g),o(p)},destroy:t}}function B(e,n,a,s,i,c,l,h){var d,f;return{create:function(){f=u(d=W.helpers.collect(a,c.field))},mount:function(e,t){r(f,e,t)},update:function(e,t,n,a,r,o,s,i){d!==(d=W.helpers.collect(a,s.field))&&(f.data=d)},unmount:function(){o(f)},destroy:t}}function K(e,n,s,i,l){var h,d,f,g,p;return{create:function(){h=c("option"),p=u(g=-1===s?"All":s),this.hydrate()},hydrate:function(t){h.__value=d=s,h.value=h.__value,h.selected=f=s==e.currentPerPage},mount:function(e,t){r(h,e,t),a(p,h)},update:function(e,t,n,a,r){d!==(d=a)&&(h.__value=d),h.value=h.__value,f!==(f=a==t.currentPerPage)&&(h.selected=f),g!==(g=-1===a?"All":a)&&(p.data=g)},unmount:function(){o(h)},destroy:t}}function $(e,t){function n(e){t.onTableLength(e)}for(var s,l,f,p,v,m,_,y,b,k,P,x,C,w,S,L,N,T,O,I=!1,A=e.perPageOptions,R=[],j=0;j<A.length;j+=1)R[j]=K(e,A,A[j],j,t);var F={marginPages:2,pageRange:4,containerClass:"pagination",pageCount:("Math"in e?e.Math:Math).ceil(e.rows.length/e.currentPerPage)};"selectedPage"in e&&(F.selected=e.selectedPage);var E=new M({_root:t._root,data:F});return t._bindings.push(function(){E._torndown||E.observe("selected",function(e){I||(I=!0,t._set({selectedPage:e}),I=!1)},{init:g(E.get("selected"),e.selectedPage)})}),E._context={state:e},{create:function(){s=c("div"),l=c("div"),f=c("label"),p=c("span"),v=u("Rows per page:"),m=u("\n\t\t\t\t"),_=c("select");for(var t=0;t<R.length;t+=1)R[t].create();y=u("\n\t\t"),b=c("div"),P=u(k=(e.currentPage-1)*e.currentPerPage?(e.currentPage-1)*e.currentPerPage:1),x=u("\n\t\t\t\t-"),w=u(C=("Math"in e?e.Math:Math).min(e.processedRows.length,e.currentPerPage*e.currentPage)),S=u(" of "),N=u(L=e.processedRows.length),T=u("\n\t\t"),O=c("div"),E._fragment.create(),this.hydrate()},hydrate:function(e){s.className="table-footer",l.className="datatable-length",_.className="browser-default",h(_,"change",n),b.className="datatable-info"},mount:function(e,t){r(s,e,t),a(l,s),a(f,l),a(p,f),a(v,p),a(m,f),a(_,f);for(var n=0;n<R.length;n+=1)R[n].mount(_,null);a(y,s),a(b,s),a(P,b),a(x,b),a(w,b),a(S,b),a(N,b),a(T,s),a(O,s),E._fragment.mount(O,null)},update:function(e,n){var a=n.perPageOptions;if("perPageOptions"in e||"currentPerPage"in e){for(var r=0;r<a.length;r+=1)R[r]?R[r].update(e,n,a,a[r],r):(R[r]=K(n,a,a[r],r,t),R[r].create(),R[r].mount(_,null));for(;r<R.length;r+=1)R[r].unmount(),R[r].destroy();R.length=a.length}k!==(k=(n.currentPage-1)*n.currentPerPage?(n.currentPage-1)*n.currentPerPage:1)&&(P.data=k),C!==(C=("Math"in n?n.Math:Math).min(n.processedRows.length,n.currentPerPage*n.currentPage))&&(w.data=C),L!==(L=n.processedRows.length)&&(N.data=L),!I&&"selectedPage"in e&&(I=!0,E._set({selected:n.selectedPage}),I=!1),E._context.state=n;var o={};("Math"in e||"rows"in e||"currentPerPage"in e)&&(o.pageCount=("Math"in n?n.Math:Math).ceil(n.rows.length/n.currentPerPage)),Object.keys(o).length&&E.set(o)},unmount:function(){o(s);for(var e=0;e<R.length;e+=1)R[e].unmount()},destroy:function(){i(R,!1,0),d(_,"change",n),E.destroy(!1)}}}function J(e){this.click()}function Y(e){var t=this._svelte.component,n=this._svelte.each_block_value_1,a=this._svelte.x;n[a];t.sort(a)}function q(e){var t=this._svelte.component,n=this._svelte.each_block_value_2[this._svelte.y];t.click(n)}function G(e){e=e||{},this._state=n(W.data(),e.data),this._observers={pre:Object.create(null),post:Object.create(null)},this._handlers=Object.create(null),this._root=e._root||this,this._yield=e._yield,this._torndown=!1,this._oncreate=[],this._bindings=[],this._fragment=T(this._state,this),e.target&&(this._fragment.create(),this._fragment.mount(e.target,null)),v(this._oncreate),v(this._bindings),e._root?e._root._oncreate.push(W.oncreate.bind(this)):W.oncreate.call(this)}"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self&&self;var Q=function(e){return e&&e.__esModule?e.default:e}(function(e,t){return t={exports:{}},e(t,t.exports),t.exports}(function(e,t){!function(t,n){e.exports=n()}(0,function(){return function(e){function t(a){if(n[a])return n[a].exports;var r=n[a]={i:a,l:!1,exports:{}};return e[a].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,a){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:a})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=8)}([function(e,t,n){e.exports=function(e){return"[object Array]"===Object.prototype.toString.call(e)}},function(e,t,n){function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),o=n(5),s=n(7),i=n(4),c=function(){function e(t,n){var r=n.location,o=void 0===r?0:r,s=n.distance,c=void 0===s?100:s,u=n.threshold,l=void 0===u?.6:u,h=n.maxPatternLength,d=void 0===h?32:h,f=n.isCaseSensitive,g=void 0!==f&&f,p=n.tokenSeparator,v=void 0===p?/ +/g:p,m=n.findAllMatches,_=void 0!==m&&m,y=n.minMatchCharLength,b=void 0===y?1:y;a(this,e),this.options={location:o,distance:c,threshold:l,maxPatternLength:d,isCaseSensitive:g,tokenSeparator:v,findAllMatches:_,minMatchCharLength:b},this.pattern=this.options.isCaseSensitive?t:t.toLowerCase(),this.pattern.length<=d&&(this.patternAlphabet=i(this.pattern))}return r(e,[{key:"search",value:function(e){if(this.options.isCaseSensitive||(e=e.toLowerCase()),this.pattern===e)return{isMatch:!0,score:0,matchedIndices:[[0,e.length-1]]};var t=this.options,n=t.maxPatternLength,a=t.tokenSeparator;if(this.pattern.length>n)return o(e,this.pattern,a);var r=this.options,i=r.location,c=r.distance,u=r.threshold,l=r.findAllMatches,h=r.minMatchCharLength;return s(e,this.pattern,this.patternAlphabet,{location:i,distance:c,threshold:u,findAllMatches:l,minMatchCharLength:h})}}]),e}();e.exports=c},function(e,t,n){var a=n(0),r=function e(t,n,r){if(n){var o=n.indexOf("."),s=n,i=null;-1!==o&&(s=n.slice(0,o),i=n.slice(o+1));var c=t[s];if(null!==c&&void 0!==c)if(i||"string"!=typeof c&&"number"!=typeof c)if(a(c))for(var u=0,l=c.length;u<l;u+=1)e(c[u],i,r);else i&&e(c,i,r);else r.push(c)}else r.push(t);return r};e.exports=function(e,t){return r(e,t,[])}},function(e,t,n){e.exports=function(){for(var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:1,n=[],a=-1,r=-1,o=0,s=e.length;o<s;o+=1){var i=e[o];i&&-1===a?a=o:i||-1===a||((r=o-1)-a+1>=t&&n.push([a,r]),a=-1)}return e[o-1]&&o-a>=t&&n.push([a,o-1]),n}},function(e,t,n){e.exports=function(e){for(var t={},n=e.length,a=0;a<n;a+=1)t[e.charAt(a)]=0;for(var r=0;r<n;r+=1)t[e.charAt(r)]|=1<<n-r-1;return t}},function(e,t,n){var a=/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;e.exports=function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:/ +/g,r=new RegExp(t.replace(a,"\\$&").replace(n,"|")),o=e.match(r),s=!!o,i=[];if(s)for(var c=0,u=o.length;c<u;c+=1){var l=o[c];i.push([e.indexOf(l),l.length-1])}return{score:s?.5:1,isMatch:s,matchedIndices:i}}},function(e,t,n){e.exports=function(e,t){var n=t.errors,a=void 0===n?0:n,r=t.currentLocation,o=void 0===r?0:r,s=t.expectedLocation,i=void 0===s?0:s,c=t.distance,u=void 0===c?100:c,l=a/e.length,h=Math.abs(i-o);return u?l+h/u:h?1:l}},function(e,t,n){var a=n(6),r=n(3);e.exports=function(e,t,n,o){for(var s=o.location,i=void 0===s?0:s,c=o.distance,u=void 0===c?100:c,l=o.threshold,h=void 0===l?.6:l,d=o.findAllMatches,f=void 0!==d&&d,g=o.minMatchCharLength,p=void 0===g?1:g,v=i,m=e.length,_=h,y=e.indexOf(t,v),b=t.length,k=[],P=0;P<m;P+=1)k[P]=0;if(-1!==y){var x=a(t,{errors:0,currentLocation:y,expectedLocation:v,distance:u});if(_=Math.min(x,_),-1!==(y=e.lastIndexOf(t,v+b))){var C=a(t,{errors:0,currentLocation:y,expectedLocation:v,distance:u});_=Math.min(C,_)}}y=-1;for(var w=[],S=1,L=b+m,N=1<<b-1,M=0;M<b;M+=1){for(var T=0,O=L;T<O;)a(t,{errors:M,currentLocation:v+O,expectedLocation:v,distance:u})<=_?T=O:L=O,O=Math.floor((L-T)/2+T);L=O;var I=Math.max(1,v-O+1),A=f?m:Math.min(v+O,m)+b,R=Array(A+2);R[A+1]=(1<<M)-1;for(var j=A;j>=I;j-=1){var F=j-1,E=n[e.charAt(F)];if(E&&(k[F]=1),R[j]=(R[j+1]<<1|1)&E,0!==M&&(R[j]|=(w[j+1]|w[j])<<1|1|w[j+1]),R[j]&N&&(S=a(t,{errors:M,currentLocation:F,expectedLocation:v,distance:u}))<=_){if(_=S,(y=F)<=v)break;I=Math.max(1,2*v-y)}}if(a(t,{errors:M+1,currentLocation:v,expectedLocation:v,distance:u})>_)break;w=R}return{isMatch:y>=0,score:0===S?.001:S,matchedIndices:r(k,p)}}},function(e,t,n){function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),o=n(1),s=n(2),i=n(0),c=function(){function e(t,n){var r=n.location,o=void 0===r?0:r,i=n.distance,c=void 0===i?100:i,u=n.threshold,l=void 0===u?.6:u,h=n.maxPatternLength,d=void 0===h?32:h,f=n.caseSensitive,g=void 0!==f&&f,p=n.tokenSeparator,v=void 0===p?/ +/g:p,m=n.findAllMatches,_=void 0!==m&&m,y=n.minMatchCharLength,b=void 0===y?1:y,k=n.id,P=void 0===k?null:k,x=n.keys,C=void 0===x?[]:x,w=n.shouldSort,S=void 0===w||w,L=n.getFn,N=void 0===L?s:L,M=n.sortFn,T=void 0===M?function(e,t){return e.score-t.score}:M,O=n.tokenize,I=void 0!==O&&O,A=n.matchAllTokens,R=void 0!==A&&A,j=n.includeMatches,F=void 0!==j&&j,E=n.includeScore,z=void 0!==E&&E,D=n.verbose,H=void 0!==D&&D;a(this,e),this.options={location:o,distance:c,threshold:l,maxPatternLength:d,isCaseSensitive:g,tokenSeparator:v,findAllMatches:_,minMatchCharLength:b,id:P,keys:C,includeMatches:F,includeScore:z,shouldSort:S,getFn:N,sortFn:T,verbose:H,tokenize:I,matchAllTokens:R},this.setCollection(t)}return r(e,[{key:"setCollection",value:function(e){return this.list=e,e}},{key:"search",value:function(e){this._log('---------\nSearch pattern: "'+e+'"');var t=this._prepareSearchers(e),n=t.tokenSearchers,a=t.fullSearcher,r=this._search(n,a),o=r.weights,s=r.results;return this._computeScore(o,s),this.options.shouldSort&&this._sort(s),this._format(s)}},{key:"_prepareSearchers",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",t=[];if(this.options.tokenize)for(var n=e.split(this.options.tokenSeparator),a=0,r=n.length;a<r;a+=1)t.push(new o(n[a],this.options));return{tokenSearchers:t,fullSearcher:new o(e,this.options)}}},{key:"_search",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],t=arguments[1],n=this.list,a={},r=[];if("string"==typeof n[0]){for(var o=0,s=n.length;o<s;o+=1)this._analyze({key:"",value:n[o],record:o,index:o},{resultMap:a,results:r,tokenSearchers:e,fullSearcher:t});return{weights:null,results:r}}for(var i={},c=0,u=n.length;c<u;c+=1)for(var l=n[c],h=0,d=this.options.keys.length;h<d;h+=1){var f=this.options.keys[h];if("string"!=typeof f){if(i[f.name]={weight:1-f.weight||1},f.weight<=0||f.weight>1)throw new Error("Key weight has to be > 0 and <= 1");f=f.name}else i[f]={weight:1};this._analyze({key:f,value:this.options.getFn(l,f),record:l,index:c},{resultMap:a,results:r,tokenSearchers:e,fullSearcher:t})}return{weights:i,results:r}}},{key:"_analyze",value:function(e,t){var n=e.key,a=e.value,r=e.record,o=e.index,s=t.tokenSearchers,c=void 0===s?[]:s,u=t.fullSearcher,l=void 0===u?[]:u,h=t.resultMap,d=void 0===h?{}:h,f=t.results,g=void 0===f?[]:f;if(void 0!==a&&null!==a){var p=!1,v=-1,m=0;if("string"==typeof a){this._log("\nKey: "+(""===n?"-":n));var _=l.search(a);if(this._log('Full text: "'+a+'", score: '+_.score),this.options.tokenize){for(var y=a.split(this.options.tokenSeparator),b=[],k=0;k<c.length;k+=1){var P=c[k];this._log('\nPattern: "'+P.pattern+'"');for(var x=!1,C=0;C<y.length;C+=1){var w=y[C],S=P.search(w),L={};S.isMatch?(L[w]=S.score,p=!0,x=!0,b.push(S.score)):(L[w]=1,this.options.matchAllTokens||b.push(1)),this._log('Token: "'+w+'", score: '+L[w])}x&&(m+=1)}v=b[0];for(var N=b.length,M=1;M<N;M+=1)v+=b[M];v/=N,this._log("Token score average:",v)}var T=_.score;v>-1&&(T=(T+v)/2),this._log("Score average:",T);var O=!this.options.tokenize||!this.options.matchAllTokens||m>=c.length;if(this._log("\nCheck Matches: "+O),(p||_.isMatch)&&O){var I=d[o];I?I.output.push({key:n,score:T,matchedIndices:_.matchedIndices}):(d[o]={item:r,output:[{key:n,score:T,matchedIndices:_.matchedIndices}]},g.push(d[o]))}}else if(i(a))for(var A=0,R=a.length;A<R;A+=1)this._analyze({key:n,value:a[A],record:r,index:o},{resultMap:d,results:g,tokenSearchers:c,fullSearcher:l})}}},{key:"_computeScore",value:function(e,t){this._log("\n\nComputing score:\n");for(var n=0,a=t.length;n<a;n+=1){for(var r=t[n].output,o=r.length,s=0,i=1,c=0;c<o;c+=1){var u=r[c].score,l=e?e[r[c].key].weight:1,h=u*l;1!==l?i=Math.min(i,h):(r[c].nScore=h,s+=h)}t[n].score=1===i?s/o:i,this._log(t[n])}}},{key:"_sort",value:function(e){this._log("\n\nSorting...."),e.sort(this.options.sortFn)}},{key:"_format",value:function(e){var t=[];this._log("\n\nOutput:\n\n",e);var n=[];this.options.includeMatches&&n.push(function(e,t){var n=e.output;t.matches=[];for(var a=0,r=n.length;a<r;a+=1){var o=n[a],s={indices:o.matchedIndices};o.key&&(s.key=o.key),t.matches.push(s)}}),this.options.includeScore&&n.push(function(e,t){t.score=e.score});for(var a=0,r=e.length;a<r;a+=1){var o=e[a];if(this.options.id&&(o.item=this.options.getFn(o.item,this.options.id)[0]),n.length){for(var s={item:o.item},i=0,c=n.length;i<c;i+=1)n[i](o,s);t.push(s)}else t.push(o.item)}return t}},{key:"_log",value:function(){if(this.options.verbose){var e;(e=console).log.apply(e,arguments)}}}]),e}();e.exports=c}])})})),U={get:function(e){return e?this._state[e]:this._state},fire:function(e,t){var n=e in this._handlers&&this._handlers[e].slice();if(n)for(var a=0;a<n.length;a+=1)n[a].call(this,t)},observe:function(e,t,n){var a=n&&n.defer?this._observers.post:this._observers.pre;return(a[e]||(a[e]=[])).push(t),n&&!1===n.init||(t.__calling=!0,t.call(this,this._state[e]),t.__calling=!1),{cancel:function(){var n=a[e].indexOf(t);~n&&a[e].splice(n,1)}}},on:function(e,t){if("teardown"===e)return this.on("destroy",t);var n=this._handlers[e]||(this._handlers[e]=[]);return n.push(t),{cancel:function(){var e=n.indexOf(t);~e&&n.splice(e,1)}}},set:function(e){this._set(n({},e)),v(this._root._oncreate)}},V=function(){var e=function(e){return Object.keys(e).map(function(t){return e[t]})};return{data:function(){return{selected:0,pageCount:0,initialPage:0,forcePage:0,clickHandler:function(){},pageRange:3,marginPages:1,prevText:"Prev",nextText:"Next",containerClass:"",pageClass:"",pageLinkClass:"",prevClass:"",prevLinkClass:"",nextClass:"",nextLinkClass:"",activeClass:"active",disabledClass:"disabled",noLiSurround:!1}},oncreate:function(){var e=this;this.observe("forcePage",function(t){t!==e.get("selected")&&e.set({selected:t})})},computed:{pages:function(t,n,a,r){var o={};if(n<=a)for(var s=0;s<n;s++){var i={index:s,content:s+1,selected:s===t};o[s]=i}else{var c=a/2,u=a-c;t<c?u=a-(c=t):t>n-a/2&&(c=a-(u=n-t));for(var l=function(e){var a={index:e,content:e+1,selected:e===t};if(e<=r-1||e>=n-r)o[e]=a;else{var s={content:"...",disabled:!0};t-c>r&&o[r]!==s&&(o[r]=s),t+u<n-r-1&&o[n-r-1]!==s&&(o[n-r-1]=s);var i=t+u-n+1;i>0&&e===t-c-i&&(o[e]=a),e>=t-c&&e<=t+u&&(o[e]=a)}},h=0;h<r;h++)l(h);for(var d=n-1;d>=n-r;d--)l(d);var f=0;t-a>0&&(f=t-a);var g=n;t+a<n&&(g=t+a);for(var p=f;p<g;p++)l(p)}return e(o)}},methods:{handlePageSelected:function(e){var t=this.get(),n=t.selected,a=t.clickHandler;n!==e&&(this.set({selected:n=e}),a(n+1))},prevPage:function(){var e=this.get(),t=e.selected,n=e.clickHandler;t<=0||(this.set({selected:--t}),n(t+1))},nextPage:function(){var e=this.get(),t=e.selected,n=e.pageCount,a=e.clickHandler;t>=n-1||(this.set({selected:++t}),a(t+1))}},helpers:{lastPageSelected:function(e,t){return e===t-1||0===t},firstPageSelected:function(e){return 0===e}}}}();n(M.prototype,V.methods,U),M.prototype._set=function(e){var t=this._state;this._state=n({},t,e),m(this._state,e,t,!1),p(this,this._observers.pre,e,t),this._fragment.update(e,this._state),p(this,this._observers.post,e,t)},M.prototype.teardown=M.prototype.destroy=function(e){this.fire("destroy"),!1!==e&&this._fragment.unmount(),this._fragment.destroy(),this._fragment=null,this._state={},this._torndown=!0};var W=function(){function e(e,t){for(var n=e,a=t.split("."),r=0;r<a.length;r++){if(void 0==n)return;n=n[a[r]]}return n}var t=function(t,n){return"function"==typeof n?n(t):"string"==typeof n?e(t,n):void 0};return{data:function(){return{selectedPage:1,currentPage:1,currentPerPage:10,sortColumn:-1,sortType:"asc",searching:!1,searchInput:"",title:"",columns:[],rows:[],processedRows:[],paginated:[],clickable:!0,customButtons:[],perPage:[10,20,30,40,50],perPageOptions:[],defaultPerPage:null,sortable:!0,searchable:!0,exactSearch:!1,paginate:!0,exportable:!0,printable:!0}},methods:{setPage:function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:0;e&&(this.set({currentPage:t+n}),this.processRows(this.get("rows")))},nextPage:function(e){e.preventDefault();var t=this.get(),n=t.processedRows,a=t.currentPerPage,r=t.currentPage;this.setPage(n.length>a*r,r,1)},previousPage:function(e){e.preventDefault();var t=this.get().currentPage;this.setPage(t>1,t,-1)},onTableLength:function(e){var t=this.get(),n=(t.rows,t.currentPage);this.set({currentPerPage:e.target.value}),this.setPage(!0,n)},sort:function(e){console.log("sort",e);var t=this.get(),n=t.sortable,a=t.sortColumn,r=t.sortType,o=t.currentPage;n&&(a===e?r="asc"===r?"desc":"asc":(r="asc",a=e),this.set({sortType:r,sortColumn:a}),this.setPage(!0,o))},searchData:function(e){this.processRows(this.get("rows"),e)},search:function(e){this.set({searching:!this.get("searching")})},click:function(e){this.get("clickable")&&getSelection().toString()},exportExcel:function(){var e=this.get().title,t=this.renderTable().replace(/ /g,"%20"),n=""!=e?e.replace(/ /g,"-"):"Sheet",a=new Date,r=document.createElement("a");r.href="data:application/vnd.ms-excel, "+t,r.download=n+"-"+a.getFullYear()+"-"+(a.getMonth()+1)+"-"+a.getDate()+"-"+a.getHours()+"-"+a.getMinutes()+"-"+a.getSeconds()+".xls",r.click()},print:function(){var e=window.open("");e.document.write(this.renderTable()),e.print(),e.close()},renderTable:function(){var e=this.get(),n=(e.currentPage,e.columns),a=e.rows,r="<table><thead>";r+="<tr>";for(var o=0;o<n.length;o++)r+="<th>",r+=n[o].label,r+="</th>";r+="</tr>",r+="</thead><tbody>";for(var s=0;s<a.length;s++){var i=a[s];r+="<tr>";for(var c=0;c<n.length;c++){var u=n[c];r+="<td>",r+=t(i,u.field),r+="</td>"}r+="</tr>"}return r+="</tbody></table>"},paginateRows:function(e){var t=this.get(),n=t.currentPerPage,a=t.currentPage,r=e;t.paginate&&(r=r.slice((a-1)*n,-1===n?r.length+1:a*n)),this.set({paginated:r}),console.log("paginatedRows",r)},processRows:function(e,n){var a=e,r=this.get(),o=(r.currentPage,r.columns),s=r.sortable,i=r.sortColumn,c=r.sortType,u=r.searching,l=r.searchInput,h=r.exactSearch;if(n||(n=l),!1!==s&&i>-1&&o&&(a=a.sort(function(e,n){if(!o[i])return 0;var a=function(e){return"string"==typeof(e=t(e,o[i].field))&&(e=e.toLowerCase(),o[i].numeric&&(e=e.indexOf(".")>=0?parseFloat(e):parseInt(e))),e};return e=a(e),n=a(n),(e<n?-1:e>n?1:0)*("desc"===c?-1:1)})),u&&n){var d={keys:o.map(function(e){return e.field})};d.getFn=function(e,t){return Number.isInteger(e[t])?JSON.stringify(e[t]):e[t]},h&&(d.threshold=0,d.distance=0),a=new Q(a,d).search(n)}this.set({processedRows:a}),this.paginateRows(a)},setPerPageOptions:function(){var e=this.get(),t=e.currentPerPage,n=e.defaultPerPage,a=e.perPage;t=(a=a.map(function(e){return parseInt(e)}))[0],a.sort(function(e,t){return e-t}),a.push(-1),a.indexOf(n)>-1&&(t=parseInt(n)),console.log("currentPerPage",t,a),this.set({currentPerPage:t,perPageOptions:a})}},helpers:{collect:t},oncreate:function(){var e=this;this.observe("rows",function(t){e.processRows(t)}),this.observe("selectedPage",function(t){e.setPage(!0,t+1)}),this.observe("searchInput",function(t){e.searchData(t)}),this.setPerPageOptions()}}}();n(G.prototype,W.methods,U),G.prototype._set=function(e){var t=this._state;this._state=n({},t,e),p(this,this._observers.pre,e,t),this._fragment.update(e,this._state),p(this,this._observers.post,e,t),v(this._oncreate),v(this._bindings)},G.prototype.teardown=G.prototype.destroy=function(e){this.fire("destroy"),!1!==e&&this._fragment.unmount(),this._fragment.destroy(),this._fragment=null,this._state={},this._torndown=!0},e.DataTable=G}(this.app=this.app||{});
+(function (exports) {
+'use strict';
+
+function noop() {}
+
+function assign(target) {
+	var k,
+		source,
+		i = 1,
+		len = arguments.length;
+	for (; i < len; i++) {
+		source = arguments[i];
+		for (k in source) target[k] = source[k];
+	}
+
+	return target;
+}
+
+function appendNode(node, target) {
+	target.appendChild(node);
+}
+
+function insertNode(node, target, anchor) {
+	target.insertBefore(node, anchor);
+}
+
+function detachNode(node) {
+	node.parentNode.removeChild(node);
+}
+
+function detachBetween(before, after) {
+	while (before.nextSibling && before.nextSibling !== after) {
+		before.parentNode.removeChild(before.nextSibling);
+	}
+}
+
+function reinsertChildren(parent, target) {
+	while (parent.firstChild) target.appendChild(parent.firstChild);
+}
+
+function destroyEach(iterations) {
+	for (var i = 0; i < iterations.length; i += 1) {
+		if (iterations[i]) iterations[i].d();
+	}
+}
+
+function createFragment() {
+	return document.createDocumentFragment();
+}
+
+function createElement(name) {
+	return document.createElement(name);
+}
+
+function createText(data) {
+	return document.createTextNode(data);
+}
+
+function createComment() {
+	return document.createComment('');
+}
+
+function addListener(node, event, handler) {
+	node.addEventListener(event, handler, false);
+}
+
+function removeListener(node, event, handler) {
+	node.removeEventListener(event, handler, false);
+}
+
+function setAttribute(node, attribute, value) {
+	node.setAttribute(attribute, value);
+}
+
+function setStyle(node, key, value) {
+	node.style.setProperty(key, value);
+}
+
+function blankObject() {
+	return Object.create(null);
+}
+
+function destroy(detach) {
+	this.destroy = noop;
+	this.fire('destroy');
+	this.set = this.get = noop;
+
+	if (detach !== false) this._fragment.u();
+	this._fragment.d();
+	this._fragment = this._state = null;
+}
+
+function differs(a, b) {
+	return a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+}
+
+function dispatchObservers(component, group, changed, newState, oldState) {
+	for (var key in group) {
+		if (!changed[key]) continue;
+
+		var newValue = newState[key];
+		var oldValue = oldState[key];
+
+		var callbacks = group[key];
+		if (!callbacks) continue;
+
+		for (var i = 0; i < callbacks.length; i += 1) {
+			var callback = callbacks[i];
+			if (callback.__calling) continue;
+
+			callback.__calling = true;
+			callback.call(component, newValue, oldValue);
+			callback.__calling = false;
+		}
+	}
+}
+
+function fire(eventName, data) {
+	var handlers =
+		eventName in this._handlers && this._handlers[eventName].slice();
+	if (!handlers) return;
+
+	for (var i = 0; i < handlers.length; i += 1) {
+		handlers[i].call(this, data);
+	}
+}
+
+function get(key) {
+	return key ? this._state[key] : this._state;
+}
+
+function init(component, options) {
+	component.options = options;
+
+	component._observers = { pre: blankObject(), post: blankObject() };
+	component._handlers = blankObject();
+	component._root = options._root || component;
+	component._yield = options._yield;
+	component._bind = options._bind;
+}
+
+function observe(key, callback, options) {
+	var group = options && options.defer
+		? this._observers.post
+		: this._observers.pre;
+
+	(group[key] || (group[key] = [])).push(callback);
+
+	if (!options || options.init !== false) {
+		callback.__calling = true;
+		callback.call(this, this._state[key]);
+		callback.__calling = false;
+	}
+
+	return {
+		cancel: function() {
+			var index = group[key].indexOf(callback);
+			if (~index) group[key].splice(index, 1);
+		}
+	};
+}
+
+function on(eventName, handler) {
+	if (eventName === 'teardown') return this.on('destroy', handler);
+
+	var handlers = this._handlers[eventName] || (this._handlers[eventName] = []);
+	handlers.push(handler);
+
+	return {
+		cancel: function() {
+			var index = handlers.indexOf(handler);
+			if (~index) handlers.splice(index, 1);
+		}
+	};
+}
+
+function set(newState) {
+	this._set(assign({}, newState));
+	if (this._root._lock) return;
+	this._root._lock = true;
+	callAll(this._root._beforecreate);
+	callAll(this._root._oncreate);
+	callAll(this._root._aftercreate);
+	this._root._lock = false;
+}
+
+function _set(newState) {
+	var oldState = this._state,
+		changed = {},
+		dirty = false;
+
+	for (var key in newState) {
+		if (differs(newState[key], oldState[key])) changed[key] = dirty = true;
+	}
+	if (!dirty) return;
+
+	this._state = assign({}, oldState, newState);
+	this._recompute(changed, this._state);
+	if (this._bind) this._bind(changed, this._state);
+	dispatchObservers(this, this._observers.pre, changed, this._state, oldState);
+	this._fragment.p(changed, this._state);
+	dispatchObservers(this, this._observers.post, changed, this._state, oldState);
+}
+
+function callAll(fns) {
+	while (fns && fns.length) fns.pop()();
+}
+
+function _mount(target, anchor) {
+	this._fragment.m(target, anchor);
+}
+
+function _unmount() {
+	this._fragment.u();
+}
+
+var proto = {
+	destroy: destroy,
+	get: get,
+	fire: fire,
+	observe: observe,
+	on: on,
+	set: set,
+	teardown: destroy,
+	_recompute: noop,
+	_set: _set,
+	_mount: _mount,
+	_unmount: _unmount
+};
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+
+
+function unwrapExports (x) {
+	return x && x.__esModule ? x['default'] : x;
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var fuse = createCommonjsModule(function (module, exports) {
+/*!
+ * Fuse.js v3.0.5 - Lightweight fuzzy-search (http://fusejs.io)
+ * 
+ * Copyright (c) 2012-2017 Kirollos Risk (http://kiro.me)
+ * All Rights Reserved. Apache Software License 2.0
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+(function webpackUniversalModuleDefinition(root, factory) {
+	module.exports = factory();
+})(commonjsGlobal, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (obj) {
+  return Object.prototype.toString.call(obj) === '[object Array]';
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var bitapRegexSearch = __webpack_require__(5);
+var bitapSearch = __webpack_require__(7);
+var patternAlphabet = __webpack_require__(4);
+
+var Bitap = function () {
+  function Bitap(pattern, _ref) {
+    var _ref$location = _ref.location,
+        location = _ref$location === undefined ? 0 : _ref$location,
+        _ref$distance = _ref.distance,
+        distance = _ref$distance === undefined ? 100 : _ref$distance,
+        _ref$threshold = _ref.threshold,
+        threshold = _ref$threshold === undefined ? 0.6 : _ref$threshold,
+        _ref$maxPatternLength = _ref.maxPatternLength,
+        maxPatternLength = _ref$maxPatternLength === undefined ? 32 : _ref$maxPatternLength,
+        _ref$isCaseSensitive = _ref.isCaseSensitive,
+        isCaseSensitive = _ref$isCaseSensitive === undefined ? false : _ref$isCaseSensitive,
+        _ref$tokenSeparator = _ref.tokenSeparator,
+        tokenSeparator = _ref$tokenSeparator === undefined ? / +/g : _ref$tokenSeparator,
+        _ref$findAllMatches = _ref.findAllMatches,
+        findAllMatches = _ref$findAllMatches === undefined ? false : _ref$findAllMatches,
+        _ref$minMatchCharLeng = _ref.minMatchCharLength,
+        minMatchCharLength = _ref$minMatchCharLeng === undefined ? 1 : _ref$minMatchCharLeng;
+
+    _classCallCheck(this, Bitap);
+
+    this.options = {
+      location: location,
+      distance: distance,
+      threshold: threshold,
+      maxPatternLength: maxPatternLength,
+      isCaseSensitive: isCaseSensitive,
+      tokenSeparator: tokenSeparator,
+      findAllMatches: findAllMatches,
+      minMatchCharLength: minMatchCharLength
+    };
+
+    this.pattern = this.options.isCaseSensitive ? pattern : pattern.toLowerCase();
+
+    if (this.pattern.length <= maxPatternLength) {
+      this.patternAlphabet = patternAlphabet(this.pattern);
+    }
+  }
+
+  _createClass(Bitap, [{
+    key: 'search',
+    value: function search(text) {
+      if (!this.options.isCaseSensitive) {
+        text = text.toLowerCase();
+      }
+
+      // Exact match
+      if (this.pattern === text) {
+        return {
+          isMatch: true,
+          score: 0,
+          matchedIndices: [[0, text.length - 1]]
+        };
+      }
+
+      // When pattern length is greater than the machine word length, just do a a regex comparison
+      var _options = this.options,
+          maxPatternLength = _options.maxPatternLength,
+          tokenSeparator = _options.tokenSeparator;
+
+      if (this.pattern.length > maxPatternLength) {
+        return bitapRegexSearch(text, this.pattern, tokenSeparator);
+      }
+
+      // Otherwise, use Bitap algorithm
+      var _options2 = this.options,
+          location = _options2.location,
+          distance = _options2.distance,
+          threshold = _options2.threshold,
+          findAllMatches = _options2.findAllMatches,
+          minMatchCharLength = _options2.minMatchCharLength;
+
+      return bitapSearch(text, this.pattern, this.patternAlphabet, {
+        location: location,
+        distance: distance,
+        threshold: threshold,
+        findAllMatches: findAllMatches,
+        minMatchCharLength: minMatchCharLength
+      });
+    }
+  }]);
+
+  return Bitap;
+}();
+
+// let x = new Bitap("od mn war", {})
+// let result = x.search("Old Man's War")
+// console.log(result)
+
+module.exports = Bitap;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isArray = __webpack_require__(0);
+
+var deepValue = function deepValue(obj, path, list) {
+  if (!path) {
+    // If there's no path left, we've gotten to the object we care about.
+    list.push(obj);
+  } else {
+    var dotIndex = path.indexOf('.');
+    var firstSegment = path;
+    var remaining = null;
+
+    if (dotIndex !== -1) {
+      firstSegment = path.slice(0, dotIndex);
+      remaining = path.slice(dotIndex + 1);
+    }
+
+    var value = obj[firstSegment];
+
+    if (value !== null && value !== undefined) {
+      if (!remaining && (typeof value === 'string' || typeof value === 'number')) {
+        list.push(value);
+      } else if (isArray(value)) {
+        // Search each item in the array.
+        for (var i = 0, len = value.length; i < len; i += 1) {
+          deepValue(value[i], remaining, list);
+        }
+      } else if (remaining) {
+        // An object. Recurse further.
+        deepValue(value, remaining, list);
+      }
+    }
+  }
+
+  return list;
+};
+
+module.exports = function (obj, path) {
+  return deepValue(obj, path, []);
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function () {
+  var matchmask = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var minMatchCharLength = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+  var matchedIndices = [];
+  var start = -1;
+  var end = -1;
+  var i = 0;
+
+  for (var len = matchmask.length; i < len; i += 1) {
+    var match = matchmask[i];
+    if (match && start === -1) {
+      start = i;
+    } else if (!match && start !== -1) {
+      end = i - 1;
+      if (end - start + 1 >= minMatchCharLength) {
+        matchedIndices.push([start, end]);
+      }
+      start = -1;
+    }
+  }
+
+  // (i-1 - start) + 1 => i - start
+  if (matchmask[i - 1] && i - start >= minMatchCharLength) {
+    matchedIndices.push([start, i - 1]);
+  }
+
+  return matchedIndices;
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (pattern) {
+  var mask = {};
+  var len = pattern.length;
+
+  for (var i = 0; i < len; i += 1) {
+    mask[pattern.charAt(i)] = 0;
+  }
+
+  for (var _i = 0; _i < len; _i += 1) {
+    mask[pattern.charAt(_i)] |= 1 << len - _i - 1;
+  }
+
+  return mask;
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var SPECIAL_CHARS_REGEX = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
+
+module.exports = function (text, pattern) {
+  var tokenSeparator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : / +/g;
+
+  var regex = new RegExp(pattern.replace(SPECIAL_CHARS_REGEX, '\\$&').replace(tokenSeparator, '|'));
+  var matches = text.match(regex);
+  var isMatch = !!matches;
+  var matchedIndices = [];
+
+  if (isMatch) {
+    for (var i = 0, matchesLen = matches.length; i < matchesLen; i += 1) {
+      var match = matches[i];
+      matchedIndices.push([text.indexOf(match), match.length - 1]);
+    }
+  }
+
+  return {
+    // TODO: revisit this score
+    score: isMatch ? 0.5 : 1,
+    isMatch: isMatch,
+    matchedIndices: matchedIndices
+  };
+};
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (pattern, _ref) {
+  var _ref$errors = _ref.errors,
+      errors = _ref$errors === undefined ? 0 : _ref$errors,
+      _ref$currentLocation = _ref.currentLocation,
+      currentLocation = _ref$currentLocation === undefined ? 0 : _ref$currentLocation,
+      _ref$expectedLocation = _ref.expectedLocation,
+      expectedLocation = _ref$expectedLocation === undefined ? 0 : _ref$expectedLocation,
+      _ref$distance = _ref.distance,
+      distance = _ref$distance === undefined ? 100 : _ref$distance;
+
+  var accuracy = errors / pattern.length;
+  var proximity = Math.abs(expectedLocation - currentLocation);
+
+  if (!distance) {
+    // Dodge divide by zero error.
+    return proximity ? 1.0 : accuracy;
+  }
+
+  return accuracy + proximity / distance;
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bitapScore = __webpack_require__(6);
+var matchedIndices = __webpack_require__(3);
+
+module.exports = function (text, pattern, patternAlphabet, _ref) {
+  var _ref$location = _ref.location,
+      location = _ref$location === undefined ? 0 : _ref$location,
+      _ref$distance = _ref.distance,
+      distance = _ref$distance === undefined ? 100 : _ref$distance,
+      _ref$threshold = _ref.threshold,
+      threshold = _ref$threshold === undefined ? 0.6 : _ref$threshold,
+      _ref$findAllMatches = _ref.findAllMatches,
+      findAllMatches = _ref$findAllMatches === undefined ? false : _ref$findAllMatches,
+      _ref$minMatchCharLeng = _ref.minMatchCharLength,
+      minMatchCharLength = _ref$minMatchCharLeng === undefined ? 1 : _ref$minMatchCharLeng;
+
+  var expectedLocation = location;
+  // Set starting location at beginning text and initialize the alphabet.
+  var textLen = text.length;
+  // Highest score beyond which we give up.
+  var currentThreshold = threshold;
+  // Is there a nearby exact match? (speedup)
+  var bestLocation = text.indexOf(pattern, expectedLocation);
+
+  var patternLen = pattern.length;
+
+  // a mask of the matches
+  var matchMask = [];
+  for (var i = 0; i < textLen; i += 1) {
+    matchMask[i] = 0;
+  }
+
+  if (bestLocation !== -1) {
+    var score = bitapScore(pattern, {
+      errors: 0,
+      currentLocation: bestLocation,
+      expectedLocation: expectedLocation,
+      distance: distance
+    });
+    currentThreshold = Math.min(score, currentThreshold);
+
+    // What about in the other direction? (speed up)
+    bestLocation = text.lastIndexOf(pattern, expectedLocation + patternLen);
+
+    if (bestLocation !== -1) {
+      var _score = bitapScore(pattern, {
+        errors: 0,
+        currentLocation: bestLocation,
+        expectedLocation: expectedLocation,
+        distance: distance
+      });
+      currentThreshold = Math.min(_score, currentThreshold);
+    }
+  }
+
+  // Reset the best location
+  bestLocation = -1;
+
+  var lastBitArr = [];
+  var finalScore = 1;
+  var binMax = patternLen + textLen;
+
+  var mask = 1 << patternLen - 1;
+
+  for (var _i = 0; _i < patternLen; _i += 1) {
+    // Scan for the best match; each iteration allows for one more error.
+    // Run a binary search to determine how far from the match location we can stray
+    // at this error level.
+    var binMin = 0;
+    var binMid = binMax;
+
+    while (binMin < binMid) {
+      var _score3 = bitapScore(pattern, {
+        errors: _i,
+        currentLocation: expectedLocation + binMid,
+        expectedLocation: expectedLocation,
+        distance: distance
+      });
+
+      if (_score3 <= currentThreshold) {
+        binMin = binMid;
+      } else {
+        binMax = binMid;
+      }
+
+      binMid = Math.floor((binMax - binMin) / 2 + binMin);
+    }
+
+    // Use the result from this iteration as the maximum for the next.
+    binMax = binMid;
+
+    var start = Math.max(1, expectedLocation - binMid + 1);
+    var finish = findAllMatches ? textLen : Math.min(expectedLocation + binMid, textLen) + patternLen;
+
+    // Initialize the bit array
+    var bitArr = Array(finish + 2);
+
+    bitArr[finish + 1] = (1 << _i) - 1;
+
+    for (var j = finish; j >= start; j -= 1) {
+      var currentLocation = j - 1;
+      var charMatch = patternAlphabet[text.charAt(currentLocation)];
+
+      if (charMatch) {
+        matchMask[currentLocation] = 1;
+      }
+
+      // First pass: exact match
+      bitArr[j] = (bitArr[j + 1] << 1 | 1) & charMatch;
+
+      // Subsequent passes: fuzzy match
+      if (_i !== 0) {
+        bitArr[j] |= (lastBitArr[j + 1] | lastBitArr[j]) << 1 | 1 | lastBitArr[j + 1];
+      }
+
+      if (bitArr[j] & mask) {
+        finalScore = bitapScore(pattern, {
+          errors: _i,
+          currentLocation: currentLocation,
+          expectedLocation: expectedLocation,
+          distance: distance
+        });
+
+        // This match will almost certainly be better than any existing match.
+        // But check anyway.
+        if (finalScore <= currentThreshold) {
+          // Indeed it is
+          currentThreshold = finalScore;
+          bestLocation = currentLocation;
+
+          // Already passed `loc`, downhill from here on in.
+          if (bestLocation <= expectedLocation) {
+            break;
+          }
+
+          // When passing `bestLocation`, don't exceed our current distance from `expectedLocation`.
+          start = Math.max(1, 2 * expectedLocation - bestLocation);
+        }
+      }
+    }
+
+    // No hope for a (better) match at greater error levels.
+    var _score2 = bitapScore(pattern, {
+      errors: _i + 1,
+      currentLocation: expectedLocation,
+      expectedLocation: expectedLocation,
+      distance: distance
+    });
+
+    if (_score2 > currentThreshold) {
+      break;
+    }
+
+    lastBitArr = bitArr;
+  }
+
+  // Count exact matches (those with a score of 0) to be "almost" exact
+  return {
+    isMatch: bestLocation >= 0,
+    score: finalScore === 0 ? 0.001 : finalScore,
+    matchedIndices: matchedIndices(matchMask, minMatchCharLength)
+  };
+};
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Bitap = __webpack_require__(1);
+var deepValue = __webpack_require__(2);
+var isArray = __webpack_require__(0);
+
+var Fuse = function () {
+  function Fuse(list, _ref) {
+    var _ref$location = _ref.location,
+        location = _ref$location === undefined ? 0 : _ref$location,
+        _ref$distance = _ref.distance,
+        distance = _ref$distance === undefined ? 100 : _ref$distance,
+        _ref$threshold = _ref.threshold,
+        threshold = _ref$threshold === undefined ? 0.6 : _ref$threshold,
+        _ref$maxPatternLength = _ref.maxPatternLength,
+        maxPatternLength = _ref$maxPatternLength === undefined ? 32 : _ref$maxPatternLength,
+        _ref$caseSensitive = _ref.caseSensitive,
+        caseSensitive = _ref$caseSensitive === undefined ? false : _ref$caseSensitive,
+        _ref$tokenSeparator = _ref.tokenSeparator,
+        tokenSeparator = _ref$tokenSeparator === undefined ? / +/g : _ref$tokenSeparator,
+        _ref$findAllMatches = _ref.findAllMatches,
+        findAllMatches = _ref$findAllMatches === undefined ? false : _ref$findAllMatches,
+        _ref$minMatchCharLeng = _ref.minMatchCharLength,
+        minMatchCharLength = _ref$minMatchCharLeng === undefined ? 1 : _ref$minMatchCharLeng,
+        _ref$id = _ref.id,
+        id = _ref$id === undefined ? null : _ref$id,
+        _ref$keys = _ref.keys,
+        keys = _ref$keys === undefined ? [] : _ref$keys,
+        _ref$shouldSort = _ref.shouldSort,
+        shouldSort = _ref$shouldSort === undefined ? true : _ref$shouldSort,
+        _ref$getFn = _ref.getFn,
+        getFn = _ref$getFn === undefined ? deepValue : _ref$getFn,
+        _ref$sortFn = _ref.sortFn,
+        sortFn = _ref$sortFn === undefined ? function (a, b) {
+      return a.score - b.score;
+    } : _ref$sortFn,
+        _ref$tokenize = _ref.tokenize,
+        tokenize = _ref$tokenize === undefined ? false : _ref$tokenize,
+        _ref$matchAllTokens = _ref.matchAllTokens,
+        matchAllTokens = _ref$matchAllTokens === undefined ? false : _ref$matchAllTokens,
+        _ref$includeMatches = _ref.includeMatches,
+        includeMatches = _ref$includeMatches === undefined ? false : _ref$includeMatches,
+        _ref$includeScore = _ref.includeScore,
+        includeScore = _ref$includeScore === undefined ? false : _ref$includeScore,
+        _ref$verbose = _ref.verbose,
+        verbose = _ref$verbose === undefined ? false : _ref$verbose;
+
+    _classCallCheck(this, Fuse);
+
+    this.options = {
+      location: location,
+      distance: distance,
+      threshold: threshold,
+      maxPatternLength: maxPatternLength,
+      isCaseSensitive: caseSensitive,
+      tokenSeparator: tokenSeparator,
+      findAllMatches: findAllMatches,
+      minMatchCharLength: minMatchCharLength,
+      id: id,
+      keys: keys,
+      includeMatches: includeMatches,
+      includeScore: includeScore,
+      shouldSort: shouldSort,
+      getFn: getFn,
+      sortFn: sortFn,
+      verbose: verbose,
+      tokenize: tokenize,
+      matchAllTokens: matchAllTokens
+    };
+
+    this.setCollection(list);
+  }
+
+  _createClass(Fuse, [{
+    key: 'setCollection',
+    value: function setCollection(list) {
+      this.list = list;
+      return list;
+    }
+  }, {
+    key: 'search',
+    value: function search(pattern) {
+      this._log('---------\nSearch pattern: "' + pattern + '"');
+
+      var _prepareSearchers2 = this._prepareSearchers(pattern),
+          tokenSearchers = _prepareSearchers2.tokenSearchers,
+          fullSearcher = _prepareSearchers2.fullSearcher;
+
+      var _search2 = this._search(tokenSearchers, fullSearcher),
+          weights = _search2.weights,
+          results = _search2.results;
+
+      this._computeScore(weights, results);
+
+      if (this.options.shouldSort) {
+        this._sort(results);
+      }
+
+      return this._format(results);
+    }
+  }, {
+    key: '_prepareSearchers',
+    value: function _prepareSearchers() {
+      var pattern = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+      var tokenSearchers = [];
+
+      if (this.options.tokenize) {
+        // Tokenize on the separator
+        var tokens = pattern.split(this.options.tokenSeparator);
+        for (var i = 0, len = tokens.length; i < len; i += 1) {
+          tokenSearchers.push(new Bitap(tokens[i], this.options));
+        }
+      }
+
+      var fullSearcher = new Bitap(pattern, this.options);
+
+      return { tokenSearchers: tokenSearchers, fullSearcher: fullSearcher };
+    }
+  }, {
+    key: '_search',
+    value: function _search() {
+      var tokenSearchers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var fullSearcher = arguments[1];
+
+      var list = this.list;
+      var resultMap = {};
+      var results = [];
+
+      // Check the first item in the list, if it's a string, then we assume
+      // that every item in the list is also a string, and thus it's a flattened array.
+      if (typeof list[0] === 'string') {
+        // Iterate over every item
+        for (var i = 0, len = list.length; i < len; i += 1) {
+          this._analyze({
+            key: '',
+            value: list[i],
+            record: i,
+            index: i
+          }, {
+            resultMap: resultMap,
+            results: results,
+            tokenSearchers: tokenSearchers,
+            fullSearcher: fullSearcher
+          });
+        }
+
+        return { weights: null, results: results };
+      }
+
+      // Otherwise, the first item is an Object (hopefully), and thus the searching
+      // is done on the values of the keys of each item.
+      var weights = {};
+      for (var _i = 0, _len = list.length; _i < _len; _i += 1) {
+        var item = list[_i];
+        // Iterate over every key
+        for (var j = 0, keysLen = this.options.keys.length; j < keysLen; j += 1) {
+          var key = this.options.keys[j];
+          if (typeof key !== 'string') {
+            weights[key.name] = {
+              weight: 1 - key.weight || 1
+            };
+            if (key.weight <= 0 || key.weight > 1) {
+              throw new Error('Key weight has to be > 0 and <= 1');
+            }
+            key = key.name;
+          } else {
+            weights[key] = {
+              weight: 1
+            };
+          }
+
+          this._analyze({
+            key: key,
+            value: this.options.getFn(item, key),
+            record: item,
+            index: _i
+          }, {
+            resultMap: resultMap,
+            results: results,
+            tokenSearchers: tokenSearchers,
+            fullSearcher: fullSearcher
+          });
+        }
+      }
+
+      return { weights: weights, results: results };
+    }
+  }, {
+    key: '_analyze',
+    value: function _analyze(_ref2, _ref3) {
+      var key = _ref2.key,
+          value = _ref2.value,
+          record = _ref2.record,
+          index = _ref2.index;
+      var _ref3$tokenSearchers = _ref3.tokenSearchers,
+          tokenSearchers = _ref3$tokenSearchers === undefined ? [] : _ref3$tokenSearchers,
+          _ref3$fullSearcher = _ref3.fullSearcher,
+          fullSearcher = _ref3$fullSearcher === undefined ? [] : _ref3$fullSearcher,
+          _ref3$resultMap = _ref3.resultMap,
+          resultMap = _ref3$resultMap === undefined ? {} : _ref3$resultMap,
+          _ref3$results = _ref3.results,
+          results = _ref3$results === undefined ? [] : _ref3$results;
+
+      // Check if the texvaluet can be searched
+      if (value === undefined || value === null) {
+        return;
+      }
+
+      var exists = false;
+      var averageScore = -1;
+      var numTextMatches = 0;
+
+      if (typeof value === 'string') {
+        this._log('\nKey: ' + (key === '' ? '-' : key));
+
+        var mainSearchResult = fullSearcher.search(value);
+        this._log('Full text: "' + value + '", score: ' + mainSearchResult.score);
+
+        if (this.options.tokenize) {
+          var words = value.split(this.options.tokenSeparator);
+          var scores = [];
+
+          for (var i = 0; i < tokenSearchers.length; i += 1) {
+            var tokenSearcher = tokenSearchers[i];
+
+            this._log('\nPattern: "' + tokenSearcher.pattern + '"');
+
+            // let tokenScores = []
+            var hasMatchInText = false;
+
+            for (var j = 0; j < words.length; j += 1) {
+              var word = words[j];
+              var tokenSearchResult = tokenSearcher.search(word);
+              var obj = {};
+              if (tokenSearchResult.isMatch) {
+                obj[word] = tokenSearchResult.score;
+                exists = true;
+                hasMatchInText = true;
+                scores.push(tokenSearchResult.score);
+              } else {
+                obj[word] = 1;
+                if (!this.options.matchAllTokens) {
+                  scores.push(1);
+                }
+              }
+              this._log('Token: "' + word + '", score: ' + obj[word]);
+              // tokenScores.push(obj)
+            }
+
+            if (hasMatchInText) {
+              numTextMatches += 1;
+            }
+          }
+
+          averageScore = scores[0];
+          var scoresLen = scores.length;
+          for (var _i2 = 1; _i2 < scoresLen; _i2 += 1) {
+            averageScore += scores[_i2];
+          }
+          averageScore = averageScore / scoresLen;
+
+          this._log('Token score average:', averageScore);
+        }
+
+        var finalScore = mainSearchResult.score;
+        if (averageScore > -1) {
+          finalScore = (finalScore + averageScore) / 2;
+        }
+
+        this._log('Score average:', finalScore);
+
+        var checkTextMatches = this.options.tokenize && this.options.matchAllTokens ? numTextMatches >= tokenSearchers.length : true;
+
+        this._log('\nCheck Matches: ' + checkTextMatches);
+
+        // If a match is found, add the item to <rawResults>, including its score
+        if ((exists || mainSearchResult.isMatch) && checkTextMatches) {
+          // Check if the item already exists in our results
+          var existingResult = resultMap[index];
+
+          if (existingResult) {
+            // Use the lowest score
+            // existingResult.score, bitapResult.score
+            existingResult.output.push({
+              key: key,
+              score: finalScore,
+              matchedIndices: mainSearchResult.matchedIndices
+            });
+          } else {
+            // Add it to the raw result list
+            resultMap[index] = {
+              item: record,
+              output: [{
+                key: key,
+                score: finalScore,
+                matchedIndices: mainSearchResult.matchedIndices
+              }]
+            };
+
+            results.push(resultMap[index]);
+          }
+        }
+      } else if (isArray(value)) {
+        for (var _i3 = 0, len = value.length; _i3 < len; _i3 += 1) {
+          this._analyze({
+            key: key,
+            value: value[_i3],
+            record: record,
+            index: index
+          }, {
+            resultMap: resultMap,
+            results: results,
+            tokenSearchers: tokenSearchers,
+            fullSearcher: fullSearcher
+          });
+        }
+      }
+    }
+  }, {
+    key: '_computeScore',
+    value: function _computeScore(weights, results) {
+      this._log('\n\nComputing score:\n');
+
+      for (var i = 0, len = results.length; i < len; i += 1) {
+        var output = results[i].output;
+        var scoreLen = output.length;
+
+        var totalScore = 0;
+        var bestScore = 1;
+
+        for (var j = 0; j < scoreLen; j += 1) {
+          var score = output[j].score;
+          var weight = weights ? weights[output[j].key].weight : 1;
+          var nScore = score * weight;
+
+          if (weight !== 1) {
+            bestScore = Math.min(bestScore, nScore);
+          } else {
+            output[j].nScore = nScore;
+            totalScore += nScore;
+          }
+        }
+
+        results[i].score = bestScore === 1 ? totalScore / scoreLen : bestScore;
+
+        this._log(results[i]);
+      }
+    }
+  }, {
+    key: '_sort',
+    value: function _sort(results) {
+      this._log('\n\nSorting....');
+      results.sort(this.options.sortFn);
+    }
+  }, {
+    key: '_format',
+    value: function _format(results) {
+      var finalOutput = [];
+
+      this._log('\n\nOutput:\n\n', results);
+
+      var transformers = [];
+
+      if (this.options.includeMatches) {
+        transformers.push(function (result, data) {
+          var output = result.output;
+          data.matches = [];
+
+          for (var i = 0, len = output.length; i < len; i += 1) {
+            var item = output[i];
+            var obj = {
+              indices: item.matchedIndices
+            };
+            if (item.key) {
+              obj.key = item.key;
+            }
+            data.matches.push(obj);
+          }
+        });
+      }
+
+      if (this.options.includeScore) {
+        transformers.push(function (result, data) {
+          data.score = result.score;
+        });
+      }
+
+      for (var i = 0, len = results.length; i < len; i += 1) {
+        var result = results[i];
+
+        if (this.options.id) {
+          result.item = this.options.getFn(result.item, this.options.id)[0];
+        }
+
+        if (!transformers.length) {
+          finalOutput.push(result.item);
+          continue;
+        }
+
+        var data = {
+          item: result.item
+        };
+
+        for (var j = 0, _len2 = transformers.length; j < _len2; j += 1) {
+          transformers[j](result, data);
+        }
+
+        finalOutput.push(data);
+      }
+
+      return finalOutput;
+    }
+  }, {
+    key: '_log',
+    value: function _log() {
+      if (this.options.verbose) {
+        var _console;
+
+        (_console = console).log.apply(_console, arguments);
+      }
+    }
+  }]);
+
+  return Fuse;
+}();
+
+module.exports = Fuse;
+
+/***/ })
+/******/ ]);
+});
+//# sourceMappingURL=fuse.js.map
+});
+
+var Fuse = unwrapExports(fuse);
+
+/* src\paginate.html generated by Svelte v1.40.2 */
+const splitObject = o => Object.keys(o).map(e => (o[e]));  
+
+function pages(selected, pageCount, pageRange, marginPages) {
+    let items = {};
+    if (pageCount <= pageRange) {
+        for (let index = 0; index < pageCount; index++) {
+            let page = {
+            index: index,
+            content: index + 1,
+            selected: index === selected
+            };
+            items[index] = page;
+        }
+    } else {
+        let leftPart = pageRange / 2;
+        let rightPart = pageRange - leftPart;
+
+        if (selected < leftPart) {
+            leftPart = selected;
+            rightPart = pageRange - leftPart;
+        } else if (selected > pageCount - pageRange / 2) {
+            rightPart = pageCount - selected;
+            leftPart = pageRange - rightPart;
+        }
+
+        // items logic extracted into this function
+        let mapItems = index => {
+            let page = {
+                index: index,
+                content: index + 1,
+                selected: index === selected
+            };
+
+            if (index <= marginPages - 1 || index >= pageCount - marginPages) {
+                items[index] = page;
+                return
+            }
+
+            let breakView = {
+                content: '...',
+                disabled: true
+            };
+
+            if ((selected - leftPart) > marginPages && items[marginPages] !== breakView) {
+                items[marginPages] = breakView;
+            }
+
+            if ((selected + rightPart) < (pageCount - marginPages - 1) && items[pageCount - marginPages - 1] !== breakView) {
+                items[pageCount - marginPages - 1] = breakView;
+            }
+
+            let overCount = selected + rightPart - pageCount + 1;
+
+            if (overCount > 0 && index === selected - leftPart - overCount) {
+                items[index] = page;
+            }
+
+            if ((index >= selected - leftPart) && (index <= selected + rightPart)) {
+                items[index] = page;
+                return
+            }
+        };
+
+        // 1st - loop thru low end of margin pages
+        for (let i = 0; i < marginPages; i++) {
+            mapItems(i);
+        }
+
+        // 2nd - loop thru high end of margin pages
+        for (let i = pageCount - 1; i >= pageCount - marginPages; i--) {
+            mapItems(i);
+        }
+
+        // 3rd - loop thru selected range
+        let selectedRangeLow = 0;
+        if (selected - pageRange > 0) {
+            selectedRangeLow = selected - pageRange;
+        }
+
+        let selectedRangeHigh = pageCount;
+        if (selected + pageRange < pageCount) {
+            selectedRangeHigh = selected + pageRange;
+        }
+
+        for (let i = selectedRangeLow; i < selectedRangeHigh; i++) {
+            mapItems(i);
+        }
+    }
+    return splitObject(items);
+}
+
+function data$1() {
+	return {
+    selected: 0,
+    pageCount: 0,
+    initialPage: 0,
+    forcePage: 0,
+    clickHandler:() => { },
+    pageRange: 3,
+    marginPages: 1,
+    prevText: 'Prev',
+    nextText: 'Next',
+    containerClass: '',
+    pageClass: '',
+    pageLinkClass:'',
+    prevClass: '',
+    prevLinkClass: '',
+    nextClass: '',
+    nextLinkClass: '',
+    activeClass: 'active',
+    disabledClass: 'disabled',
+    noLiSurround: false,
+    // pages: []
+};
+}
+
+function lastPageSelected(selected, pageCount) {
+    return (selected === pageCount - 1) || (pageCount === 0);
+}
+
+function firstPageSelected(selected) {
+    return selected === 0;
+}
+
+var methods$1 = {
+    handlePageSelected(selectedIndex) {
+        let {selected, clickHandler} = this.get();
+        if (selected === selectedIndex) return;
+            
+        this.set({selected: selected = selectedIndex});
+        clickHandler(selected + 1);
+    },
+    prevPage() {
+        let {selected, clickHandler} = this.get();
+        if (selected <= 0) return;
+
+        this.set({selected: --selected});
+        clickHandler(selected + 1);
+    },
+    nextPage() {
+        let {selected, pageCount, clickHandler} = this.get();
+        if (selected >= pageCount - 1) return;
+
+        this.set({selected: ++selected});
+        clickHandler(selected + 1);
+    }
+};
+
+function oncreate$1() {
+    this.observe('forcePage', forcePage => {
+        if (forcePage !== this.get('selected')) {
+            this.set({selected: forcePage});
+        }
+    });       
+}
+
+function encapsulateStyles$1(node) {
+	setAttribute(node, "svelte-694586458", "");
+}
+
+function create_main_fragment$1(state, component) {
+	var if_block_anchor;
+
+	var current_block_type = select_block_type_2(state);
+	var if_block = current_block_type(state, component);
+
+	return {
+		c: function create() {
+			if_block.c();
+			if_block_anchor = createComment();
+		},
+
+		m: function mount(target, anchor) {
+			if_block.m(target, anchor);
+			insertNode(if_block_anchor, target, anchor);
+		},
+
+		p: function update(changed, state) {
+			if (current_block_type === (current_block_type = select_block_type_2(state)) && if_block) {
+				if_block.p(changed, state);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, component);
+				if_block.c();
+				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+			}
+		},
+
+		u: function unmount() {
+			if_block.u();
+			detachNode(if_block_anchor);
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+		}
+	};
+}
+
+// (6:4) {{#each pages as page}}
+function create_each_block$1(state, pages_1, page, page_index, component) {
+	var li;
+
+	var current_block_type = select_block_type$1(state, pages_1, page, page_index);
+	var if_block = current_block_type(state, pages_1, page, page_index, component);
+
+	return {
+		c: function create() {
+			li = createElement("li");
+			if_block.c();
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(li, target, anchor);
+			if_block.m(li, null);
+		},
+
+		p: function update(changed, state, pages_1, page, page_index) {
+			if (current_block_type === (current_block_type = select_block_type$1(state, pages_1, page, page_index)) && if_block) {
+				if_block.p(changed, state, pages_1, page, page_index);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, pages_1, page, page_index, component);
+				if_block.c();
+				if_block.m(li, null);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(li);
+			if_block.u();
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+		}
+	};
+}
+
+// (8:12) {{#if page.disabled}}
+function create_if_block_1$1(state, pages_1, page, page_index, component) {
+	var a, text_value = page.content, text;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.className = state.pageLinkClass;
+			a.tabIndex = "0";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(text, a);
+		},
+
+		p: function update(changed, state, pages_1, page, page_index) {
+			if (changed.pageLinkClass) {
+				a.className = state.pageLinkClass;
+			}
+
+			if ((changed.pages) && text_value !== (text_value = page.content)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: noop
+	};
+}
+
+// (10:12) {{else}}
+function create_if_block_2$1(state, pages_1, page, page_index, component) {
+	var a, text_value = page.content, text;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.className = state.pageLinkClass;
+			a.tabIndex = "0";
+			addListener(a, "click", click_handler$1);
+
+			a._svelte = {
+				component: component,
+				pages_1: pages_1,
+				page_index: page_index
+			};
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(text, a);
+		},
+
+		p: function update(changed, state, pages_1, page, page_index) {
+			if (changed.pageLinkClass) {
+				a.className = state.pageLinkClass;
+			}
+
+			a._svelte.pages_1 = pages_1;
+			a._svelte.page_index = page_index;
+
+			if ((changed.pages) && text_value !== (text_value = page.content)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler$1);
+		}
+	};
+}
+
+// (23:4) {{#each pages as page}}
+function create_each_block_1$1(state, pages_1, page_1, page_index, component) {
+	var if_block_anchor;
+
+	var current_block_type = select_block_type_1(state, pages_1, page_1, page_index);
+	var if_block = current_block_type(state, pages_1, page_1, page_index, component);
+
+	return {
+		c: function create() {
+			if_block.c();
+			if_block_anchor = createComment();
+		},
+
+		m: function mount(target, anchor) {
+			if_block.m(target, anchor);
+			insertNode(if_block_anchor, target, anchor);
+		},
+
+		p: function update(changed, state, pages_1, page_1, page_index) {
+			if (current_block_type === (current_block_type = select_block_type_1(state, pages_1, page_1, page_index)) && if_block) {
+				if_block.p(changed, state, pages_1, page_1, page_index);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, pages_1, page_1, page_index, component);
+				if_block.c();
+				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+			}
+		},
+
+		u: function unmount() {
+			if_block.u();
+			detachNode(if_block_anchor);
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+		}
+	};
+}
+
+// (24:8) {{#if page.disabled}}
+function create_if_block_4$1(state, pages_1, page_1, page_index, component) {
+	var a, a_class_value, text_value = page_1.content, text;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.className = a_class_value = "" + state.pageLinkClass + " " + (page_1.selected ? state.activeClass : '') + " " + (page_1.disabled ? state.disabledClass : '');
+			a.tabIndex = "0";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(text, a);
+		},
+
+		p: function update(changed, state, pages_1, page_1, page_index) {
+			if ((changed.pageLinkClass || changed.pages || changed.activeClass || changed.disabledClass) && a_class_value !== (a_class_value = "" + state.pageLinkClass + " " + (page_1.selected ? state.activeClass : '') + " " + (page_1.disabled ? state.disabledClass : ''))) {
+				a.className = a_class_value;
+			}
+
+			if ((changed.pages) && text_value !== (text_value = page_1.content)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: noop
+	};
+}
+
+// (26:8) {{else}}
+function create_if_block_5$1(state, pages_1, page_1, page_index, component) {
+	var a, a_class_value, text_value = page_1.content, text;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.className = a_class_value = "" + state.pageLinkClass + " " + (page_1.selected ? state.activeClass : '') + " " + (page_1.disabled ? state.disabledClass : '');
+			a.tabIndex = "0";
+			addListener(a, "click", click_handler_1$1);
+
+			a._svelte = {
+				component: component,
+				pages_1: pages_1,
+				page_index: page_index
+			};
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(text, a);
+		},
+
+		p: function update(changed, state, pages_1, page_1, page_index) {
+			if ((changed.pageLinkClass || changed.pages || changed.activeClass || changed.disabledClass) && a_class_value !== (a_class_value = "" + state.pageLinkClass + " " + (page_1.selected ? state.activeClass : '') + " " + (page_1.disabled ? state.disabledClass : ''))) {
+				a.className = a_class_value;
+			}
+
+			a._svelte.pages_1 = pages_1;
+			a._svelte.page_index = page_index;
+
+			if ((changed.pages) && text_value !== (text_value = page_1.content)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler_1$1);
+		}
+	};
+}
+
+// (1:0) {{#if !noLiSurround}}
+function create_if_block$1(state, component) {
+	var ul, li, li_class_value, a, slot_content_prevContent = component._slotted.prevContent, text, li_1, li_1_class_value, a_1, slot_content_nextContent = component._slotted.nextContent, text_2;
+
+	function click_handler(event) {
+		component.prevPage();
+	}
+
+	var pages_1 = state.pages;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < pages_1.length; i += 1) {
+		each_blocks[i] = create_each_block$1(state, pages_1, pages_1[i], i, component);
+	}
+
+	function click_handler_1(event) {
+		component.nextPage();
+	}
+
+	return {
+		c: function create() {
+			ul = createElement("ul");
+			li = createElement("li");
+			a = createElement("a");
+			if (!slot_content_prevContent) {
+				text = createText(state.prevText);
+			}
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			li_1 = createElement("li");
+			a_1 = createElement("a");
+			if (!slot_content_nextContent) {
+				text_2 = createText(state.nextText);
+			}
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$1(ul);
+			ul.className = state.containerClass;
+			li.className = li_class_value = "" + state.prevClass + " " + (firstPageSelected(state.selected) ? state.disabledClass : '');
+			a.className = state.prevLinkClass;
+			a.tabIndex = "0";
+			addListener(a, "click", click_handler);
+			li_1.className = li_1_class_value = "" + state.nextClass + " " + (lastPageSelected(state.selected, state.pageCount) ? state.disabledClass : '');
+			a_1.className = state.nextLinkClass;
+			a_1.tabIndex = "0";
+			addListener(a_1, "click", click_handler_1);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(ul, target, anchor);
+			appendNode(li, ul);
+			appendNode(a, li);
+			if (!slot_content_prevContent) {
+				appendNode(text, a);
+			}
+
+			if (slot_content_prevContent) {
+				appendNode(slot_content_prevContent, a);
+			}
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(ul, null);
+			}
+
+			appendNode(li_1, ul);
+			appendNode(a_1, li_1);
+			if (!slot_content_nextContent) {
+				appendNode(text_2, a_1);
+			}
+
+			if (slot_content_nextContent) {
+				appendNode(slot_content_nextContent, a_1);
+			}
+		},
+
+		p: function update(changed, state) {
+			if (changed.containerClass) {
+				ul.className = state.containerClass;
+			}
+
+			if ((changed.prevClass || changed.selected || changed.disabledClass) && li_class_value !== (li_class_value = "" + state.prevClass + " " + (firstPageSelected(state.selected) ? state.disabledClass : ''))) {
+				li.className = li_class_value;
+			}
+
+			if (changed.prevLinkClass) {
+				a.className = state.prevLinkClass;
+			}
+
+			if (changed.prevText) {
+				text.data = state.prevText;
+			}
+
+			var pages_1 = state.pages;
+
+			if (changed.pages || changed.pageLinkClass) {
+				for (var i = 0; i < pages_1.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, pages_1, pages_1[i], i);
+					} else {
+						each_blocks[i] = create_each_block$1(state, pages_1, pages_1[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(ul, li_1);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = pages_1.length;
+			}
+
+			if ((changed.nextClass || changed.selected || changed.pageCount || changed.disabledClass) && li_1_class_value !== (li_1_class_value = "" + state.nextClass + " " + (lastPageSelected(state.selected, state.pageCount) ? state.disabledClass : ''))) {
+				li_1.className = li_1_class_value;
+			}
+
+			if (changed.nextLinkClass) {
+				a_1.className = state.nextLinkClass;
+			}
+
+			if (changed.nextText) {
+				text_2.data = state.nextText;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(ul);
+
+			if (slot_content_prevContent) {
+				reinsertChildren(a, slot_content_prevContent);
+			}
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+
+			if (slot_content_nextContent) {
+				reinsertChildren(a_1, slot_content_nextContent);
+			}
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler);
+
+			destroyEach(each_blocks);
+
+			removeListener(a_1, "click", click_handler_1);
+		}
+	};
+}
+
+// (19:0) {{else}}
+function create_if_block_3$1(state, component) {
+	var div, a, a_class_value, slot_content_prevContentNoLi = component._slotted.prevContentNoLi, text, text_1, text_2, a_1, a_1_class_value, slot_content_nextContentNoLi = component._slotted.nextContentNoLi, text_3;
+
+	function click_handler_1(event) {
+		component.prevPage();
+	}
+
+	var pages_1 = state.pages;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < pages_1.length; i += 1) {
+		each_blocks[i] = create_each_block_1$1(state, pages_1, pages_1[i], i, component);
+	}
+
+	function click_handler_2(event) {
+		component.nextPage();
+	}
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			a = createElement("a");
+			if (!slot_content_prevContentNoLi) {
+				text = createText(state.prevText);
+			}
+			text_1 = createText("\r\n    ");
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			text_2 = createText("\r\n    ");
+			a_1 = createElement("a");
+			if (!slot_content_nextContentNoLi) {
+				text_3 = createText(state.nextText);
+			}
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$1(div);
+			div.className = state.containerClass;
+			a.className = a_class_value = "" + state.prevLinkClass + " " + (firstPageSelected(state.selected) ? state.disabledClass : '');
+			a.tabIndex = "0";
+			addListener(a, "click", click_handler_1);
+			a_1.className = a_1_class_value = "" + state.nextLinkClass + " " + (lastPageSelected(state.selected, state.pageCount) ? state.disabledClass : '');
+			a_1.tabIndex = "0";
+			addListener(a_1, "click", click_handler_2);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(a, div);
+			if (!slot_content_prevContentNoLi) {
+				appendNode(text, a);
+			}
+
+			if (slot_content_prevContentNoLi) {
+				appendNode(slot_content_prevContentNoLi, a);
+			}
+
+			appendNode(text_1, div);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(div, null);
+			}
+
+			appendNode(text_2, div);
+			appendNode(a_1, div);
+			if (!slot_content_nextContentNoLi) {
+				appendNode(text_3, a_1);
+			}
+
+			if (slot_content_nextContentNoLi) {
+				appendNode(slot_content_nextContentNoLi, a_1);
+			}
+		},
+
+		p: function update(changed, state) {
+			if (changed.containerClass) {
+				div.className = state.containerClass;
+			}
+
+			if ((changed.prevLinkClass || changed.selected || changed.disabledClass) && a_class_value !== (a_class_value = "" + state.prevLinkClass + " " + (firstPageSelected(state.selected) ? state.disabledClass : ''))) {
+				a.className = a_class_value;
+			}
+
+			if (changed.prevText) {
+				text.data = state.prevText;
+			}
+
+			var pages_1 = state.pages;
+
+			if (changed.pages || changed.pageLinkClass || changed.activeClass || changed.disabledClass) {
+				for (var i = 0; i < pages_1.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, pages_1, pages_1[i], i);
+					} else {
+						each_blocks[i] = create_each_block_1$1(state, pages_1, pages_1[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(div, text_2);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = pages_1.length;
+			}
+
+			if ((changed.nextLinkClass || changed.selected || changed.pageCount || changed.disabledClass) && a_1_class_value !== (a_1_class_value = "" + state.nextLinkClass + " " + (lastPageSelected(state.selected, state.pageCount) ? state.disabledClass : ''))) {
+				a_1.className = a_1_class_value;
+			}
+
+			if (changed.nextText) {
+				text_3.data = state.nextText;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+
+			if (slot_content_prevContentNoLi) {
+				reinsertChildren(a, slot_content_prevContentNoLi);
+			}
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+
+			if (slot_content_nextContentNoLi) {
+				reinsertChildren(a_1, slot_content_nextContentNoLi);
+			}
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler_1);
+
+			destroyEach(each_blocks);
+
+			removeListener(a_1, "click", click_handler_2);
+		}
+	};
+}
+
+function click_handler$1(event) {
+	var component = this._svelte.component;
+	var pages_1 = this._svelte.pages_1, page_index = this._svelte.page_index, page = pages_1[page_index];
+	component.handlePageSelected(page.index);
+}
+
+function select_block_type$1(state, pages_1, page, page_index) {
+	if (page.disabled) return create_if_block_1$1;
+	return create_if_block_2$1;
+}
+
+function click_handler_1$1(event) {
+	var component = this._svelte.component;
+	var pages_1 = this._svelte.pages_1, page_index = this._svelte.page_index, page_1 = pages_1[page_index];
+	component.handlePageSelected(page_1.index);
+}
+
+function select_block_type_1(state, pages_1, page_1, page_index) {
+	if (page_1.disabled) return create_if_block_4$1;
+	return create_if_block_5$1;
+}
+
+function select_block_type_2(state) {
+	if (!state.noLiSurround) return create_if_block$1;
+	return create_if_block_3$1;
+}
+
+function Paginate(options) {
+	init(this, options);
+	this._state = assign(data$1(), options.data);
+	this._recompute({ selected: 1, pageCount: 1, pageRange: 1, marginPages: 1 }, this._state);
+
+	this._slotted = options.slots || {};
+
+	var _oncreate = oncreate$1.bind(this);
+
+	if (!options._root) {
+		this._oncreate = [_oncreate];
+	} else {
+	 	this._root._oncreate.push(_oncreate);
+	 }
+
+	this.slots = {};
+
+	this._fragment = create_main_fragment$1(this._state, this);
+
+	if (options.target) {
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		callAll(this._oncreate);
+	}
+}
+
+assign(Paginate.prototype, methods$1, proto);
+
+Paginate.prototype._recompute = function _recompute(changed, state) {
+	if (changed.selected || changed.pageCount || changed.pageRange || changed.marginPages) {
+		if (differs(state.pages, (state.pages = pages(state.selected, state.pageCount, state.pageRange, state.marginPages)))) changed.pages = true;
+	}
+};
+
+/* src\DataTable.html generated by Svelte v1.40.2 */
+function dig(obj, selector) {
+        var result = obj;
+        const splitter = selector.split('.');
+
+        for (let i = 0; i < splitter.length; i++){
+            if (result == undefined)
+                return undefined;                
+            result = result[splitter[i]];
+        }
+
+        return result;
+    }
+
+    const collect = function(obj, field) {
+	if (typeof(field) === 'function')
+		return field(obj);
+	else if (typeof(field) === 'string')
+		return dig(obj, field);
+	else
+		return undefined;
+};
+
+function data() {
+	return {
+	selectedPage: 1,
+	currentPage: 1,
+	currentPerPage: 10,
+	sortColumn: -1,
+	sortType: 'asc',
+	searching: false,
+	searchInput: '',
+            // props
+            title: '',
+	columns: [],
+	rows: [],
+	processedRows: [],
+	paginated: [],
+	clickable:true,
+	customButtons: [],
+	perPage:  [10, 20, 30, 40, 50],
+	perPageOptions: [],
+	defaultPerPage: null,
+	sortable: true,
+	searchable: true,
+	exactSearch: false,
+	paginate: true,
+	exportable: true,
+	printable: true,		
+};
+}
+
+var methods = {
+	setPage(reload, currentPage, offset = 0) {
+		if (reload) {
+			this.set({currentPage: currentPage + offset});
+			this.processRows(this.get('rows'));
+		}
+	},
+
+	nextPage: function(e) {
+		e.preventDefault();
+		const { processedRows, currentPerPage, currentPage } = this.get();
+		this.setPage(processedRows.length > currentPerPage * currentPage, currentPage, 1);
+	},
+
+	previousPage: function(e) {
+		e.preventDefault();
+		const { currentPage } = this.get();
+		this.setPage(currentPage > 1, currentPage, -1);
+	},
+
+	onTableLength: function(e) {
+		const { rows, currentPage } = this.get();
+		this.set({currentPerPage: e.target.value});
+		this.setPage(true, currentPage);
+	},
+
+	sort: function(index) {
+		console.log('sort', index);
+		let { sortable, sortColumn, sortType, currentPage } = this.get();
+		if (!sortable)
+			return;
+		if (sortColumn === index) {
+			sortType = sortType === 'asc' ? 'desc' : 'asc';
+		} else {
+			sortType = 'asc';
+			sortColumn = index;
+		}
+		this.set({sortType, sortColumn});
+		this.setPage(true, currentPage);
+	},
+
+	searchData(searchText) {
+		this.processRows(this.get('rows'), searchText);
+	},
+
+	search: function(e) {
+		this.set({searching: !this.get('searching')});
+		setTimeout(() => {
+			this.refs.searchInput.focus();
+		}, 100);
+	},
+
+	click: function(row) {
+		if(!this.get('clickable')){
+			return;
+		}
+
+		if(getSelection().toString()){
+			// Return if some text is selected instead of firing the row-click event.
+			return;
+		}
+		// this.$emit('row-click', row)
+	},
+
+	exportExcel: function() {
+		const {title} = this.get();
+		const mimeType = 'data:application/vnd.ms-excel';
+		const html = this.renderTable().replace(/ /g, '%20');
+
+		const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet';
+		const d = new Date();
+
+		var dummy = document.createElement('a');
+		dummy.href = mimeType + ', ' + html;
+		dummy.download = documentPrefix
+			+ '-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
+			+ '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds()
+			+'.xls';
+		dummy.click();
+	},
+
+	print: function() {
+		let win = window.open("");
+		win.document.write(this.renderTable());
+		win.print();
+		win.close();
+	},
+
+	renderTable: function() {
+		const { currentPage, columns, rows } = this.get();
+		let table = '<table><thead>';
+
+		table += '<tr>';
+		for (let i = 0; i < columns.length; i++) {
+			const column = columns[i];
+			table += '<th>';
+			table += 	column.label;
+			table += '</th>';
+		}
+		table += '</tr>';
+ 
+		table += '</thead><tbody>';
+		
+		for (let i = 0; i < rows.length; i++) {
+			const row = rows[i];
+			table += '<tr>';
+			for (let j = 0; j < columns.length; j++) {
+				const column = columns[j];
+				table += '<td>';
+				table +=	collect(row, column.field);
+				table += '</td>';
+			}
+			table += '</tr>';
+		}
+
+		table += '</tbody></table>';
+
+		return table;
+	},
+
+	paginateRows: function(rows) {
+		const { currentPerPage, currentPage, paginate } = this.get();
+		let paginatedRows = rows;
+		if (paginate)
+                    paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? paginatedRows.length + 1 : currentPage * currentPerPage);
+		this.set({paginated: paginatedRows});
+		console.log('paginatedRows', paginatedRows);
+	},
+
+	processRows: function(rows, searchText) {
+		let computedRows = rows;				
+		const { currentPage, columns,
+			sortable, sortColumn, sortType, 
+			searching, searchInput, exactSearch } = this.get();
+		if (!searchText) {
+			searchText = searchInput;
+		}	
+		if (sortable !== false && sortColumn > -1 && columns)
+			computedRows = computedRows.sort((x,y) => {
+				if (!columns[sortColumn])
+					return 0;
+
+				const cook = (x) => {
+					x = collect(x, columns[sortColumn].field);
+					if (typeof(x) === 'string') {
+						x = x.toLowerCase();
+					 	if (columns[sortColumn].numeric)
+							x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
+					}
+					return x;
+				};
+
+				x = cook(x);
+				y = cook(y);
+
+				return (x < y ? -1 : (x > y ? 1 : 0)) * (sortType === 'desc' ? -1 : 1);
+			});
+
+		if (searching && searchText) {
+			const searchConfig = { keys: columns.map(c => c.field) };
+
+			// Enable searching of numbers (non-string)
+			// Temporary fix of https://github.com/krisk/Fuse/issues/144
+		    	searchConfig.getFn = function (obj, path) {
+				if(Number.isInteger(obj[path]))
+				return JSON.stringify(obj[path]);
+			    	return obj[path];
+			};
+
+			if (exactSearch) {
+				//return only exact matches
+				searchConfig.threshold = 0,
+				searchConfig.distance = 0;
+			}
+
+			computedRows = (new Fuse(computedRows, searchConfig)).search(searchText);
+		}
+
+		this.set({processedRows: computedRows});
+		this.paginateRows(computedRows);
+	},
+
+	setPerPageOptions() {
+		let { currentPerPage, defaultPerPage, perPage } = this.get();
+		let options = perPage;
+
+		// Force numbers
+		options = options.map( v => parseInt(v));
+		
+		// Set current page to first value
+		currentPerPage = options[0];
+
+		// Sort options
+		options.sort((a,b) => a - b);
+
+		// And add "All"
+		options.push(-1);
+
+		// If defaultPerPage is provided and it's a valid option, set as current per page
+		if (options.indexOf(defaultPerPage) > -1) {
+			currentPerPage = parseInt(defaultPerPage);
+		}
+
+		console.log('currentPerPage', currentPerPage, options);
+		this.set({currentPerPage, perPageOptions: options});
+	},
+};
+
+function oncreate() {
+	this.observe('rows', rows => {
+		this.processRows(rows);
+	});
+	this.observe('selectedPage', selected => {
+		this.setPage(true, selected + 1);
+            });
+	this.observe('searchInput', searchInput => {
+		this.searchData(searchInput);
+	});				
+	this.setPerPageOptions();
+}
+
+function encapsulateStyles(node) {
+	setAttribute(node, "svelte-3531723352", "");
+}
+
+function create_main_fragment(state, component) {
+	var div, div_1, span, text, text_1, div_2, text_2, text_3, text_4, text_7, text_8, table, thead, tr, text_11, tbody, text_14;
+
+	var customButtons = state.customButtons;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < customButtons.length; i += 1) {
+		each_blocks[i] = create_each_block(state, customButtons, customButtons[i], i, component);
+	}
+
+	var if_block = (state.printable) && create_if_block_1(state, component);
+
+	var if_block_1 = (state.exportable) && create_if_block_2(state, component);
+
+	var if_block_2 = (state.searchable) && create_if_block_3(state, component);
+
+	var if_block_3 = (state.searching) && create_if_block_4(state, component);
+
+	var columns = state.columns;
+
+	var each_1_blocks = [];
+
+	for (var i = 0; i < columns.length; i += 1) {
+		each_1_blocks[i] = create_each_block_1(state, columns, columns[i], i, component);
+	}
+
+	var paginated = state.paginated;
+
+	var each_2_blocks = [];
+
+	for (var i = 0; i < paginated.length; i += 1) {
+		each_2_blocks[i] = create_each_block_2(state, paginated, paginated[i], i, component);
+	}
+
+	var if_block_4 = (state.paginate) && create_if_block_7(state, component);
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			div_1 = createElement("div");
+			span = createElement("span");
+			text = createText(state.title);
+			text_1 = createText("\n\t\t");
+			div_2 = createElement("div");
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			text_2 = createText("\n\t\t\t");
+			if (if_block) if_block.c();
+			text_3 = createText("\n\t\t\t");
+			if (if_block_1) if_block_1.c();
+			text_4 = createText("\n\t\t\t");
+			if (if_block_2) if_block_2.c();
+			text_7 = createText("\n\t");
+			if (if_block_3) if_block_3.c();
+			text_8 = createText("\n\n    ");
+			table = createElement("table");
+			thead = createElement("thead");
+			tr = createElement("tr");
+
+			for (var i = 0; i < each_1_blocks.length; i += 1) {
+				each_1_blocks[i].c();
+			}
+
+			text_11 = createText("\n\n        ");
+			tbody = createElement("tbody");
+
+			for (var i = 0; i < each_2_blocks.length; i += 1) {
+				each_2_blocks[i].c();
+			}
+
+			text_14 = createText("\n");
+			if (if_block_4) if_block_4.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles(div);
+			div.className = "material-table";
+			div_1.className = "table-header";
+			span.className = "table-title";
+			div_2.className = "actions";
+			setAttribute(table, "ref", "table");
+			table.className = "table table-striped table-hover";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(div_1, div);
+			appendNode(span, div_1);
+			appendNode(text, span);
+			appendNode(text_1, div_1);
+			appendNode(div_2, div_1);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(div_2, null);
+			}
+
+			appendNode(text_2, div_2);
+			if (if_block) if_block.m(div_2, null);
+			appendNode(text_3, div_2);
+			if (if_block_1) if_block_1.m(div_2, null);
+			appendNode(text_4, div_2);
+			if (if_block_2) if_block_2.m(div_2, null);
+			appendNode(text_7, div);
+			if (if_block_3) if_block_3.m(div, null);
+			appendNode(text_8, div);
+			appendNode(table, div);
+			appendNode(thead, table);
+			appendNode(tr, thead);
+
+			for (var i = 0; i < each_1_blocks.length; i += 1) {
+				each_1_blocks[i].m(tr, null);
+			}
+
+			appendNode(text_11, table);
+			appendNode(tbody, table);
+
+			for (var i = 0; i < each_2_blocks.length; i += 1) {
+				each_2_blocks[i].m(tbody, null);
+			}
+
+			appendNode(text_14, div);
+			if (if_block_4) if_block_4.m(div, null);
+		},
+
+		p: function update(changed, state) {
+			if (changed.title) {
+				text.data = state.title;
+			}
+
+			var customButtons = state.customButtons;
+
+			if (changed.customButtons) {
+				for (var i = 0; i < customButtons.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, customButtons, customButtons[i], i);
+					} else {
+						each_blocks[i] = create_each_block(state, customButtons, customButtons[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(div_2, text_2);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = customButtons.length;
+			}
+
+			if (state.printable) {
+				if (!if_block) {
+					if_block = create_if_block_1(state, component);
+					if_block.c();
+					if_block.m(div_2, text_3);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+
+			if (state.exportable) {
+				if (!if_block_1) {
+					if_block_1 = create_if_block_2(state, component);
+					if_block_1.c();
+					if_block_1.m(div_2, text_4);
+				}
+			} else if (if_block_1) {
+				if_block_1.u();
+				if_block_1.d();
+				if_block_1 = null;
+			}
+
+			if (state.searchable) {
+				if (!if_block_2) {
+					if_block_2 = create_if_block_3(state, component);
+					if_block_2.c();
+					if_block_2.m(div_2, null);
+				}
+			} else if (if_block_2) {
+				if_block_2.u();
+				if_block_2.d();
+				if_block_2 = null;
+			}
+
+			if (state.searching) {
+				if (if_block_3) {
+					if_block_3.p(changed, state);
+				} else {
+					if_block_3 = create_if_block_4(state, component);
+					if_block_3.c();
+					if_block_3.m(div, text_8);
+				}
+			} else if (if_block_3) {
+				if_block_3.u();
+				if_block_3.d();
+				if_block_3 = null;
+			}
+
+			var columns = state.columns;
+
+			if (changed.sortable || changed.sortColumn || changed.sortType || changed.columns) {
+				for (var i = 0; i < columns.length; i += 1) {
+					if (each_1_blocks[i]) {
+						each_1_blocks[i].p(changed, state, columns, columns[i], i);
+					} else {
+						each_1_blocks[i] = create_each_block_1(state, columns, columns[i], i, component);
+						each_1_blocks[i].c();
+						each_1_blocks[i].m(tr, null);
+					}
+				}
+
+				for (; i < each_1_blocks.length; i += 1) {
+					each_1_blocks[i].u();
+					each_1_blocks[i].d();
+				}
+				each_1_blocks.length = columns.length;
+			}
+
+			var paginated = state.paginated;
+
+			if (changed.clickable || changed.paginated || changed.columns) {
+				for (var i = 0; i < paginated.length; i += 1) {
+					if (each_2_blocks[i]) {
+						each_2_blocks[i].p(changed, state, paginated, paginated[i], i);
+					} else {
+						each_2_blocks[i] = create_each_block_2(state, paginated, paginated[i], i, component);
+						each_2_blocks[i].c();
+						each_2_blocks[i].m(tbody, null);
+					}
+				}
+
+				for (; i < each_2_blocks.length; i += 1) {
+					each_2_blocks[i].u();
+					each_2_blocks[i].d();
+				}
+				each_2_blocks.length = paginated.length;
+			}
+
+			if (state.paginate) {
+				if (if_block_4) {
+					if_block_4.p(changed, state);
+				} else {
+					if_block_4 = create_if_block_7(state, component);
+					if_block_4.c();
+					if_block_4.m(div, null);
+				}
+			} else if (if_block_4) {
+				if_block_4.u();
+				if_block_4.d();
+				if_block_4 = null;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+
+			if (if_block) if_block.u();
+			if (if_block_1) if_block_1.u();
+			if (if_block_2) if_block_2.u();
+			if (if_block_3) if_block_3.u();
+
+			for (var i = 0; i < each_1_blocks.length; i += 1) {
+				each_1_blocks[i].u();
+			}
+
+			for (var i = 0; i < each_2_blocks.length; i += 1) {
+				each_2_blocks[i].u();
+			}
+
+			if (if_block_4) if_block_4.u();
+		},
+
+		d: function destroy$$1() {
+			destroyEach(each_blocks);
+
+			if (if_block) if_block.d();
+			if (if_block_1) if_block_1.d();
+			if (if_block_2) if_block_2.d();
+			if (if_block_3) if_block_3.d();
+
+			destroyEach(each_1_blocks);
+
+			destroyEach(each_2_blocks);
+
+			if (if_block_4) if_block_4.d();
+		}
+	};
+}
+
+// (6:3) {{#each customButtons as button, x}}
+function create_each_block(state, customButtons, button, x, component) {
+	var if_block_anchor;
+
+	var if_block = (!button.hide) && create_if_block(state, customButtons, button, x, component);
+
+	return {
+		c: function create() {
+			if (if_block) if_block.c();
+			if_block_anchor = createComment();
+		},
+
+		m: function mount(target, anchor) {
+			if (if_block) if_block.m(target, anchor);
+			insertNode(if_block_anchor, target, anchor);
+		},
+
+		p: function update(changed, state, customButtons, button, x) {
+			if (!button.hide) {
+				if (if_block) {
+					if_block.p(changed, state, customButtons, button, x);
+				} else {
+					if_block = create_if_block(state, customButtons, button, x, component);
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+		},
+
+		u: function unmount() {
+			if (if_block) if_block.u();
+			detachNode(if_block_anchor);
+		},
+
+		d: function destroy$$1() {
+			if (if_block) if_block.d();
+		}
+	};
+}
+
+// (7:3) {{#if !button.hide}}
+function create_if_block(state, customButtons, button, x, component) {
+	var a, i, text_value = button.icon, text;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			i = createElement("i");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.href = "javascript:undefined";
+			a.className = "waves-effect btn-flat nopadding";
+			addListener(a, "click", click_handler);
+			i.className = "material-icons";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(i, a);
+			appendNode(text, i);
+		},
+
+		p: function update(changed, state, customButtons, button, x) {
+			if ((changed.customButtons) && text_value !== (text_value = button.icon)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler);
+		}
+	};
+}
+
+// (15:3) {{#if printable}}
+function create_if_block_1(state, component) {
+	var a;
+
+	function click_handler_1(event) {
+		component.print();
+	}
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			a.innerHTML = "<i class=\"material-icons\">print</i>";
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.href = "javascript:undefined";
+			a.className = "waves-effect btn-flat nopadding";
+			addListener(a, "click", click_handler_1);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler_1);
+		}
+	};
+}
+
+// (22:3) {{#if exportable}}
+function create_if_block_2(state, component) {
+	var a;
+
+	function click_handler_1(event) {
+		component.exportExcel();
+	}
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			a.innerHTML = "<i class=\"material-icons\">description</i>";
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.href = "javascript:undefined";
+			a.className = "waves-effect btn-flat nopadding";
+			setAttribute(a, "v-if", "this.exportable");
+			addListener(a, "click", click_handler_1);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler_1);
+		}
+	};
+}
+
+// (30:3) {{#if searchable}}
+function create_if_block_3(state, component) {
+	var a;
+
+	function click_handler_1(event) {
+		component.search();
+	}
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			a.innerHTML = "<i class=\"material-icons\">search</i>";
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.href = "javascript:undefined";
+			a.className = "waves-effect btn-flat nopadding";
+			addListener(a, "click", click_handler_1);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a, "click", click_handler_1);
+		}
+	};
+}
+
+// (39:1) {{#if searching}}
+function create_if_block_4(state, component) {
+	var div, div_1, label, input, input_updating = false;
+
+	function input_input_handler() {
+		input_updating = true;
+		component.set({ searchInput: input.value });
+		input_updating = false;
+	}
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			div_1 = createElement("div");
+			label = createElement("label");
+			input = createElement("input");
+			this.h();
+		},
+
+		h: function hydrate() {
+			div_1.id = "search-input-container";
+			input.type = "search";
+			input.id = "search-input";
+			input.className = "form-control";
+			input.placeholder = "Search data";
+			addListener(input, "input", input_input_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(div_1, div);
+			appendNode(label, div_1);
+			appendNode(input, label);
+			component.refs.searchInput = input;
+
+			input.value = state.searchInput;
+		},
+
+		p: function update(changed, state) {
+			if (!input_updating) {
+				input.value = state.searchInput;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+		},
+
+		d: function destroy$$1() {
+			removeListener(input, "input", input_input_handler);
+			if (component.refs.searchInput === input) component.refs.searchInput = null;
+		}
+	};
+}
+
+// (54:16) {{#each columns as column, x}}
+function create_each_block_1(state, columns, column, x, component) {
+	var th, th_class_value, text_value = column.label, text;
+
+	return {
+		c: function create() {
+			th = createElement("th");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			th.className = th_class_value = "" + (state.sortable ? 'sorting ' : '') + "\n                        " + (state.sortColumn === x ?
+                            (state.sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
+                            : '') + "\n                        " + (column.numeric ? ' numeric' : '');
+			setStyle(th, "width", ( column.width ? column.width : 'auto' ));
+			addListener(th, "click", click_handler_1);
+
+			th._svelte = {
+				component: component,
+				columns: columns,
+				x: x
+			};
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(th, target, anchor);
+			appendNode(text, th);
+		},
+
+		p: function update(changed, state, columns, column, x) {
+			if ((changed.sortable || changed.sortColumn || changed.sortType || changed.columns) && th_class_value !== (th_class_value = "" + (state.sortable ? 'sorting ' : '') + "\n                        " + (state.sortColumn === x ?
+                            (state.sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
+                            : '') + "\n                        " + (column.numeric ? ' numeric' : ''))) {
+				th.className = th_class_value;
+			}
+
+			if (changed.columns) {
+				setStyle(th, "width", ( column.width ? column.width : 'auto' ));
+			}
+
+			th._svelte.columns = columns;
+			th._svelte.x = x;
+
+			if ((changed.columns) && text_value !== (text_value = column.label)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(th);
+		},
+
+		d: function destroy$$1() {
+			removeListener(th, "click", click_handler_1);
+		}
+	};
+}
+
+// (69:12) {{#each paginated as row, y}}
+function create_each_block_2(state, paginated, row, y, component) {
+	var tr, tr_class_value;
+
+	var columns = state.columns;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < columns.length; i += 1) {
+		each_blocks[i] = create_each_block_3(state, paginated, row, y, columns, columns[i], i, component);
+	}
+
+	return {
+		c: function create() {
+			tr = createElement("tr");
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+			this.h();
+		},
+
+		h: function hydrate() {
+			tr.className = tr_class_value = state.clickable ? 'clickable' : '';
+			addListener(tr, "click", click_handler_2);
+
+			tr._svelte = {
+				component: component,
+				paginated: paginated,
+				y: y
+			};
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(tr, target, anchor);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(tr, null);
+			}
+		},
+
+		p: function update(changed, state, paginated, row, y) {
+			if ((changed.clickable) && tr_class_value !== (tr_class_value = state.clickable ? 'clickable' : '')) {
+				tr.className = tr_class_value;
+			}
+
+			tr._svelte.paginated = paginated;
+			tr._svelte.y = y;
+
+			var columns = state.columns;
+
+			if (changed.columns || changed.paginated) {
+				for (var i = 0; i < columns.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, paginated, row, y, columns, columns[i], i);
+					} else {
+						each_blocks[i] = create_each_block_3(state, paginated, row, y, columns, columns[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(tr, null);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = columns.length;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(tr);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+		},
+
+		d: function destroy$$1() {
+			removeListener(tr, "click", click_handler_2);
+
+			destroyEach(each_blocks);
+		}
+	};
+}
+
+// (71:20) {{#each columns as column, x}}
+function create_each_block_3(state, paginated, row, y, columns, column_1, x, component) {
+	var td;
+
+	var current_block_type = select_block_type(state, paginated, row, y, columns, column_1, x);
+	var if_block = current_block_type(state, paginated, row, y, columns, column_1, x, component);
+
+	return {
+		c: function create() {
+			td = createElement("td");
+			if_block.c();
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(td, target, anchor);
+			if_block.m(td, null);
+		},
+
+		p: function update(changed, state, paginated, row, y, columns, column_1, x) {
+			if (current_block_type === (current_block_type = select_block_type(state, paginated, row, y, columns, column_1, x)) && if_block) {
+				if_block.p(changed, state, paginated, row, y, columns, column_1, x);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, paginated, row, y, columns, column_1, x, component);
+				if_block.c();
+				if_block.m(td, null);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(td);
+			if_block.u();
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+		}
+	};
+}
+
+// (73:28) {{#if column.html}}
+function create_if_block_5(state, paginated, row, y, columns, column_1, x, component) {
+	var raw_value = collect(row, column_1.field), raw_before, raw_after;
+
+	return {
+		c: function create() {
+			raw_before = createElement('noscript');
+			raw_after = createElement('noscript');
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(raw_before, target, anchor);
+			raw_before.insertAdjacentHTML("afterend", raw_value);
+			insertNode(raw_after, target, anchor);
+		},
+
+		p: function update(changed, state, paginated, row, y, columns, column_1, x) {
+			if ((changed.paginated || changed.columns) && raw_value !== (raw_value = collect(row, column_1.field))) {
+				detachBetween(raw_before, raw_after);
+				raw_before.insertAdjacentHTML("afterend", raw_value);
+			}
+		},
+
+		u: function unmount() {
+			detachBetween(raw_before, raw_after);
+
+			detachNode(raw_before);
+			detachNode(raw_after);
+		},
+
+		d: noop
+	};
+}
+
+// (75:28) {{else}}
+function create_if_block_6(state, paginated, row, y, columns, column_1, x, component) {
+	var text_value = collect(row, column_1.field), text;
+
+	return {
+		c: function create() {
+			text = createText(text_value);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(text, target, anchor);
+		},
+
+		p: function update(changed, state, paginated, row, y, columns, column_1, x) {
+			if ((changed.paginated || changed.columns) && text_value !== (text_value = collect(row, column_1.field))) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(text);
+		},
+
+		d: noop
+	};
+}
+
+// (90:5) {{#each perPageOptions as option, x}}
+function create_each_block_4(state, perPageOptions, option, x, component) {
+	var option_1, option_1_value_value, option_1_selected_value, text_value = option === -1 ? 'All' : option, text;
+
+	return {
+		c: function create() {
+			option_1 = createElement("option");
+			text = createText(text_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			option_1.__value = option_1_value_value = option;
+			option_1.value = option_1.__value;
+			option_1.selected = option_1_selected_value = option == state.currentPerPage;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(option_1, target, anchor);
+			appendNode(text, option_1);
+		},
+
+		p: function update(changed, state, perPageOptions, option, x) {
+			if ((changed.perPageOptions) && option_1_value_value !== (option_1_value_value = option)) {
+				option_1.__value = option_1_value_value;
+			}
+
+			option_1.value = option_1.__value;
+			if ((changed.perPageOptions || changed.currentPerPage) && option_1_selected_value !== (option_1_selected_value = option == state.currentPerPage)) {
+				option_1.selected = option_1_selected_value;
+			}
+
+			if ((changed.perPageOptions) && text_value !== (text_value = option === -1 ? 'All' : option)) {
+				text.data = text_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(option_1);
+		},
+
+		d: noop
+	};
+}
+
+// (84:0) {{#if paginate}}
+function create_if_block_7(state, component) {
+	var div, div_1, label, span, text_1, select, text_4, div_2, text_5_value = (state.currentPage - 1) * state.currentPerPage ? (state.currentPage - 1) * state.currentPerPage : 1, text_5, text_6, text_7_value = ('Math' in state ? state.Math : Math).min(state.processedRows.length, state.currentPerPage * state.currentPage), text_7, text_8, text_9_value = state.processedRows.length, text_9, text_11, div_3, i, text_12, text_13, i_1, text_14, paginate_updating = {};
+
+	var perPageOptions = state.perPageOptions;
+
+	var each_blocks = [];
+
+	for (var i_2 = 0; i_2 < perPageOptions.length; i_2 += 1) {
+		each_blocks[i_2] = create_each_block_4(state, perPageOptions, perPageOptions[i_2], i_2, component);
+	}
+
+	function change_handler(event) {
+		component.onTableLength((event));
+	}
+
+	var paginate_initial_data = {
+		pageCount: ('Math' in state ? state.Math : Math).ceil(state.rows.length / state.currentPerPage),
+		marginPages: 2,
+		pageRange: 4,
+		containerClass: "material-pagination",
+		pageLinkClass: "waves-effect btn-flat",
+		prevLinkClass: "waves-effect btn-flat nopadding",
+		nextLinkClass: "waves-effect btn-flat nopadding"
+	};
+	if ('selectedPage' in state) {
+		paginate_initial_data.selected = state.selectedPage;
+		paginate_updating.selected = true;
+	}
+	var paginate = new Paginate({
+		_root: component._root,
+		slots: { default: createFragment(), prevContent: createFragment(), nextContent: createFragment() },
+		data: paginate_initial_data,
+		_bind: function(changed, childState) {
+			var state = component.get(), newState = {};
+			if (!paginate_updating.selected && changed.selected) {
+				newState.selectedPage = childState.selected;
+			}
+			paginate_updating = assign({}, changed);
+			component._set(newState);
+			paginate_updating = {};
+		}
+	});
+
+	component._root._beforecreate.push(function () {
+		var state = component.get(), childState = paginate.get(), newState = {};
+		if (!childState) return;
+		if (!paginate_updating.selected) {
+			newState.selectedPage = childState.selected;
+		}
+		paginate_updating = { selected: true };
+		component._set(newState);
+		paginate_updating = {};
+	});
+
+	var paginate_context = {
+		state: state
+	};
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			div_1 = createElement("div");
+			label = createElement("label");
+			span = createElement("span");
+			span.textContent = "Rows per page:";
+			text_1 = createText("\n\t\t\t\t");
+			select = createElement("select");
+
+			for (var i_2 = 0; i_2 < each_blocks.length; i_2 += 1) {
+				each_blocks[i_2].c();
+			}
+
+			text_4 = createText("\n\t\t");
+			div_2 = createElement("div");
+			text_5 = createText(text_5_value);
+			text_6 = createText("\n\t\t\t\t-");
+			text_7 = createText(text_7_value);
+			text_8 = createText(" of ");
+			text_9 = createText(text_9_value);
+			text_11 = createText("\n\t\t");
+			div_3 = createElement("div");
+			i = createElement("i");
+			text_12 = createText("chevron_left");
+			text_13 = createText("\n\t\t\t\t");
+			i_1 = createElement("i");
+			text_14 = createText("chevron_right");
+			paginate._fragment.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			div.className = "table-footer";
+			div_1.className = "datatable-length";
+			select.className = "browser-default";
+			addListener(select, "change", change_handler);
+			div_2.className = "datatable-info";
+			i.className = "material-icons";
+			setAttribute(i, "slot", "prevContent");
+			i_1.className = "material-icons";
+			setAttribute(i_1, "slot", "nextContent");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(div_1, div);
+			appendNode(label, div_1);
+			appendNode(span, label);
+			appendNode(text_1, label);
+			appendNode(select, label);
+
+			for (var i_2 = 0; i_2 < each_blocks.length; i_2 += 1) {
+				each_blocks[i_2].m(select, null);
+			}
+
+			appendNode(text_4, div);
+			appendNode(div_2, div);
+			appendNode(text_5, div_2);
+			appendNode(text_6, div_2);
+			appendNode(text_7, div_2);
+			appendNode(text_8, div_2);
+			appendNode(text_9, div_2);
+			appendNode(text_11, div);
+			appendNode(div_3, div);
+			appendNode(i, paginate._slotted.prevContent);
+			appendNode(text_12, i);
+			appendNode(text_13, paginate._slotted.default);
+			appendNode(i_1, paginate._slotted.nextContent);
+			appendNode(text_14, i_1);
+			paginate._mount(div_3, null);
+		},
+
+		p: function update(changed, state) {
+			var perPageOptions = state.perPageOptions;
+
+			if (changed.perPageOptions || changed.currentPerPage) {
+				for (var i_2 = 0; i_2 < perPageOptions.length; i_2 += 1) {
+					if (each_blocks[i_2]) {
+						each_blocks[i_2].p(changed, state, perPageOptions, perPageOptions[i_2], i_2);
+					} else {
+						each_blocks[i_2] = create_each_block_4(state, perPageOptions, perPageOptions[i_2], i_2, component);
+						each_blocks[i_2].c();
+						each_blocks[i_2].m(select, null);
+					}
+				}
+
+				for (; i_2 < each_blocks.length; i_2 += 1) {
+					each_blocks[i_2].u();
+					each_blocks[i_2].d();
+				}
+				each_blocks.length = perPageOptions.length;
+			}
+
+			if ((changed.currentPage || changed.currentPerPage) && text_5_value !== (text_5_value = (state.currentPage - 1) * state.currentPerPage ? (state.currentPage - 1) * state.currentPerPage : 1)) {
+				text_5.data = text_5_value;
+			}
+
+			if ((changed.Math || changed.processedRows || changed.currentPerPage || changed.currentPage) && text_7_value !== (text_7_value = ('Math' in state ? state.Math : Math).min(state.processedRows.length, state.currentPerPage * state.currentPage))) {
+				text_7.data = text_7_value;
+			}
+
+			if ((changed.processedRows) && text_9_value !== (text_9_value = state.processedRows.length)) {
+				text_9.data = text_9_value;
+			}
+
+			var paginate_changes = {};
+			if (changed.Math || changed.rows || changed.currentPerPage) paginate_changes.pageCount = ('Math' in state ? state.Math : Math).ceil(state.rows.length / state.currentPerPage);
+			if (!paginate_updating.selected && changed.selectedPage) {
+				paginate_changes.selected = state.selectedPage;
+				paginate_updating.selected = true;
+			}
+			paginate._set( paginate_changes );
+			paginate_updating = {};
+
+			paginate_context.state = state;
+		},
+
+		u: function unmount() {
+			detachNode(div);
+
+			for (var i_2 = 0; i_2 < each_blocks.length; i_2 += 1) {
+				each_blocks[i_2].u();
+			}
+		},
+
+		d: function destroy$$1() {
+			destroyEach(each_blocks);
+
+			removeListener(select, "change", change_handler);
+			paginate.destroy(false);
+		}
+	};
+}
+
+function click_handler(event) {
+	this.click();
+}
+
+function click_handler_1(event) {
+	var component = this._svelte.component;
+	var columns = this._svelte.columns, x = this._svelte.x, column = columns[x];
+	component.sort(x);
+}
+
+function click_handler_2(event) {
+	var component = this._svelte.component;
+	var paginated = this._svelte.paginated, y = this._svelte.y, row = paginated[y];
+	component.click(row);
+}
+
+function select_block_type(state, paginated, row, y, columns, column_1, x) {
+	if (column_1.html) return create_if_block_5;
+	return create_if_block_6;
+}
+
+function DataTable(options) {
+	init(this, options);
+	this.refs = {};
+	this._state = assign(data(), options.data);
+
+	var _oncreate = oncreate.bind(this);
+
+	if (!options._root) {
+		this._oncreate = [_oncreate];
+		this._beforecreate = [];
+		this._aftercreate = [];
+	} else {
+	 	this._root._oncreate.push(_oncreate);
+	 }
+
+	this._fragment = create_main_fragment(this._state, this);
+
+	if (options.target) {
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		this._lock = true;
+		callAll(this._beforecreate);
+		callAll(this._oncreate);
+		callAll(this._aftercreate);
+		this._lock = false;
+	}
+}
+
+assign(DataTable.prototype, methods, proto);
+
+exports.DataTable = DataTable;
+
+}((this.app = this.app || {})));
