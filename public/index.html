@@ -10,11 +10,9 @@
   <link rel='stylesheet' href='app.css'>
 </head>
 <body>
-  <script src='svelte-custom-elements.js'></script>
   <script src='app.js'></script>
   <div id="data-table"></div>
-  <script>
-    svelteCustomElements.register( 'data-table', app.DataTable, [ 'columns', 'rows' ] );  
+  <script>   
     var columndata = [ // Array of objects
         {
             label: 'First Name', // Column name
