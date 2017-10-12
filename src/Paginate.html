@@ -19,7 +19,7 @@
 {{else}} 
 <div class={{containerClass}}>
     <a on:click="prevPage()" class="{{prevLinkClass}} {{ firstPageSelected(selected) ? disabledClass : '' }}" tabindex="0">
-        <slot name="prevContentNoLi">{{ prevText }}</slot></a>
+        <slot name="prevContent">{{ prevText }}</slot></a>
     {{#each pages as page}}
         {{#if page.disabled}}
             <a class="{{pageLinkClass}} {{ page.selected ? activeClass : ''}} {{ page.disabled ? disabledClass : '' }}" tabindex="0">{{ page.content }}</a>
@@ -30,7 +30,7 @@
         {{/if}}    
     {{/each}}
     <a on:click="nextPage()" class="{{nextLinkClass}} {{lastPageSelected(selected, pageCount) ? disabledClass : '' }}" tabindex="0">
-        <slot name="nextContentNoLi">{{ nextText }}</slot></a>
+        <slot name="nextContent">{{ nextText }}</slot></a>
 </div>
 {{/if}}
 
