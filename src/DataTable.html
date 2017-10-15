@@ -101,14 +101,15 @@
 		</div>
 		<div>
 			<Paginate
-				pageCount={{ Math.ceil(rows.length / currentPerPage) }}
+				pageCount={{ Math.ceil(processedRows.length / currentPerPage) }}
 				marginPages="2"
 				pageRange="4"
-				containerClass="material-pagination"
+				containerClass="pagination material-pagination"
 				pageLinkClass="waves-effect btn-flat"
 				prevLinkClass="waves-effect btn-flat nopadding"
 				nextLinkClass="waves-effect btn-flat nopadding"
 				bind:selected="selectedPage"
+				activeClass="active"
 				>
 				<i class="material-icons" slot="prevContent">chevron_left</i>
 				<i class="material-icons" slot="nextContent">chevron_right</i>			
@@ -436,8 +437,8 @@
 		margin-left: auto;
 	}
 	.table-header .btn-flat {
-			min-width: 36px;
-			padding: 0 8px;
+		min-width: 36px;
+		padding: 0 8px;
 	}
 	.table-header input {
 		margin: 0;
@@ -508,6 +509,12 @@
 		color: rgba(0, 0, 0, 0.54);
 		padding: 0 8px;
 		font-size: 15px;
+	}
+	.table-footer .material-pagination li a.nopadding {
+		padding: 0;
+	}
+	.table-footer a {		
+		max-height: 30px;
 	}
 	.table-footer .select-wrapper input.select-dropdown {
 		margin: 0;

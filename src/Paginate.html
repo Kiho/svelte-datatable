@@ -4,7 +4,7 @@
         <a on:click="prevPage()" class={{prevLinkClass}} tabindex="0"><slot name="prevContent">{{ prevText }}</slot></a>
     </li>
     {{#each pages as page}}
-        <li>
+        <li class="{{ page.selected ? activeClass : ''}}">
             {{#if page.disabled}}
                 <a class={{pageLinkClass}} tabindex="0">{{ page.content }}</a>
             {{else}}     
