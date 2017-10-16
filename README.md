@@ -3,6 +3,7 @@
 This project was created by the [Svelte REPL](https://svelte.technology/repl).
 
 Data Table component was converted to Svelte from [MicroDroid/vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable) project. 
+Paginate component was converted to Svelte from [https://github.com/lokyoung/vuejs-paginate](https://github.com/lokyoung/vuejs-paginate) project.
 
 [See demo here at Heroku(slow)](https://safe-springs-35306.herokuapp.com/)
 
