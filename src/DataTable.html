@@ -96,11 +96,11 @@
 		</div>
 		<div class="datatable-info">
 			{{(currentPage - 1) * currentPerPage ? (currentPage - 1) * currentPerPage : 1}}
-				-{{Math.min(processedRows.length, currentPerPage * currentPage)}} of {{processedRows.length}}
+				-{{Math.min(rowCount, currentPerPage * currentPage)}} of {{rowCount}}
 		</div>
 		<div>
 			<Paginate
-				pageCount={{ Math.ceil(processedRows.length / currentPerPage) }}
+				bind:pageCount="pageCount"
 				marginPages="2"
 				pageRange="4"
 				containerClass="pagination material-pagination"
@@ -121,6 +121,7 @@
 <script>
 	import Paginate from './paginate.html';
 	import local from './local';
+	import server from './server';
 	import { collect, dataGrid } from './data-grid';
 
 	export default {
@@ -156,7 +157,12 @@
 		},
 		
 		oncreate() {
-			local.oncreate.call(this, local);
+			const { process } = this.get();
+			if (process== 'server') {
+				server.oncreate.call(this, server);
+			} else {
+				local.oncreate.call(this, local);
+			}
 		}
 	}
 </script>

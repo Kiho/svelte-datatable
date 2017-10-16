@@ -2,7 +2,7 @@ import Fuse from 'fuse.js';
 import { collect, dataGrid } from './data-grid';
 
 export default {
-    data: dataGrid.data,
+    // data: dataGrid.data,
     methods: {
         grid: function(data) { 
             return this.get(data); // this.refs.grid.get(data);

@@ -23,6 +23,7 @@ export function collect(obj, field) {
 export class dataGrid {
     static data() {
         return {
+            process: 'server',
             selectedPage: 0,
             currentPage: 1,
             currentPerPage: 10,
