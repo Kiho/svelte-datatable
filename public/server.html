@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf8'>
+  <meta name='viewport' content='width=device-width'>
+
+  <title>Svelte DataTable</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel='stylesheet' href='app.css'>
+</head>
+<body>
+  <script src='app.js'></script>
+  <div id="data-table"></div>
+  <script>   
+    var columndata = [ // Array of objects
+        {
+            label: 'First Name', // Column name
+            field: 'fname', // Field name from row
+            numeric: false, // Affects sorting
+            html: false, // Escapes output if false.
+        }, {
+            label: 'Last Name',
+            field: 'lname',
+            numeric: false,
+            html: false,
+        }, {
+            label: 'Age',
+            field: 'age',
+            numeric: true,
+            html: false,
+        }, {
+            label: 'State',
+            field: 'state',
+            numeric: false,
+            html: false,
+        }, {
+            label: 'Action',
+            field: function (data) {
+                    return '<a href="#customers/' + data.id + '" class="waves-effect waves-light btn nopadding">Edit</a>';
+                },
+            numeric: false,
+            html: true,
+        }
+    ];
+
+    var el = document.querySelector('#data-table');        
+    var dataTable = new app.DataTable({
+        target: el,
+        data: {
+            title: 'Customers',
+            columns: columndata,
+            process: 'server'
+        }
+    });
+  </script>
+</body>
+</html>
