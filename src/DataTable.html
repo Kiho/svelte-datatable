@@ -4,7 +4,7 @@
 		<div class="actions">
 			{{#each customButtons as button, x}}
 			{{#if !button.hide}}
-			<a href="javascript:undefined"
+			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				on:click="this.click()">
 				<i class="material-icons">{{button.icon}}</i>
@@ -12,14 +12,14 @@
 			{{/if}}
 			{{/each}}
 			{{#if printable}}
-			<a href="javascript:undefined"
+			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				on:click="print()">
 				<i class="material-icons">print</i>
 			</a>
 			{{/if}}
 			{{#if exportable}}
-			<a href="javascript:undefined"
+			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				v-if="this.exportable"
 				on:click="exportExcel()">
@@ -27,7 +27,7 @@
 			</a>
 			{{/if}}
 			{{#if searchable}}
-			<a href="javascript:undefined"
+			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				on:click="search()">
 				<i class="material-icons">search</i>
