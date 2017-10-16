@@ -1,4 +1,3 @@
-
 <div class="material-table">
 	<div class="table-header">
 		<span class="table-title">{{title}}</span>
@@ -86,9 +85,9 @@
 		<div class="datatable-length">
 			<label>
 				<span>Rows per page:</span>
-				<select class="browser-default" on:change="onTableLength((event))">
+				<select class="browser-default" bind:value="currentPerPage">
 					{{#each perPageOptions as option, x}}
-						<option value={{option}} selected={{option == currentPerPage}}>
+						<option value={{option}}>
 						{{ option === -1 ? 'All' : option }}
 						</option>
 					{{/each}}
@@ -120,283 +119,44 @@
 </div>
 
 <script>
-	import Fuse from 'fuse.js';
 	import Paginate from './paginate.html';
-
-    function dig(obj, selector) {
-        var result = obj;
-        const splitter = selector.split('.');
-
-        for (let i = 0; i < splitter.length; i++){
-            if (result == undefined)
-                return undefined;                
-            result = result[splitter[i]];
-        }
-
-        return result;
-    }
-
-    const collect = function(obj, field) {
-		if (typeof(field) === 'function')
-			return field(obj);
-		else if (typeof(field) === 'string')
-			return dig(obj, field);
-		else
-			return undefined;
-	}
+	import local from './local';
+	import { collect, dataGrid } from './data-grid';
 
 	export default {
-		components: { Paginate },
-		data: () => ({
-			selectedPage: 1,
-			currentPage: 1,
-			currentPerPage: 10,
-			sortColumn: -1,
-			sortType: 'asc',
-			searching: false,
-			searchInput: '',
-            // props
-            title: '',
-			columns: [],
-			rows: [],
-			processedRows: [],
-			paginated: [],
-			clickable:true,
-			customButtons: [],
-			perPage:  [10, 20, 30, 40, 50],
-			perPageOptions: [],
-			defaultPerPage: null,
-			sortable: true,
-			searchable: true,
-			exactSearch: false,
-			paginate: true,
-			exportable: true,
-			printable: true,		
-		}),
+		data: dataGrid.data,
 
+		components: {
+			Paginate,
+		},
+	
 		methods: {
-			setPage(reload, currentPage, offset = 0) {
-				if (reload) {
-					this.set({currentPage: currentPage + offset});
-					this.processRows(this.get('rows'));
-				}
-			},
-
-			nextPage: function(e) {
-				e.preventDefault();
-				const { processedRows, currentPerPage, currentPage } = this.get();
-				this.setPage(processedRows.length > currentPerPage * currentPage, currentPage, 1);
-			},
-
-			previousPage: function(e) {
-				e.preventDefault();
-				const { currentPage } = this.get();
-				this.setPage(currentPage > 1, currentPage, -1);
-			},
-
-			onTableLength: function(e) {
-				const { rows, currentPage } = this.get();
-				this.set({currentPerPage: e.target.value});
-				this.setPage(true, currentPage);
-			},
-
-			sort: function(index) {
-				console.log('sort', index);
-				let { sortable, sortColumn, sortType, currentPage } = this.get();
-				if (!sortable)
-					return;
-				if (sortColumn === index) {
-					sortType = sortType === 'asc' ? 'desc' : 'asc';
-				} else {
-					sortType = 'asc';
-					sortColumn = index;
-				}
-				this.set({sortType, sortColumn});
-				this.setPage(true, currentPage);
-			},
-
-			searchData(searchText) {
-				this.processRows(this.get('rows'), searchText);
-			},
-
 			search: function(e) {
 				this.set({searching: !this.get('searching')});
 				setTimeout(() => {
 					this.refs.searchInput.focus();
 				}, 100);
 			},
-
-			click: function(row) {
-				if(!this.get('clickable')){
-					return;
-				}
-
-				if(getSelection().toString()){
-					// Return if some text is selected instead of firing the row-click event.
-					return;
-				}
-				// this.$emit('row-click', row)
+			click(row) {
+				dataGrid.click(this, row)
 			},
-
-			exportExcel: function() {
-				const {title} = this.get();
-				const mimeType = 'data:application/vnd.ms-excel';
-				const html = this.renderTable().replace(/ /g, '%20');
-
-				const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet'
-				const d = new Date();
-
-				var dummy = document.createElement('a');
-				dummy.href = mimeType + ', ' + html;
-				dummy.download = documentPrefix
-					+ '-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
-					+ '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds()
-					+'.xls';
-				dummy.click();
+			exportExcel() {
+				dataGrid.exportExcel(this);
 			},
-
-			print: function() {
-				let win = window.open("");
-				win.document.write(this.renderTable());
-				win.print();
-				win.close();
+			print() {
+				dataGrid.print(this);
 			},
-
-			renderTable: function() {
-				const { currentPage, columns, rows } = this.get();
-				let table = '<table><thead>';
-
-				table += '<tr>';
-				for (let i = 0; i < columns.length; i++) {
-					const column = columns[i];
-					table += '<th>';
-					table += 	column.label;
-					table += '</th>';
-				}
-				table += '</tr>';
- 
-				table += '</thead><tbody>';
-				
-				for (let i = 0; i < rows.length; i++) {
-					const row = rows[i];
-					table += '<tr>';
-					for (let j = 0; j < columns.length; j++) {
-						const column = columns[j];
-						table += '<td>';
-						table +=	collect(row, column.field);
-						table += '</td>';
-					}
-					table += '</tr>';
-				}
-
-				table += '</tbody></table>';
-
-				return table;
-			},
-
-			paginateRows: function(rows) {
-				const { currentPerPage, currentPage, paginate } = this.get();
-				let paginatedRows = rows;
-				if (paginate)
-                    paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? paginatedRows.length + 1 : currentPage * currentPerPage);
-				this.set({paginated: paginatedRows});
-				console.log('paginatedRows', paginatedRows);
-			},
-
-			processRows: function(rows, searchText) {
-				let computedRows = rows;				
-				const { currentPage, columns,
-					sortable, sortColumn, sortType, 
-					searching, searchInput, exactSearch } = this.get();
-				if (!searchText) {
-					searchText = searchInput;
-				}	
-				if (sortable !== false && sortColumn > -1 && columns)
-					computedRows = computedRows.sort((x,y) => {
-						if (!columns[sortColumn])
-							return 0;
-
-						const cook = (x) => {
-							x = collect(x, columns[sortColumn].field);
-							if (typeof(x) === 'string') {
-								x = x.toLowerCase();
-							 	if (columns[sortColumn].numeric)
-									x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
-							}
-							return x;
-						}
-
-						x = cook(x);
-						y = cook(y);
-
-						return (x < y ? -1 : (x > y ? 1 : 0)) * (sortType === 'desc' ? -1 : 1);
-					})
-
-				if (searching && searchText) {
-					const searchConfig = { keys: columns.map(c => c.field) }
-
-					// Enable searching of numbers (non-string)
-					// Temporary fix of https://github.com/krisk/Fuse/issues/144
-				    	searchConfig.getFn = function (obj, path) {
-						if(Number.isInteger(obj[path]))
-						return JSON.stringify(obj[path]);
-					    	return obj[path];
-					}
-
-					if (exactSearch) {
-						//return only exact matches
-						searchConfig.threshold = 0,
-						searchConfig.distance = 0
-					}
-
-					computedRows = (new Fuse(computedRows, searchConfig)).search(searchText);
-				}
-
-				this.set({processedRows: computedRows});
-				this.paginateRows(computedRows);
-			},
-
-			setPerPageOptions() {
-				let { currentPerPage, defaultPerPage, perPage } = this.get();
-				let options = perPage;
-
-				// Force numbers
-				options = options.map( v => parseInt(v));
-				
-				// Set current page to first value
-				currentPerPage = options[0];
-
-				// Sort options
-				options.sort((a,b) => a - b);
-
-				// And add "All"
-				options.push(-1);
-
-				// If defaultPerPage is provided and it's a valid option, set as current per page
-				if (options.indexOf(defaultPerPage) > -1) {
-					currentPerPage = parseInt(defaultPerPage);
-				}
-
-				console.log('currentPerPage', currentPerPage, options);
-				this.set({currentPerPage, perPageOptions: options});
+			sort(index) {
+				this.fire('sort', index);
 			},
 		},
 
         helpers: {
-			collect,
-        },
-
-		oncreate: function() {
-			this.observe('rows', rows => {
-				this.processRows(rows);
-			});
-			this.observe('selectedPage', selected => {
-				this.setPage(true, selected + 1);
-            });
-			this.observe('searchInput', searchInput => {
-				this.searchData(searchInput);
-			});				
-			this.setPerPageOptions();
+            collect
+		},
+		
+		oncreate() {
+			local.oncreate.call(this, local);
 		}
 	}
 </script>
