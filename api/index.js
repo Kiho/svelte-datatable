@@ -25,8 +25,15 @@ export default class api {
     }
 } 
 
-function paginateArray (array, size, page) {
+function paginateArray(array, size, page) {
     return array.slice(page * size, (page + 1) * size);
+}
+
+function searchByName(obj, text) {
+    text = text.toLowerCase();
+    if (obj.fname.toLowerCase().indexOf(text) > -1) return true;
+    if (obj.lname.toLowerCase().indexOf(text) > -1) return true;
+    return false;
 }
 
 function getData(p) {
@@ -50,6 +57,10 @@ function getData(p) {
         };
 
         data = data.sort(sort);
+    }
+
+    if (p.searchText) { 
+        data = data.filter(x => searchByName(x, p.searchText));
     }
 
     const rows = paginateArray(data, p.size, p.page - 1);
