@@ -1,4 +1,3 @@
-import api from '../api';
 import { dataGrid } from './data-grid';
 
 export default {
@@ -51,7 +50,5 @@ export default {
             const newPage = selected + 1;
             this.getPaged({page: newPage}, x => x.page != newPage);
         }, { init: false });
-
-        api.getList().then(data => this.set(data));	
     }
 }

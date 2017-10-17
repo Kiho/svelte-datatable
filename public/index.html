@@ -212,9 +212,13 @@
         }
     });
     
-    if (process ==='local') {
+    if (process ==='server') {        
+        app.getList().then(function(data){
+            dataTable.set(data);
+        });	
+    } else {
         dataTable.set({rows: data});
-    }    
+    }  
 
     // dataTable.innerHTML = '<data-table columns=' + JSON.stringify(columndata) + ' rows=[] ></data-table>';
     </script>
@@ -223,7 +227,7 @@
             <div class="row">
             <div class="col l6 s12">
                 <h5 class="white-text">Svelte DataTable</h5>
-                <p class="grey-text text-lighten-4"></p>
+                <p class="grey-text text-lighten-4">DataTable for Svelte with Materialize</p>
             </div>
             <div class="col l4 offset-l2 s12">
                 <ul>

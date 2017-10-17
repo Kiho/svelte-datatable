@@ -13,17 +13,15 @@ const paginate = {
 
 const delay = (time) => (result) => new Promise(resolve => setTimeout(() => resolve(result), time));
 
-export default class api {
-    static getList(p) {
-        if (!p) {
-            p = Object.assign({}, paginate);
-        }
-        return getData(p).then(data => {
-            data.getList = getData;
-            return  { paged: data };
-        });    
+export default function getList(p) {
+    if (!p) {
+        p = Object.assign({}, paginate);
     }
-} 
+    return getData(p).then(data => {
+        data.getList = getData;
+        return  { paged: data };
+    });    
+}
 
 function paginateArray(array, size, page) {
     return array.slice(page * size, (page + 1) * size);
