@@ -1,6 +1,6 @@
 {
   "name": "svelte-datatable",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Datatable for Svelte with Materialize",
   "author": "Kiho Chang",
   "private": false,
