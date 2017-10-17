@@ -2,14 +2,12 @@ import Fuse from 'fuse.js';
 import { collect, dataGrid } from './data-grid';
 
 export default {
-    // data: dataGrid.data,
     methods: {
         grid: function(data) { 
-            return this.get(data); // this.refs.grid.get(data);
+            return this.get(data);
         },
 
         setGrid: function(data) { 
-            // this.refs.grid.set(data);
             this.set(data);
         },
 
@@ -86,13 +84,21 @@ export default {
             this.setGrid({processedRows: computedRows, rowCount: computedRows.length, pageCount});
             this.paginateRows(computedRows);
         },
+
+        sort(index) {
+            if (index > -1) {
+                dataGrid.setSortIcon(this, index);
+                const { currentPage } = this.get();
+                this.setPage(true, currentPage);				
+            }
+        },
     },
 
     oncreate: function(p) {
         const grid = Object.assign(this, p.methods);		
         dataGrid.setPerPageOptions(grid);
 
-        this.observe('rows', rows => {
+        grid.observe('rows', rows => {
             this.processRows(rows);		
         }, { init: false });
 
@@ -108,13 +114,6 @@ export default {
             this.setPage(true, selected + 1);
         }, { init: false });
         
-        grid.on('sort', (index) => {
-            if (index > -1) {
-                dataGrid.setSortIcon(grid, index);
-                const { columns, sortType, currentPage } = grid.get();
-                this.setPage(true, currentPage);
-            }
-        });			
-        grid.on('row-click', (row) => dataGrid.edit(row));
+        // grid.on('row-click', (row) => dataGrid.edit(row));
     }
 }

@@ -3,20 +3,21 @@
 This project was created by the [Svelte REPL](https://svelte.technology/repl).
 
 Data Table component was converted to Svelte from [MicroDroid/vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable) project. 
+
 Paginate component was converted to Svelte from [https://github.com/lokyoung/vuejs-paginate](https://github.com/lokyoung/vuejs-paginate) project.
 
 [See demo here at Heroku(slow)](https://safe-springs-35306.herokuapp.com/)
 
 ## Features
  - Sorting, with numerical sorting
- - Pagination
+ - Pagination - Client & Server Side
  - Fuzzy searching
  - Excel export
  - Printing
  - Custom topbar buttons
  - Flexible data-from-row extractor
  - Follows the Material Design spec
- - Limited support for IE 11
+ - Limited support for IE 11(need Object.assign polyfill)
 
 ## Requirements
  - [`materialize-css`](https://www.npmjs.com/package/materialize-css) (and **NOT** any other MD library!)

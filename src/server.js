@@ -10,13 +10,21 @@ export default {
                 getList(p).then(data => this.set({ paged: data }));				
             }
         },
+
+        sort(index) {
+            if (index > -1) {
+                dataGrid.setSortIcon(this, index);
+                const { columns, sortType } = this.get();
+                this.getPaged({colName: columns[index].field, direction: sortType});				
+            }
+        },
     },
 
     oncreate: function(p) {
         const grid = Object.assign(this, p.methods);		
         dataGrid.setPerPageOptions(grid);
 
-        this.observe('paged', paged => {
+        grid.observe('paged', paged => {
             if (paged) {
                 const { paginate, rows, getList } = paged;
                 const d = {
@@ -43,15 +51,6 @@ export default {
             const newPage = selected + 1;
             this.getPaged({page: newPage}, x => x.page != newPage);
         }, { init: false });
-        
-        grid.on('sort', (index) => {
-            if (index > -1) {
-                dataGrid.setSortIcon(grid, index);
-                const { columns, sortType } = grid.get();
-                this.getPaged({colName: columns[index].field, direction: sortType});				
-            }
-        });
-        grid.on('row-click', (row) => dataGrid.edit(row));
 
         api.getList().then(data => this.set(data));	
     }
