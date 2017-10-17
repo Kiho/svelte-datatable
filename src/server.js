@@ -1,12 +1,16 @@
 import { dataGrid } from './data-grid';
+import { debounce } from './debounce';
 
 export default {
     methods: {
         getPaged(props, pred) {
             const { paginate, getList } = this.get(); // this.refs.grid.get();
-            if (getList && !pred || pred(paginate)) {
+            if (getList && (!pred || pred(paginate))) {
                 const p = Object.assign({}, paginate, props);
-                getList(p).then(data => this.set({ paged: data }));				
+                getList(p).then(data => {
+                    this.set({ paged: data });
+                    // console.log('getPaged', data);	
+                });		
             }
         },
 
@@ -43,9 +47,9 @@ export default {
         grid.observe('currentPerPage', currentPerPage => {
             this.getPaged({size: currentPerPage});
         }, { init: false });
-        grid.observe('searchInput', searchInput => {
+        grid.observe('searchInput', debounce((searchInput) => {
             this.getPaged({searchText: searchInput});
-        }, { init: false });
+        }, 250));
         grid.observe('selectedPage', selected => {
             const newPage = selected + 1;
             this.getPaged({page: newPage}, x => x.page != newPage);

@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js';
+import { debounce } from './debounce';
 import { collect, dataGrid } from './data-grid';
 
 export default {
@@ -107,9 +108,9 @@ export default {
             this.set({currentPerPage});
             this.setPage(true, currentPage);
         }, { init: false });
-        grid.observe('searchInput', searchInput => {
+        grid.observe('searchInput', debounce((searchInput) => {
             this.searchData(searchInput);
-        }, { init: false });
+        }, 250));
         grid.observe('selectedPage', selected => {
             this.setPage(true, selected + 1);
         }, { init: false });
