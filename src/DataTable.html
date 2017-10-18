@@ -133,10 +133,11 @@
 	
 		methods: {
 			search: function(e) {
-				this.set({searching: !this.get('searching')});
-				setTimeout(() => {
-					this.refs.searchInput.focus();
-				}, 100);
+				const searching = !this.get('searching');
+				this.set({searching});
+				if (searching) {
+					setTimeout(() => this.refs.searchInput.focus(), 100);
+				}
 			},
 			click(row) {
 				dataGrid.click(this, row)

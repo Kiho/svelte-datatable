@@ -1,7 +1,7 @@
 import serverData from './data';
 import { collect } from '../src/data-grid';
 
-const artificialDelay = 500;
+const artificialDelay = 250;
 
 const paginate = {
     page: 1,

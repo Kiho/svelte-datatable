@@ -56,7 +56,6 @@ export class dataGrid {
     }
 
     static setSortIcon(component, index) {
-        console.log('sort', index);
         let { sortable, sortColumn, sortType, currentPage } = component.get();
         if (!sortable)
             return;

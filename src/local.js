@@ -110,7 +110,7 @@ export default {
         }, { init: false });
         grid.observe('searchInput', debounce((searchInput) => {
             this.searchData(searchInput);
-        }, 250));
+        }, 250), { init: false });
         grid.observe('selectedPage', selected => {
             this.setPage(true, selected + 1);
         }, { init: false });

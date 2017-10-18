@@ -49,7 +49,7 @@ export default {
         }, { init: false });
         grid.observe('searchInput', debounce((searchInput) => {
             this.getPaged({searchText: searchInput});
-        }, 250));
+        }, 250), { init: false });
         grid.observe('selectedPage', selected => {
             const newPage = selected + 1;
             this.getPaged({page: newPage}, x => x.page != newPage);
