@@ -147,6 +147,9 @@
 			print() {
 				dataGrid.print(this);
 			},
+			sort(index) { 
+				this.fire('sort', index);
+			}
 		},
 
         helpers: {

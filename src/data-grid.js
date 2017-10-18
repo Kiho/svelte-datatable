@@ -23,17 +23,18 @@ export function collect(obj, field) {
 export class dataGrid {
     static data() {
         return {
-            process: 'server',
             selectedPage: 0,
             currentPage: 1,
             currentPerPage: 10,
             pageCount: 0,
             rowCount: 0,
+            sortIndex: -1,
             sortColumn: -1,
             sortType: 'asc',
             searching: false,
             searchInput: '',
             // props
+            process: 'server',
             title: '',
             columns: [],
             rows: [],

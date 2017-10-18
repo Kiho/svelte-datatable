@@ -1,35 +1,35 @@
 {{#if !noLiSurround}}
 <ul class={{containerClass}}>
     <li class="{{prevClass}} {{ firstPageSelected(selected) ? disabledClass : '' }}">
-        <a on:click="prevPage()" class={{prevLinkClass}} tabindex="0"><slot name="prevContent">{{ prevText }}</slot></a>
+        <a href="#!" on:click="prevPage()" class={{prevLinkClass}} tabindex="0"><slot name="prevContent">{{ prevText }}</slot></a>
     </li>
     {{#each pages as page}}
         <li class="{{ page.selected ? activeClass : ''}}">
             {{#if page.disabled}}
-                <a class={{pageLinkClass}} tabindex="0">{{ page.content }}</a>
+                <a href="#!" class={{pageLinkClass}} tabindex="0">{{ page.content }}</a>
             {{else}}     
-                <a on:click="handlePageSelected(page.index)" class={{pageLinkClass}} tabindex="0">{{ page.content }}</a>
+                <a href="#!" on:click="handlePageSelected(page.index)" class={{pageLinkClass}} tabindex="0">{{ page.content }}</a>
             {{/if}}
         </li>
     {{/each}}
     <li class="{{nextClass}} {{lastPageSelected(selected, pageCount) ? disabledClass : '' }}">
-        <a on:click="nextPage()" class="{{nextLinkClass}}" tabindex="0"><slot name="nextContent">{{ nextText }}</slot></a>
+        <a href="#!" on:click="nextPage()" class="{{nextLinkClass}}" tabindex="0"><slot name="nextContent">{{ nextText }}</slot></a>
     </li>
 </ul>
 {{else}} 
 <div class={{containerClass}}>
-    <a on:click="prevPage()" class="{{prevLinkClass}} {{ firstPageSelected(selected) ? disabledClass : '' }}" tabindex="0">
+    <a href="#!" on:click="prevPage()" class="{{prevLinkClass}} {{ firstPageSelected(selected) ? disabledClass : '' }}" tabindex="0">
         <slot name="prevContent">{{ prevText }}</slot></a>
     {{#each pages as page}}
         {{#if page.disabled}}
-            <a class="{{pageLinkClass}} {{ page.selected ? activeClass : ''}} {{ page.disabled ? disabledClass : '' }}" tabindex="0">{{ page.content }}</a>
+            <a href="#!" class="{{pageLinkClass}} {{ page.selected ? activeClass : ''}} {{ page.disabled ? disabledClass : '' }}" tabindex="0">{{ page.content }}</a>
         {{else}}
-            <a on:click="handlePageSelected(page.index)" class="{{pageLinkClass}} {{ page.selected ? activeClass : ''}} {{ page.disabled ? disabledClass : '' }}" tabindex="0">
+            <a href="#!" on:click="handlePageSelected(page.index)" class="{{pageLinkClass}} {{ page.selected ? activeClass : ''}} {{ page.disabled ? disabledClass : '' }}" tabindex="0">
                 {{ page.content }}
             </a>
         {{/if}}    
     {{/each}}
-    <a on:click="nextPage()" class="{{nextLinkClass}} {{lastPageSelected(selected, pageCount) ? disabledClass : '' }}" tabindex="0">
+    <a href="#!" on:click="nextPage()" class="{{nextLinkClass}} {{lastPageSelected(selected, pageCount) ? disabledClass : '' }}" tabindex="0">
         <slot name="nextContent">{{ nextText }}</slot></a>
 </div>
 {{/if}}
