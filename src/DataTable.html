@@ -120,6 +120,7 @@
 
 <script>
 	import Paginate from './paginate.html';
+	import { debounce } from './debounce';
 	import local from './local';
 	import server from './server';
 	import { collect, dataGrid } from './data-grid';
@@ -148,9 +149,13 @@
 			print() {
 				dataGrid.print(this);
 			},
-			sort(index) { 
-				this.fire('sort', index);
-			}
+			sort(index) {
+				if (index > -1) {
+					dataGrid.setSortIcon(this, index);
+					const { columns, sortType } = this.get();
+					this.getPaged({colName: columns[index].field, direction: sortType});				
+				}
+			},
 		},
 
         helpers: {
@@ -159,11 +164,24 @@
 		
 		oncreate() {
 			const { process } = this.get();
+			let grid;
 			if (process== 'server') {
-				server.oncreate.call(this, server);
+				grid = server.oncreate.call(this, server);
 			} else {
-				local.oncreate.call(this, local);
+				grid = local.oncreate.call(this, local);
 			}
+			
+			dataGrid.setPerPageOptions(grid);
+			grid.observe('currentPerPage', currentPerPage => {
+            	this.getPaged({size: currentPerPage});
+			}, { init: false });
+			grid.observe('searchInput', debounce((searchInput) => {
+				this.getPaged({searchText: searchInput});
+			}, 250), { init: false });
+			grid.observe('selectedPage', selected => {
+				const newPage = selected + 1;
+				this.getPaged({page: newPage}, x => x.page != newPage);
+			}, { init: false });
 		}
 	}
 </script>

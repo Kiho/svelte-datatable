@@ -9,23 +9,13 @@ export default {
                 const p = Object.assign({}, paginate, props);
                 getList(p).then(data => {
                     this.set({ paged: data });
-                    // console.log('getPaged', data);	
                 });		
-            }
-        },
-
-        sort(index) {
-            if (index > -1) {
-                dataGrid.setSortIcon(this, index);
-                const { columns, sortType } = this.get();
-                this.getPaged({colName: columns[index].field, direction: sortType});				
             }
         },
     },
 
     oncreate: function(p) {
         const grid = Object.assign(this, p.methods);		
-        dataGrid.setPerPageOptions(grid);
 
         grid.observe('paged', paged => {
             if (paged) {
@@ -43,16 +33,6 @@ export default {
                 grid.set(d);
             }				
         }, { init: false });
-
-        grid.observe('currentPerPage', currentPerPage => {
-            this.getPaged({size: currentPerPage});
-        }, { init: false });
-        grid.observe('searchInput', debounce((searchInput) => {
-            this.getPaged({searchText: searchInput});
-        }, 250), { init: false });
-        grid.observe('selectedPage', selected => {
-            const newPage = selected + 1;
-            this.getPaged({page: newPage}, x => x.page != newPage);
-        }, { init: false });
+        return grid;
     }
 }

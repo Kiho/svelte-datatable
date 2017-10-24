@@ -1,5 +1,4 @@
 import Fuse from 'fuse.js';
-import { debounce } from './debounce';
 import { collect, dataGrid } from './data-grid';
 
 export default {
@@ -90,33 +89,14 @@ export default {
             this.setGrid({processedRows: computedRows, rowCount: computedRows.length, pageCount});
             this.paginateRows(computedRows);
         },
-
-        sort(index) {
-            if (index > -1) {
-                dataGrid.setSortIcon(this, index);
-                const { currentPage } = this.get();
-                this.getPaged({currentPage});				
-            }
-        },
     },
 
     oncreate: function(p) {
-        const grid = Object.assign(this, p.methods);		
-        dataGrid.setPerPageOptions(grid);
+        const grid = Object.assign(this, p.methods);
 
         grid.observe('rows', rows => {
             this.processRows(rows);		
         }, { init: false });
-
-        grid.observe('currentPerPage', currentPerPage => {
-            this.getPaged({currentPerPage});
-        }, { init: false });
-        grid.observe('searchInput', debounce((searchInput) => {
-            this.searchData(searchInput);
-        }, 250), { init: false });
-        grid.observe('selectedPage', selected => {
-            const newPage = selected + 1;
-            this.getPaged({page: newPage}, x => x.page != newPage);
-        }, { init: false });
+        return grid;
     }
 }
