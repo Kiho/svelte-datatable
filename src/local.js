@@ -3,18 +3,6 @@ import { collect, dataGrid } from './data-grid';
 
 export default {
     methods: {
-        grid: function(data) { 
-            return this.get(data);
-        },
-
-        setGrid: function(data) { 
-            this.set(data);
-        },
-
-        searchData(searchText) {
-            this.processRows(this.get('rows'), searchText);
-        },
-
         getPaged(props, pred) {
             const { page } = props;            
             if (!pred || pred({page: this.get('selectedPage')})) {
@@ -22,17 +10,17 @@ export default {
                     props.currentPage = page;
                 }
                 // console.log('getPaged - props', props);	
-                this.setGrid(props);
+                this.set(props);
                 this.processRows(this.get('rows'));	
             }
         },
         
         paginateRows: function(rows) {
-            const { currentPerPage, currentPage, paginate } = this.grid();
+            const { currentPerPage, currentPage, paginate } = this.get();
             let paginatedRows = rows;
             if (paginate)
                 paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? paginatedRows.length + 1 : currentPage * currentPerPage);
-            this.setGrid({paginated: paginatedRows});
+            this.set({paginated: paginatedRows});
             console.log('paginatedRows', paginatedRows);
         },
 
@@ -40,7 +28,7 @@ export default {
             let computedRows = rows;				
             const { currentPage, currentPerPage, columns,
                 sortable, sortColumn, sortType, 
-                searchInput, exactSearch } = this.grid();
+                searchInput, exactSearch } = this.get();
             if (!searchText) {
                 searchText = searchInput;
             }	
@@ -86,7 +74,7 @@ export default {
             }
 
             const pageCount = Math.ceil(computedRows.length / currentPerPage);
-            this.setGrid({processedRows: computedRows, rowCount: computedRows.length, pageCount});
+            this.set({processedRows: computedRows, rowCount: computedRows.length, pageCount});
             this.paginateRows(computedRows);
         },
     },

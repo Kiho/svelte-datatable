@@ -1,5 +1,4 @@
 import { dataGrid } from './data-grid';
-import { debounce } from './debounce';
 
 export default {
     methods: {
