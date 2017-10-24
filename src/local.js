@@ -16,10 +16,15 @@ export default {
             this.processRows(this.get('rows'), searchText);
         },
 
-        setPage(reload, currentPage, offset = 0) {
-            if (reload) {
-                this.setGrid({currentPage: currentPage + offset});
-                this.processRows(this.get('rows'));
+        getPaged(props, pred) {
+            const { page } = props;            
+            if (!pred || pred({page: this.get('selectedPage')})) {
+                if (page) {
+                    props.currentPage = page;
+                }
+                // console.log('getPaged - props', props);	
+                this.setGrid(props);
+                this.processRows(this.get('rows'));	
             }
         },
         
@@ -90,7 +95,7 @@ export default {
             if (index > -1) {
                 dataGrid.setSortIcon(this, index);
                 const { currentPage } = this.get();
-                this.setPage(true, currentPage);				
+                this.getPaged({currentPage});				
             }
         },
     },
@@ -104,17 +109,14 @@ export default {
         }, { init: false });
 
         grid.observe('currentPerPage', currentPerPage => {
-            const { currentPage } = grid.get();
-            this.set({currentPerPage});
-            this.setPage(true, currentPage);
+            this.getPaged({currentPerPage});
         }, { init: false });
         grid.observe('searchInput', debounce((searchInput) => {
             this.searchData(searchInput);
         }, 250), { init: false });
         grid.observe('selectedPage', selected => {
-            this.setPage(true, selected + 1);
+            const newPage = selected + 1;
+            this.getPaged({page: newPage}, x => x.page != newPage);
         }, { init: false });
-        
-        // grid.on('row-click', (row) => dataGrid.edit(row));
     }
 }
