@@ -5,13 +5,13 @@ export default {
     methods: {
         getPaged(props, pred) {
             const { page } = props;            
-            if (!pred || pred({page: this.get('selectedPage')})) {
+            if (!pred || pred({page: this.get().selectedPage})) {
                 if (page) {
                     props.currentPage = page;
                 }
                 // console.log('getPaged - props', props);	
                 this.set(props);
-                this.processRows(this.get('rows'));	
+                this.processRows(this.get().rows);	
             }
         },
         
@@ -81,10 +81,11 @@ export default {
 
     oncreate: function(p) {
         const grid = Object.assign(this, p.methods);
-
-        grid.observe('rows', rows => {
-            this.processRows(rows);		
-        }, { init: false });
+        grid.on('state', ({ changed, current, previous }) => {
+            if (changed.rows) {
+                this.processRows(current.rows);
+            }				
+        });
         return grid;
     }
 }

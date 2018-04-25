@@ -149,7 +149,7 @@ export class dataGrid {
     }
 
     static click(component, row) {
-        if(!component.get('clickable')){
+        if(!component.get().clickable){
             return;
         }
         if (getSelection().toString()) {

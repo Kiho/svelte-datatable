@@ -1,41 +1,41 @@
 <div class="material-table">
 	<div class="table-header">
-		<span class="table-title">{{title}}</span>
+		<span class="table-title">{title}</span>
 		<div class="actions">
-			{{#each customButtons as button, x}}
-			{{#if !button.hide}}
+			{#each customButtons as button, x}
+			{#if !button.hide}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				on:click="this.click()">
-				<i class="material-icons">{{button.icon}}</i>
+				<i class="material-icons">{button.icon}</i>
 			</a>
-			{{/if}}
-			{{/each}}
-			{{#if printable}}
+			{/if}
+			{/each}
+			{#if printable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				on:click="print()">
 				<i class="material-icons">print</i>
 			</a>
-			{{/if}}
-			{{#if exportable}}
+			{/if}
+			{#if exportable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				v-if="this.exportable"
 				on:click="exportExcel()">
 				<i class="material-icons">description</i>
 			</a>
-			{{/if}}
-			{{#if searchable}}
+			{/if}
+			{#if searchable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				on:click="search()">
 				<i class="material-icons">search</i>
 			</a>
-			{{/if}}
+			{/if}
 		</div>
 	</div>
-	{{#if searching}}
+	{#if searching}
 	<div>
 		<div id="search-input-container">
 			<label>
@@ -44,59 +44,59 @@
 			</label>
 		</div>
 	</div>
-	{{/if}}
+	{/if}
 
     <table  ref="table"
             class="table table-striped table-hover">
         <thead>
             <tr>
-                {{#each columns as column, x}}
+                {#each columns as column, x}
                 <th on:click="sort(x)"
-                    class="{{ sortable ? 'sorting ' : ''}}
-                        {{ sortColumn === x ?
+                    class="{ sortable ? 'sorting ' : ''}
+                        { sortColumn === x ?
                             (sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
-                            : '' }}
-                        {{ column.numeric ? ' numeric' : ''}}"
-                    style="width: {{ column.width ? column.width : 'auto' }}">
-                    {{column.label}}
+                            : '' }
+                        { column.numeric ? ' numeric' : ''}"
+                    style="width: { column.width ? column.width : 'auto' }">
+                    {column.label}
                 </th>
-                {{/each}}
+                {/each}
             </tr>
         </thead>
 
         <tbody>
-            {{#each paginated as row, y}}
-                <tr class="{{ clickable ? 'clickable' : '' }}" on:click="click(row)">
-                    {{#each columns as column, x}}
+            {#each paginated as row, y}
+                <tr class="{ clickable ? 'clickable' : '' }" on:click="click(row)">
+                    {#each columns as column, x}
                         <td>
-                            {{#if column.html}}
-                                {{{collect(row, column.field)}}}
-                            {{else}}
-                                {{ collect(row, column.field) }}   
-                            {{/if}}     
+                            {#if column.html}
+                                {@html collect(row, column.field)}
+                            {:else}
+                                { collect(row, column.field) }   
+                            {/if}     
                         </td>    
-                    {{/each}}
+                    {/each}
                 </tr>
-            {{/each}}
+            {/each}
         </tbody>
     </table>
-{{#if paginate}}
+{#if paginate}
 	<div class="table-footer">
 		<div class="datatable-length">
 			<label>
 				<span>Rows per page:</span>
 				<select class="browser-default" bind:value="currentPerPage">
-					{{#each perPageOptions as option, x}}
-						<option value={{option}}>
-						{{ option === -1 ? 'All' : option }}
+					{#each perPageOptions as option, x}
+						<option value={option}>
+						{ option === -1 ? 'All' : option }
 						</option>
-					{{/each}}
+					{/each}
 				</select>
 			</label>
 		</div>
 		<div class="datatable-info">
-			{{(currentPage - 1) * currentPerPage ? (currentPage - 1) * currentPerPage : 1}}
-				-{{Math.min(rowCount, currentPerPage * currentPage)}} of {{rowCount}}
+			{(currentPage - 1) * currentPerPage ? (currentPage - 1) * currentPerPage : 1}
+				-{Math.min(rowCount, currentPerPage * currentPage)} of {rowCount}
 		</div>
 		<div>
 			<Paginate
@@ -115,7 +115,7 @@
 			</Paginate>
 		</div>
 	</div>
-{{/if}}
+{/if}
 </div>
 
 <script>
@@ -134,7 +134,7 @@
 	
 		methods: {
 			search: function(e) {
-				const searching = !this.get('searching');
+				const searching = !this.get().searching;
 				this.set({searching});
 				if (searching) {
 					setTimeout(() => this.refs.searchInput.focus(), 100);
@@ -172,17 +172,34 @@
 			}
 			
 			dataGrid.setPerPageOptions(grid);
-			grid.observe('currentPerPage', currentPerPage => {
-            	this.getPaged({size: currentPerPage});
-			}, { init: false });
-			grid.observe('searchInput', debounce((searchInput) => {
-				this.getPaged({searchText: searchInput});
-			}, 250), { init: false });
-			grid.observe('selectedPage', selected => {
-				const newPage = selected + 1;
-				this.getPaged({page: newPage}, x => x.page != newPage);
-			}, { init: false });
-		}
+			// grid.observe('currentPerPage', currentPerPage => {
+            // 	this.getPaged({size: currentPerPage});
+			// }, { init: false });
+			// grid.observe('searchInput', debounce((searchInput) => {
+			// 	this.getPaged({searchText: searchInput});
+			// }, 250), { init: false });
+			// grid.observe('selectedPage', selected => {
+			// 	const newPage = selected + 1;
+			// 	this.getPaged({page: newPage}, x => x.page != newPage);
+			// }, { init: false });
+		},
+
+		onupdate({ changed, current, previous }) {
+			console.log('changed', changed);
+			const { currentPerPage, searchInput, selectedPage, rows } = current;
+			if (changed.currentPerPage) {
+				this.getPaged({size: currentPerPage});
+			}	        
+			// if (changed.searchInput) {
+			// 	debounce((searchInput) => {
+			// 		this.getPaged({ searchText: searchInput });
+			// 	}, 250);
+			// }	        
+			if (changed.selectedPage) {
+				const newPage = selectedPage + 1;
+				this.getPaged({ page: newPage }, x => x.page != newPage);
+			}   	        
+		},
 	}
 </script>
 

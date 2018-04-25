@@ -3,7 +3,7 @@ import { dataGrid } from './data-grid';
 export default {
     methods: {
         getPaged(props, pred) {
-            const { paginate, getList } = this.get(); // this.refs.grid.get();
+            const { paginate, getList } = this.get();
             if (getList && (!pred || pred(paginate))) {
                 const p = Object.assign({}, paginate, props);
                 getList(p).then(data => {
@@ -15,10 +15,9 @@ export default {
 
     oncreate: function(p) {
         const grid = Object.assign(this, p.methods);		
-
-        grid.observe('paged', paged => {
-            if (paged) {
-                const { paginate, rows, getList } = paged;
+        grid.on('state', ({ changed, current, previous }) => {
+            if (changed.paged) {
+                const { paginate, rows, getList } = current.paged;
                 const d = {
                     paginate,
                     rowCount: paginate.total,
@@ -31,7 +30,7 @@ export default {
                 }
                 grid.set(d);
             }				
-        }, { init: false });
+        });
         return grid;
     }
 }
