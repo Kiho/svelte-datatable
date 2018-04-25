@@ -29,8 +29,7 @@
     "serve": "^6.0.6"
   },
   "scripts": {
-    "build": "rollup -c --environment production",
-    "build:dev": "rollup -c",
+    "build": "rollup -c",
     "dev": "npm-run-all --parallel watch start",
     "start": "serve public",
     "watch": "rollup -c -w"
