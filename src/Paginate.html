@@ -61,22 +61,6 @@ export default {
         noLiSurround: false,
         // pages: []
     }),
-    // oncreate: function() {
-    //     this.observe('forcePage', forcePage => {
-    //         if (forcePage !== this.get(selected)) {
-    //             this.set({selected: forcePage});
-    //         }
-    //     });       
-    // },
-    // onupdate({ changed, current, previous }) {
-    //     console.log('Paginate changed', changed);
-    //     const { forcePage, selected } = current;        
-    //     if (changed.forcePage) {
-    //         if (forcePage !== selected) {
-    //             this.set({selected: forcePage});
-    //         }
-    //     }       	        
-    // },
     computed: {
         pages: ({ selected, pageCount, pageRange, marginPages }) => {
             let items = {};

@@ -172,16 +172,6 @@
 			}
 			
 			dataGrid.setPerPageOptions(grid);
-			// grid.observe('currentPerPage', currentPerPage => {
-            // 	this.getPaged({size: currentPerPage});
-			// }, { init: false });
-			// grid.observe('searchInput', debounce((searchInput) => {
-			// 	this.getPaged({searchText: searchInput});
-			// }, 250), { init: false });
-			// grid.observe('selectedPage', selected => {
-			// 	const newPage = selected + 1;
-			// 	this.getPaged({page: newPage}, x => x.page != newPage);
-			// }, { init: false });
 		},
 
 		onupdate({ changed, current, previous }) {			
