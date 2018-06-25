@@ -1,5 +1,3 @@
-import { dataGrid } from './data-grid';
-
 export default {
     methods: {
         getPaged(props, pred) {
