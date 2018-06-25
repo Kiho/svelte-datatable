@@ -184,17 +184,17 @@
 			// }, { init: false });
 		},
 
-		onupdate({ changed, current, previous }) {
-			console.log('changed', changed);
+		onupdate({ changed, current, previous }) {			
 			const { currentPerPage, searchInput, selectedPage, rows } = current;
 			if (changed.currentPerPage) {
 				this.getPaged({size: currentPerPage});
 			}	        
-			// if (changed.searchInput) {
-			// 	debounce((searchInput) => {
-			// 		this.getPaged({ searchText: searchInput });
-			// 	}, 250);
-			// }	        
+			if (changed.searchInput) {
+				debounce((x) => {
+					console.log('searchInput changed', x);
+					this.getPaged({ searchText: x });
+				}, 250)();
+			}	        
 			if (changed.selectedPage) {
 				const newPage = selectedPage + 1;
 				this.getPaged({ page: newPage }, x => x.page != newPage);
@@ -320,7 +320,7 @@
 	.table-footer .material-pagination li a.nopadding {
 		padding: 0;
 	}
-	.table-footer a {		
+	.table-footer :global(a) {		
 		max-height: 30px;
 	}
 	.table-footer .select-wrapper input.select-dropdown {
