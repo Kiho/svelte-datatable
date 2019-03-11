@@ -1,5 +1,5 @@
 import serverData from './data';
-import { collect } from '../src/data-grid';
+import { collect } from '../data-grid';
 
 const artificialDelay = 250;
 

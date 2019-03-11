@@ -1,5 +1,5 @@
 import DataTable from './DataTable.html';
-import getList from '../api';
+import getList from './data';
 
 export {
     DataTable,
