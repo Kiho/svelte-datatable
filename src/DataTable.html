@@ -123,10 +123,42 @@
 	import { debounce } from './debounce';
 	import local from './local';
 	import server from './server';
-	import { collect, dataGrid } from './data-grid';
+	import { collect } from './data-grid';
 
 	export default {
-		data: dataGrid.data,
+		data() {
+			return {
+				selectedPage: 0,
+				currentPage: 1,
+				currentPerPage: 10,
+				pageCount: 0,
+				rowCount: 0,
+				sortIndex: -1,
+				sortColumn: -1,
+				sortType: 'asc',
+				searching: false,
+				searchInput: '',
+				// props
+				process: 'server',
+				title: '',
+				columns: [],
+				rows: [],
+				processedRows: [],
+				paged: {},
+				paginate: {},
+				paginated: [],
+				clickable:true,
+				customButtons: [],
+				perPage:  [10, 20, 30, 40, 50],
+				perPageOptions: [],
+				defaultPerPage: null,
+				sortable: true,
+				searchable: true,
+				exactSearch: false,
+				exportable: true,
+				printable: true,			
+			};
+		},
 
 		components: {
 			Paginate,
@@ -140,18 +172,108 @@
 					setTimeout(() => this.refs.searchInput.focus(), 100);
 				}
 			},
-			click(row) {
-				dataGrid.click(this, row)
+			setSortIcon(index) {
+				let { sortable, sortColumn, sortType, currentPage } = this.get();
+				if (!sortable)
+					return;
+				if (sortColumn === index) {
+					sortType = sortType === 'asc' ? 'desc' : 'asc';
+				} else {
+					sortType = 'asc';
+					sortColumn = index;
+				}
+				this.set({sortType, sortColumn});
+			},
+			setPerPageOptions() {
+				let { currentPerPage, defaultPerPage, perPage } = this.get();
+				let options = perPage;
+			
+				// Force numbers
+				options = options.map( v => parseInt(v));
+				
+				// Set current page to first value
+				currentPerPage = options[0];
+			
+				// Sort options
+				options.sort((a,b) => a - b);
+			
+				// And add "All"
+				options.push(-1);
+			
+				// If defaultPerPage is provided and it's a valid option, set as current per page
+				if (options.indexOf(defaultPerPage) > -1) {
+					currentPerPage = parseInt(defaultPerPage);
+				}
+			
+				console.log('currentPerPage', currentPerPage, options);
+				this.set({currentPerPage, perPageOptions: options});
 			},
 			exportExcel() {
-				dataGrid.exportExcel(this);
+				const {title} = this.get();
+				const mimeType = 'data:application/vnd.ms-excel';
+				const html = dataGrid.renderTable(this).replace(/ /g, '%20');
+			
+				const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet'
+				const d = new Date();
+			
+				var dummy = document.createElement('a');
+				dummy.href = mimeType + ', ' + html;
+				dummy.download = documentPrefix
+					+ '-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
+					+ '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds()
+					+'.xls';
+				dummy.click();
 			},
 			print() {
-				dataGrid.print(this);
+				let win = window.open("");
+				win.document.write(dataGrid.renderTable(this));
+				win.print();
+				win.close();
+			},
+			renderTable() {
+				const { currentPage, columns, rows } = this.get();
+				let table = '<table><thead>';
+			
+				table += '<tr>';
+				for (let i = 0; i < columns.length; i++) {
+					const column = columns[i];
+					table += '<th>';
+					table += 	column.label;
+					table += '</th>';
+				}
+				table += '</tr>';
+			
+				table += '</thead><tbody>';
+				
+				for (let i = 0; i < rows.length; i++) {
+					const row = rows[i];
+					table += '<tr>';
+					for (let j = 0; j < columns.length; j++) {
+						const column = columns[j];
+						table += '<td>';
+						table +=	collect(row, column.field);
+						table += '</td>';
+					}
+					table += '</tr>';
+				}
+			
+				table += '</tbody></table>';
+				return table;
+			}, 
+			click(row) {
+				if(!this.get().clickable){
+					return;
+				}
+				if (getSelection().toString()) {
+					// Return if some text is selected instead of firing the row-click event.
+					return;
+				}
+				this.fire('row-click', row);
+				// console.log('click', row);
 			},
 			sort(index) {
 				if (index > -1) {
-					dataGrid.setSortIcon(this, index);
+					this.setSortIcon(index);
 					const { columns, sortType } = this.get();
 					this.getPaged({colName: columns[index].field, direction: sortType});				
 				}
@@ -171,7 +293,7 @@
 				grid = local.oncreate.call(this, local);
 			}
 			
-			dataGrid.setPerPageOptions(grid);
+			this.setPerPageOptions(grid);
 		},
 
 		onupdate({ changed, current, previous }) {			
