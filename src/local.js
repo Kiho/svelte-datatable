@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js';
-import { collect, dataGrid } from './data-grid';
+import { collect } from './data-grid';
 
 export default {
     methods: {
