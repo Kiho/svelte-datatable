@@ -20,13 +20,13 @@ export default {
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file  better for performance
-			css: css => {
-				css.write('public/app.css');
-			},
-			onwarn: (warning, handler) => {
-				if (warning.code === 'a11y-missing-href') return;
-				handler(warning);
-			}
+			// css: css => {
+			// 	css.write('public/app.css');
+			// },
+			// onwarn: (warning, handler) => {
+			// 	if (warning.code === 'a11y-missing-href') return;
+			// 	handler(warning);
+			// }
 		}),
 
 		// If you have external dependencies installed from

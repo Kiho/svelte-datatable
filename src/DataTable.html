@@ -1,3 +1,205 @@
+<script>
+	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
+
+	// [svelte-upgrade suggestion]
+	// manually refactor all references to __this
+	const __this = {
+		get: () => ({ title, customButtons, printable, exportable, searchable, searching, searchInput, columns, sortable, sortColumn, sortType, paginated, clickable, paginate, currentPerPage, perPageOptions, currentPage, rowCount, pageCount, selectedPage, sortIndex, process, rows, processedRows, paged, perPage, defaultPerPage, exactSearch })
+	};
+
+	const dispatch = createEventDispatcher();
+
+	// export let searchInput;
+
+	import Paginate from './paginate.html';
+	import { debounce } from './debounce';
+	import local from './local';
+	import server from './server';
+	import { collect } from './data-grid';
+
+	export let title = '';
+	export let customButtons = [];
+	export let printable = true;
+	export let exportable = true;
+	export let searchable = true;
+	export let searching = false;
+	export let searchInput = '';
+	export let columns = [];
+	export let sortable = true;
+	export let sortColumn = -1;
+	export let sortType = 'asc';
+	export let paginated = [];
+	export let clickable = true;
+	export let paginate = {};
+	export let currentPerPage = 10;
+	export let perPageOptions = [];
+	export let currentPage = 1;
+	export let rowCount = 0;
+	export let pageCount = 0;
+	export let selectedPage = 0;
+	export let sortIndex = -1;
+	export let process = 'server';
+	export let rows = [];
+	export let processedRows = [];
+	export let paged = {};
+	export let perPage = [10, 20, 30, 40, 50];
+	export let defaultPerPage = null;
+	export let exactSearch = false;
+
+	// [svelte-upgrade suggestion]
+	// review these functions and remove unnecessary 'export' keywords
+	export function search(e) {
+		const searching = !__this.get().searching;
+		searching = searching;
+		if (searching) {
+			setTimeout(() => searchInput.focus(), 100);
+		}
+	}
+
+	export function setSortIcon(index) {
+		if (!sortable)
+			return;
+		if (sortColumn === index) {
+			sortType = sortType === 'asc' ? 'desc' : 'asc';
+		} else {
+			sortType = 'asc';
+			sortColumn = index;
+		}
+		sortType = sortType, sortColumn = sortColumn;
+	}
+
+	export function setPerPageOptions() {
+		let options = perPage;
+	
+		// Force numbers
+		options = options.map( v => parseInt(v));
+		
+		// Set current page to first value
+		currentPerPage = options[0];
+	
+		// Sort options
+		options.sort((a,b) => a - b);
+	
+		// And add "All"
+		options.push(-1);
+	
+		// If defaultPerPage is provided and it's a valid option, set as current per page
+		if (options.indexOf(defaultPerPage) > -1) {
+			currentPerPage = parseInt(defaultPerPage);
+		}
+	
+		console.log('currentPerPage', currentPerPage, options);
+		currentPerPage = currentPerPage, perPageOptions = options;
+	}
+
+	export function exportExcel() {
+		const mimeType = 'data:application/vnd.ms-excel';
+		const html = dataGrid.renderTable(this).replace(/ /g, '%20');
+	
+		const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet'
+		const d = new Date();
+	
+		var dummy = document.createElement('a');
+		dummy.href = mimeType + ', ' + html;
+		dummy.download = documentPrefix
+			+ '-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
+			+ '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds()
+			+'.xls';
+		dummy.click();
+	}
+
+	export function print() {
+		let win = window.open("");
+		win.document.write(dataGrid.renderTable(this));
+		win.print();
+		win.close();
+	}
+
+	export function renderTable() {
+		let table = '<table><thead>';
+	
+		table += '<tr>';
+		for (let i = 0; i < columns.length; i++) {
+			const column = columns[i];
+			table += '<th>';
+			table += 	column.label;
+			table += '</th>';
+		}
+		table += '</tr>';
+	
+		table += '</thead><tbody>';
+		
+		for (let i = 0; i < rows.length; i++) {
+			const row = rows[i];
+			table += '<tr>';
+			for (let j = 0; j < columns.length; j++) {
+				const column = columns[j];
+				table += '<td>';
+				table +=	collect(row, column.field);
+				table += '</td>';
+			}
+			table += '</tr>';
+		}
+	
+		table += '</tbody></table>';
+		return table;
+	}
+
+	export function click(row) {
+		if(!__this.get().clickable){
+			return;
+		}
+		if (getSelection().toString()) {
+			// Return if some text is selected instead of firing the row-click event.
+			return;
+		}
+		dispatch('row-click', row);
+		// console.log('click', row);
+	}
+
+	export function sort(index) {
+		if (index > -1) {
+			setSortIcon(index);
+			__this.getPaged({colName: columns[index].field, direction: sortType});				
+		}
+	}
+
+	onMount(() => {
+		let grid;
+		if (process== 'server') {
+			grid = server.oncreate.call(this, server);
+		} else {
+			grid = local.oncreate.call(this, local);
+		}
+		
+		setPerPageOptions(grid);
+	});
+
+	const previous = { perPage, searchInput, selectedPage }
+	// [svelte-upgrade warning]
+	// beforeUpdate and afterUpdate handlers behave
+	// differently to their v2 counterparts
+	beforeUpdate(() => {			
+		// const { currentPerPage, searchInput, selectedPage, rows } = current;
+		if (currentPerPage != previous.perPage) {
+			__this.getPaged({size: currentPerPage});
+			previous.perPage = currentPerPage;
+		}	        
+		if (searchInput != previous.searchInput) {
+			debounce((x) => {
+				console.log('searchInput changed', x);
+				__this.getPaged({ searchText: x });
+				previous.searchText = searchText;
+			}, 250)();
+		}	        
+		if (selectedPage = previous.selectedPage) {
+			const newPage = selectedPage + 1;
+			__this.getPaged({ page: newPage }, x => x.page != newPage);
+			previous.selectedPage = selectedPage;
+		}   	        
+	});
+</script>
+
 <div class="material-table">
 	<div class="table-header">
 		<span class="table-title">{title}</span>
@@ -6,7 +208,7 @@
 			{#if !button.hide}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
-				on:click="this.click()">
+				on:click="{click}">
 				<i class="material-icons">{button.icon}</i>
 			</a>
 			{/if}
@@ -14,7 +216,7 @@
 			{#if printable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
-				on:click="print()">
+				on:click="{print}">
 				<i class="material-icons">print</i>
 			</a>
 			{/if}
@@ -22,14 +224,14 @@
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				v-if="this.exportable"
-				on:click="exportExcel()">
+				on:click="{exportExcel}">
 				<i class="material-icons">description</i>
 			</a>
 			{/if}
 			{#if searchable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
-				on:click="search()">
+				on:click="{search}">
 				<i class="material-icons">search</i>
 			</a>
 			{/if}
@@ -39,8 +241,8 @@
 	<div>
 		<div id="search-input-container">
 			<label>
-				<input type="search" id="search-input" ref:searchInput class="form-control" placeholder="Search data"
-					bind:value="searchInput">
+				<input type="search" id="search-input" bind:this={searchInput} class="form-control" placeholder="Search data"
+					bind:value="{searchInput}">
 			</label>
 		</div>
 	</div>
@@ -51,7 +253,7 @@
         <thead>
             <tr>
                 {#each columns as column, x}
-                <th on:click="sort(x)"
+                <th on:click="{() => sort(x)}"
                     class="{ sortable ? 'sorting ' : ''}
                         { sortColumn === x ?
                             (sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
@@ -66,7 +268,7 @@
 
         <tbody>
             {#each paginated as row, y}
-                <tr class="{ clickable ? 'clickable' : '' }" on:click="click(row)">
+                <tr class="{ clickable ? 'clickable' : '' }" on:click="{() => click(row)}">
                     {#each columns as column, x}
                         <td>
                             {#if column.html}
@@ -85,7 +287,7 @@
 		<div class="datatable-length">
 			<label>
 				<span>Rows per page:</span>
-				<select class="browser-default" bind:value="currentPerPage">
+				<select class="browser-default" bind:value="{currentPerPage}">
 					{#each perPageOptions as option, x}
 						<option value={option}>
 						{ option === -1 ? 'All' : option }
@@ -100,14 +302,14 @@
 		</div>
 		<div>
 			<Paginate
-				bind:pageCount="pageCount"
+				bind:pageCount="{pageCount}"
 				marginPages="2"
 				pageRange="4"
 				containerClass="pagination material-pagination"
 				pageLinkClass="waves-effect btn-flat"
 				prevLinkClass="waves-effect btn-flat nopadding"
 				nextLinkClass="waves-effect btn-flat nopadding"
-				bind:selected="selectedPage"
+				bind:selected="{selectedPage}"
 				activeClass="active"
 				>
 				<i class="material-icons" slot="prevContent">chevron_left</i>
@@ -117,203 +319,6 @@
 	</div>
 {/if}
 </div>
-
-<script>
-	import Paginate from './paginate.html';
-	import { debounce } from './debounce';
-	import local from './local';
-	import server from './server';
-	import { collect } from './data-grid';
-
-	export default {
-		data() {
-			return {
-				selectedPage: 0,
-				currentPage: 1,
-				currentPerPage: 10,
-				pageCount: 0,
-				rowCount: 0,
-				sortIndex: -1,
-				sortColumn: -1,
-				sortType: 'asc',
-				searching: false,
-				searchInput: '',
-				// props
-				process: 'server',
-				title: '',
-				columns: [],
-				rows: [],
-				processedRows: [],
-				paged: {},
-				paginate: {},
-				paginated: [],
-				clickable:true,
-				customButtons: [],
-				perPage:  [10, 20, 30, 40, 50],
-				perPageOptions: [],
-				defaultPerPage: null,
-				sortable: true,
-				searchable: true,
-				exactSearch: false,
-				exportable: true,
-				printable: true,			
-			};
-		},
-
-		components: {
-			Paginate,
-		},
-	
-		methods: {
-			search: function(e) {
-				const searching = !this.get().searching;
-				this.set({searching});
-				if (searching) {
-					setTimeout(() => this.refs.searchInput.focus(), 100);
-				}
-			},
-			setSortIcon(index) {
-				let { sortable, sortColumn, sortType, currentPage } = this.get();
-				if (!sortable)
-					return;
-				if (sortColumn === index) {
-					sortType = sortType === 'asc' ? 'desc' : 'asc';
-				} else {
-					sortType = 'asc';
-					sortColumn = index;
-				}
-				this.set({sortType, sortColumn});
-			},
-			setPerPageOptions() {
-				let { currentPerPage, defaultPerPage, perPage } = this.get();
-				let options = perPage;
-			
-				// Force numbers
-				options = options.map( v => parseInt(v));
-				
-				// Set current page to first value
-				currentPerPage = options[0];
-			
-				// Sort options
-				options.sort((a,b) => a - b);
-			
-				// And add "All"
-				options.push(-1);
-			
-				// If defaultPerPage is provided and it's a valid option, set as current per page
-				if (options.indexOf(defaultPerPage) > -1) {
-					currentPerPage = parseInt(defaultPerPage);
-				}
-			
-				console.log('currentPerPage', currentPerPage, options);
-				this.set({currentPerPage, perPageOptions: options});
-			},
-			exportExcel() {
-				const {title} = this.get();
-				const mimeType = 'data:application/vnd.ms-excel';
-				const html = dataGrid.renderTable(this).replace(/ /g, '%20');
-			
-				const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet'
-				const d = new Date();
-			
-				var dummy = document.createElement('a');
-				dummy.href = mimeType + ', ' + html;
-				dummy.download = documentPrefix
-					+ '-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
-					+ '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds()
-					+'.xls';
-				dummy.click();
-			},
-			print() {
-				let win = window.open("");
-				win.document.write(dataGrid.renderTable(this));
-				win.print();
-				win.close();
-			},
-			renderTable() {
-				const { currentPage, columns, rows } = this.get();
-				let table = '<table><thead>';
-			
-				table += '<tr>';
-				for (let i = 0; i < columns.length; i++) {
-					const column = columns[i];
-					table += '<th>';
-					table += 	column.label;
-					table += '</th>';
-				}
-				table += '</tr>';
-			
-				table += '</thead><tbody>';
-				
-				for (let i = 0; i < rows.length; i++) {
-					const row = rows[i];
-					table += '<tr>';
-					for (let j = 0; j < columns.length; j++) {
-						const column = columns[j];
-						table += '<td>';
-						table +=	collect(row, column.field);
-						table += '</td>';
-					}
-					table += '</tr>';
-				}
-			
-				table += '</tbody></table>';
-				return table;
-			}, 
-			click(row) {
-				if(!this.get().clickable){
-					return;
-				}
-				if (getSelection().toString()) {
-					// Return if some text is selected instead of firing the row-click event.
-					return;
-				}
-				this.fire('row-click', row);
-				// console.log('click', row);
-			},
-			sort(index) {
-				if (index > -1) {
-					this.setSortIcon(index);
-					const { columns, sortType } = this.get();
-					this.getPaged({colName: columns[index].field, direction: sortType});				
-				}
-			},
-		},
-
-        helpers: {
-            collect
-		},
-		
-		oncreate() {
-			const { process } = this.get();
-			let grid;
-			if (process== 'server') {
-				grid = server.oncreate.call(this, server);
-			} else {
-				grid = local.oncreate.call(this, local);
-			}
-			
-			this.setPerPageOptions(grid);
-		},
-
-		onupdate({ changed, current, previous }) {			
-			const { currentPerPage, searchInput, selectedPage, rows } = current;
-			if (changed.currentPerPage) {
-				this.getPaged({size: currentPerPage});
-			}	        
-			if (changed.searchInput) {
-				debounce((x) => {
-					console.log('searchInput changed', x);
-					this.getPaged({ searchText: x });
-				}, 250)();
-			}	        
-			if (changed.selectedPage) {
-				const newPage = selectedPage + 1;
-				this.getPaged({ page: newPage }, x => x.page != newPage);
-			}   	        
-		},
-	}
-</script>
 
 <style>
 	div.material-table {
