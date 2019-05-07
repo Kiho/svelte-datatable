@@ -1,15 +1,6 @@
 <script>
 	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 	import Fuse from 'fuse.js';
-	// [svelte-upgrade suggestion]
-	// manually refactor all references to __this
-	// const __this = {
-	// 	get: () => ({ title, customButtons, printable, exportable, searchable, searching, searchInput, columns, sortable, sortColumn, sortType, paginated, clickable, paginate, currentPerPage, perPageOptions, currentPage, rowCount, pageCount, selectedPage, sortIndex, process, rows, processedRows, paged, perPage, defaultPerPage, exactSearch })
-	// };
-
-	const dispatch = createEventDispatcher();
-
-	// export let searchInput;
 
 	import Paginate from './paginate.html';
 	import { debounce } from './debounce';
@@ -25,12 +16,12 @@
 	export let exportable = true;
 	export let searchable = true;
 	export let searching = false;
+	export let searchInputRef = null;
 	export let searchInput = '';
 	export let columns = [];
 	export let sortable = true;
 	export let sortColumn = -1;
 	export let sortType = 'asc';
-	// export let paginated = [];
 	export let clickable = true;
 	export let paginate = {};
 	export let currentPerPage = 10;
@@ -46,25 +37,15 @@
 	export let paged = {};
 	export let perPage = [10, 20, 30, 40, 50];
 	export let defaultPerPage = null;
-	export let exactSearch = false;
-		
-	// const localStore = immerStore(
-	// 	selectedPage,
-	// 	currentPage,
-	// 	currentPerPage, 
-	// 	rows
-	// );
+	export let exactSearch = false;		
 
+	const dispatch = createEventDispatcher();
 	const paginated = immerStore({ rows: [] });
 
-	function getPaged(props, pred) {
-		// todos.update($todos => {
-		// 	$todos[i].text = text;
-		// });
-		const { page } = props;            
+	function getPaged(props, pred) {           
 		if (!pred || pred({page: selectedPage})) {
-			if (page) {
-				props.currentPage = page;
+			if (props.page) {
+				props.currentPage = props.page;
 			}
 			if (props.selectedPage !== undefined)
 				selectedPage = props.selectedPage;
@@ -79,23 +60,18 @@
 	}
 
 	function paginateRows(rows) {
-		// const { currentPerPage, currentPage, paginate } = this.get();
 		let paginatedRows = rows;
 		if (paginate)
 			paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? 
 				paginatedRows.length + 1 : currentPage * currentPerPage);
-		// this.set({paginated: paginatedRows});
 		paginated.update($paginated => {
 			$paginated.rows = paginatedRows;
-			console.log('$paginated.rows', $paginated.rows);
+			// console.log('$paginated.rows', $paginated.rows);
 		});
 	}
 	
 	function processRows(rows, searchText) {
 		let computedRows = rows;				
-		// const { currentPage, currentPerPage, columns,
-		// 	sortable, sortColumn, sortType, 
-		// 	searchInput, exactSearch } = this.get();
 		if (!searchText) {
 			searchText = searchInput;
 		}	
@@ -140,8 +116,6 @@
 			computedRows = (new Fuse(computedRows, searchConfig)).search(searchText);
 		}
 
-		// const pageCount = Math.ceil(computedRows.length / currentPerPage);
-		// this.set({processedRows: computedRows, rowCount: computedRows.length, pageCount});
 		pageCount = Math.ceil(computedRows.length / currentPerPage);
 		processedRows = computedRows;
 		rowCount = computedRows.length;
@@ -151,10 +125,9 @@
 	// [svelte-upgrade suggestion]
 	// review these functions and remove unnecessary 'export' keywords
 	export function search(e) {
-		// const searching = !searching;
 		searching = !searching;
 		if (searching) {
-			setTimeout(() => searchInput.focus(), 100);
+			setTimeout(() => searchInputRef.focus(), 100);
 		}
 	}
 
@@ -195,7 +168,7 @@
 	}
 
 	export function click(row) {
-		if (!__this.get().clickable) {
+		if (!clickable) {
 			return;
 		}
 		if (getSelection().toString()) {
@@ -224,42 +197,31 @@
 		setPerPageOptions();
 	});
 
-	// let previous1;
-	// $: {
-	// 	// we can check that Immer is creating new objects where
-	// 	// necessary, and preserving others, by logging
-	// 	// referential equality checks
-	// 	if (previous1) {
-	// 		console.log(`previous === $paginated`, previous1 === $paginated);
-	// 		console.log(`previous[0] === $paginated[0]`, previous1[0]);
-	// 	}
-	// 	previous1 = $paginated;
-	// }
-
 	const previous = { perPage, searchInput, selectedPage, rows }
 	// [svelte-upgrade warning]
 	// beforeUpdate and afterUpdate handlers behave
 	// differently to their v2 counterparts
 	beforeUpdate(() => {			
-		// const { currentPerPage, searchInput, selectedPage, rows } = current;
 		if (currentPerPage != previous.perPage) {
 			getPaged({size: currentPerPage});
 			previous.perPage = currentPerPage;
 		}	        
 		if (searchInput != previous.searchInput) {
-			debounce((x) => {
-				console.log('searchInput changed', x);
-				getPaged({ searchText: x });
-				previous.searchText = searchText;
-			}, 250)();
+			debounce(() => {
+				if (searchInput != previous.searchInput) {
+					// console.log('searchInput changed', searchInput);
+					getPaged({ searchText: searchInput });
+					previous.searchInput = searchInput;
+				}
+			}, 400)();
 		}	        
 		if (selectedPage != previous.selectedPage) {
 			const newPage = selectedPage + 1;
 			getPaged({ page: newPage }, x => x.page != newPage);
 			previous.selectedPage = selectedPage;
 		}
-		if (rows != previous.rows) {
-			getPaged({size: currentPerPage});
+		if (process === 'local' && rows != previous.rows) {
+			getPaged({ size: currentPerPage });
 			previous.rows = rows;
 		}	        
 	});
@@ -306,7 +268,7 @@
 	<div>
 		<div id="search-input-container">
 			<label>
-				<input type="search" id="search-input" bind:this={searchInput}
+				<input type="search" id="search-input" bind:this={searchInputRef}
 				 	class="form-control" placeholder="Search data"
 					bind:value="{searchInput}">
 			</label>
