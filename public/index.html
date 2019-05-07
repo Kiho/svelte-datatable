@@ -205,7 +205,7 @@
     var el = document.querySelector('#data-table');        
     var dataTable = new app.DataTable({
         target: el,
-        data: {
+        props: {
             title: 'Customers',
             columns: columndata,
             process: process
@@ -214,10 +214,10 @@
     
     if (process ==='server') {        
         app.getList().then(function(data){
-            dataTable.set(data);
+            dataTable.$set(data);
         });	
     } else {
-        dataTable.set({rows: data});
+        dataTable.$set({rows: data});
     }  
 
     // dataTable.innerHTML = '<data-table columns=' + JSON.stringify(columndata) + ' rows=[] ></data-table>';

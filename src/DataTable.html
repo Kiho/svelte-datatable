@@ -1,11 +1,11 @@
 <script>
 	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
-
+	import Fuse from 'fuse.js';
 	// [svelte-upgrade suggestion]
 	// manually refactor all references to __this
-	const __this = {
-		get: () => ({ title, customButtons, printable, exportable, searchable, searching, searchInput, columns, sortable, sortColumn, sortType, paginated, clickable, paginate, currentPerPage, perPageOptions, currentPage, rowCount, pageCount, selectedPage, sortIndex, process, rows, processedRows, paged, perPage, defaultPerPage, exactSearch })
-	};
+	// const __this = {
+	// 	get: () => ({ title, customButtons, printable, exportable, searchable, searching, searchInput, columns, sortable, sortColumn, sortType, paginated, clickable, paginate, currentPerPage, perPageOptions, currentPage, rowCount, pageCount, selectedPage, sortIndex, process, rows, processedRows, paged, perPage, defaultPerPage, exactSearch })
+	// };
 
 	const dispatch = createEventDispatcher();
 
@@ -16,6 +16,8 @@
 	import local from './local';
 	import server from './server';
 	import { collect, exportExcel, print } from './data-grid';
+
+	import { immerStore } from './stores';
 
 	export let title = '';
 	export let customButtons = [];
@@ -28,7 +30,7 @@
 	export let sortable = true;
 	export let sortColumn = -1;
 	export let sortType = 'asc';
-	export let paginated = [];
+	// export let paginated = [];
 	export let clickable = true;
 	export let paginate = {};
 	export let currentPerPage = 10;
@@ -45,12 +47,112 @@
 	export let perPage = [10, 20, 30, 40, 50];
 	export let defaultPerPage = null;
 	export let exactSearch = false;
+		
+	// const localStore = immerStore(
+	// 	selectedPage,
+	// 	currentPage,
+	// 	currentPerPage, 
+	// 	rows
+	// );
 
+	const paginated = immerStore({ rows: [] });
+
+	function getPaged(props, pred) {
+		// todos.update($todos => {
+		// 	$todos[i].text = text;
+		// });
+		const { page } = props;            
+		if (!pred || pred({page: selectedPage})) {
+			if (page) {
+				props.currentPage = page;
+			}
+			if (props.selectedPage !== undefined)
+				selectedPage = props.selectedPage;
+			if (props.currentPage !== undefined)	
+				currentPage = props.currentPage;
+			if (props.currentPerPage !== undefined)
+				currentPerPage = props.currentPerPage;
+			if (props.paginate !== undefined)
+				paginate = props.paginate;
+			processRows(rows);	
+		}
+	}
+
+	function paginateRows(rows) {
+		// const { currentPerPage, currentPage, paginate } = this.get();
+		let paginatedRows = rows;
+		if (paginate)
+			paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? 
+				paginatedRows.length + 1 : currentPage * currentPerPage);
+		// this.set({paginated: paginatedRows});
+		paginated.update($paginated => {
+			$paginated.rows = paginatedRows;
+			console.log('$paginated.rows', $paginated.rows);
+		});
+	}
+	
+	function processRows(rows, searchText) {
+		let computedRows = rows;				
+		// const { currentPage, currentPerPage, columns,
+		// 	sortable, sortColumn, sortType, 
+		// 	searchInput, exactSearch } = this.get();
+		if (!searchText) {
+			searchText = searchInput;
+		}	
+		if (sortable !== false && sortColumn > -1 && columns)
+			computedRows = computedRows.sort((x, y) => {
+				if (!columns[sortColumn])
+					return 0;
+
+				const cook = (x) => {
+					x = collect(x, columns[sortColumn].field);
+					if (typeof(x) === 'string') {
+						x = x.toLowerCase();
+							if (columns[sortColumn].numeric)
+							x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
+					}
+					return x;
+				}
+
+				x = cook(x);
+				y = cook(y);
+
+				return (x < y ? -1 : (x > y ? 1 : 0)) * (sortType === 'desc' ? -1 : 1);
+			});
+
+		if (searchText) {
+			const searchConfig = { keys: columns.map(c => c.field) }
+
+			// Enable searching of numbers (non-string)
+			// Temporary fix of https://github.com/krisk/Fuse/issues/144
+				searchConfig.getFn = function (obj, path) {
+				if(Number.isInteger(obj[path]))
+				return JSON.stringify(obj[path]);
+					return obj[path];
+			}
+
+			if (exactSearch) {
+				//return only exact matches
+				searchConfig.threshold = 0,
+				searchConfig.distance = 0
+			}
+
+			computedRows = (new Fuse(computedRows, searchConfig)).search(searchText);
+		}
+
+		// const pageCount = Math.ceil(computedRows.length / currentPerPage);
+		// this.set({processedRows: computedRows, rowCount: computedRows.length, pageCount});
+		pageCount = Math.ceil(computedRows.length / currentPerPage);
+		processedRows = computedRows;
+		rowCount = computedRows.length;
+		paginateRows(computedRows);
+	}
+	
 	// [svelte-upgrade suggestion]
 	// review these functions and remove unnecessary 'export' keywords
 	export function search(e) {
-		const searching = !__this.get().searching;
-		searching = searching;
+		// const searching = !searching;
+		searching = !searching;
 		if (searching) {
 			setTimeout(() => searchInput.focus(), 100);
 		}
@@ -107,43 +209,59 @@
 	export function sort(index) {
 		if (index > -1) {
 			setSortIcon(index);
-			__this.getPaged({colName: columns[index].field, direction: sortType});				
+			getPaged({colName: columns[index].field, direction: sortType});				
 		}
 	}
 
 	onMount(() => {
-		let grid;
-		if (process== 'server') {
-			grid = server.oncreate.call(this, server);
-		} else {
-			grid = local.oncreate.call(this, local);
-		}
+		// let grid;
+		// if (process== 'server') {
+		// 	grid = server.oncreate.call(this, server);
+		// } else {
+		// 	grid = local.oncreate.call(this, local);
+		// }
 		
-		setPerPageOptions(grid);
+		setPerPageOptions();
 	});
 
-	const previous = { perPage, searchInput, selectedPage }
+	// let previous1;
+	// $: {
+	// 	// we can check that Immer is creating new objects where
+	// 	// necessary, and preserving others, by logging
+	// 	// referential equality checks
+	// 	if (previous1) {
+	// 		console.log(`previous === $paginated`, previous1 === $paginated);
+	// 		console.log(`previous[0] === $paginated[0]`, previous1[0]);
+	// 	}
+	// 	previous1 = $paginated;
+	// }
+
+	const previous = { perPage, searchInput, selectedPage, rows }
 	// [svelte-upgrade warning]
 	// beforeUpdate and afterUpdate handlers behave
 	// differently to their v2 counterparts
 	beforeUpdate(() => {			
 		// const { currentPerPage, searchInput, selectedPage, rows } = current;
 		if (currentPerPage != previous.perPage) {
-			__this.getPaged({size: currentPerPage});
+			getPaged({size: currentPerPage});
 			previous.perPage = currentPerPage;
 		}	        
 		if (searchInput != previous.searchInput) {
 			debounce((x) => {
 				console.log('searchInput changed', x);
-				__this.getPaged({ searchText: x });
+				getPaged({ searchText: x });
 				previous.searchText = searchText;
 			}, 250)();
 		}	        
-		if (selectedPage = previous.selectedPage) {
+		if (selectedPage != previous.selectedPage) {
 			const newPage = selectedPage + 1;
-			__this.getPaged({ page: newPage }, x => x.page != newPage);
+			getPaged({ page: newPage }, x => x.page != newPage);
 			previous.selectedPage = selectedPage;
-		}   	        
+		}
+		if (rows != previous.rows) {
+			getPaged({size: currentPerPage});
+			previous.rows = rows;
+		}	        
 	});
 </script>
 
@@ -188,7 +306,8 @@
 	<div>
 		<div id="search-input-container">
 			<label>
-				<input type="search" id="search-input" bind:this={searchInput} class="form-control" placeholder="Search data"
+				<input type="search" id="search-input" bind:this={searchInput}
+				 	class="form-control" placeholder="Search data"
 					bind:value="{searchInput}">
 			</label>
 		</div>
@@ -214,7 +333,7 @@
         </thead>
 
         <tbody>
-            {#each paginated as row, y}
+            {#each $paginated.rows as row, y}
                 <tr class="{ clickable ? 'clickable' : '' }" on:click="{() => click(row)}">
                     {#each columns as column, x}
                         <td>
