@@ -5,7 +5,7 @@
 	import Paginate from './paginate.html';
 	import { debounce } from './debounce';
 	import local from './local';
-	import server from './server';
+	// import server from './server';
 	import { collect, exportExcel, print } from './data-grid';
 
 	import { immerStore } from './stores';
@@ -40,90 +40,11 @@
 	export let exactSearch = false;		
 
 	const dispatch = createEventDispatcher();
-	const paginated = immerStore({ rows: [] });
 
-	function getPaged(props, pred) {           
-		if (!pred || pred({page: selectedPage})) {
-			if (props.page) {
-				props.currentPage = props.page;
-			}
-			if (props.selectedPage !== undefined)
-				selectedPage = props.selectedPage;
-			if (props.currentPage !== undefined)	
-				currentPage = props.currentPage;
-			if (props.currentPerPage !== undefined)
-				currentPerPage = props.currentPerPage;
-			if (props.paginate !== undefined)
-				paginate = props.paginate;
-			processRows(rows);	
-		}
-	}
+	const paginated = immerStore({ 
+		rows: [],
+	});
 
-	function paginateRows(rows) {
-		let paginatedRows = rows;
-		if (paginate)
-			paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? 
-				paginatedRows.length + 1 : currentPage * currentPerPage);
-		paginated.update($paginated => {
-			$paginated.rows = paginatedRows;
-			// console.log('$paginated.rows', $paginated.rows);
-		});
-	}
-	
-	function processRows(rows, searchText) {
-		let computedRows = rows;				
-		if (!searchText) {
-			searchText = searchInput;
-		}	
-		if (sortable !== false && sortColumn > -1 && columns)
-			computedRows = computedRows.sort((x, y) => {
-				if (!columns[sortColumn])
-					return 0;
-
-				const cook = (x) => {
-					x = collect(x, columns[sortColumn].field);
-					if (typeof(x) === 'string') {
-						x = x.toLowerCase();
-							if (columns[sortColumn].numeric)
-							x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
-					}
-					return x;
-				}
-
-				x = cook(x);
-				y = cook(y);
-
-				return (x < y ? -1 : (x > y ? 1 : 0)) * (sortType === 'desc' ? -1 : 1);
-			});
-
-		if (searchText) {
-			const searchConfig = { keys: columns.map(c => c.field) }
-
-			// Enable searching of numbers (non-string)
-			// Temporary fix of https://github.com/krisk/Fuse/issues/144
-				searchConfig.getFn = function (obj, path) {
-				if(Number.isInteger(obj[path]))
-				return JSON.stringify(obj[path]);
-					return obj[path];
-			}
-
-			if (exactSearch) {
-				//return only exact matches
-				searchConfig.threshold = 0,
-				searchConfig.distance = 0
-			}
-
-			computedRows = (new Fuse(computedRows, searchConfig)).search(searchText);
-		}
-
-		pageCount = Math.ceil(computedRows.length / currentPerPage);
-		processedRows = computedRows;
-		rowCount = computedRows.length;
-		paginateRows(computedRows);
-	}
-	
-	// [svelte-upgrade suggestion]
-	// review these functions and remove unnecessary 'export' keywords
 	export function search(e) {
 		searching = !searching;
 		if (searching) {
@@ -197,32 +118,44 @@
 		setPerPageOptions();
 	});
 
-	const previous = { perPage, searchInput, selectedPage, rows }
-	// [svelte-upgrade warning]
-	// beforeUpdate and afterUpdate handlers behave
-	// differently to their v2 counterparts
-	beforeUpdate(() => {			
-		if (currentPerPage != previous.perPage) {
-			getPaged({size: currentPerPage});
-			previous.perPage = currentPerPage;
-		}	        
-		if (searchInput != previous.searchInput) {
+	const processor = local(paginated);
+	$: if (process === 'local' && rows) getPaged({ rows, size: currentPerPage });
+	$: getPaged({ size: currentPerPage }); 
+	$: getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
+
+	function getPaged(props, pred) {
+		const values = processor.getPaged(props, pred, {	
+			paginate, selectedPage,
+			currentPage, currentPerPage,
+            sortable, sortColumn, sortType, 
+			searchInput, exactSearch,
+			rowCount, pageCount, 
+			rows, columns	
+		});
+
+		paginated.update($paginated => {
+			$paginated.rows = values.rows;
+			console.log('$values', values);
+		});
+		
+		({	paginate, selectedPage,
+			currentPage, currentPerPage,
+            sortable, sortColumn, sortType,
+			searchInput, exactSearch,
+			rowCount, pageCount	
+		} = values);
+	}
+
+	let prevSearchInput = '';
+	beforeUpdate(() => {			        
+		if (searchInput != prevSearchInput) {
 			debounce(() => {
-				if (searchInput != previous.searchInput) {
-					// console.log('searchInput changed', searchInput);
+				if (searchInput != prevSearchInput) {
+					console.log('searchInput changed', searchInput);
 					getPaged({ searchText: searchInput });
-					previous.searchInput = searchInput;
+					prevSearchInput = searchInput;
 				}
 			}, 400)();
-		}	        
-		if (selectedPage != previous.selectedPage) {
-			const newPage = selectedPage + 1;
-			getPaged({ page: newPage }, x => x.page != newPage);
-			previous.selectedPage = selectedPage;
-		}
-		if (process === 'local' && rows != previous.rows) {
-			getPaged({ size: currentPerPage });
-			previous.rows = rows;
 		}	        
 	});
 </script>
@@ -330,7 +263,7 @@
 		</div>
 		<div>
 			<Paginate
-				bind:pageCount="{pageCount}"
+				bind:pageCount={pageCount}
 				marginPages="2"
 				pageRange="4"
 				containerClass="pagination material-pagination"

@@ -23,16 +23,16 @@
 
     export let pages;
 
-    $: pages =  getPages();
+    $: pages = getPages(pageCount, selected);
 
-    function getPages() {
+    function getPages(pageCount, selected) {
         let items = {};
         if (pageCount <= pageRange) {
             for (let index = 0; index < pageCount; index++) {
                 let page = {
-                index: index,
-                content: index + 1,
-                selected: index === selected
+                    index: index,
+                    content: index + 1,
+                    selected: index === selected
                 }
                 items[index] = page
             }
