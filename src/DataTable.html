@@ -38,6 +38,7 @@
 	export let perPage = [10, 20, 30, 40, 50];
 	export let defaultPerPage = null;
 	export let exactSearch = false;		
+	export let instance = null;
 
 	const dispatch = createEventDispatcher();
 
@@ -139,6 +140,7 @@
 		paginated.update($paginated => {
 			$paginated.rows = values.rows;
 			console.log('$values', values);
+			console.log('instance', instance);			
 		});
 
 		({	paginate, selectedPage,

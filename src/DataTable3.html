@@ -1,0 +1,12 @@
+<DataTable bind:this={instance} {...$$props} />
+
+<script>
+    import DataTable from './DataTable.html';
+    import { onMount } from 'svelte';
+
+    export let instance;
+
+	onMount(() => {
+        instance.$set({ instance });
+	});
+</script>
