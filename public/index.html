@@ -214,6 +214,7 @@
     
     if (process ==='server') {        
         app.getList().then(function(data){
+            console.log('data', data)
             dataTable.$set(data);
         });	
     } else {

@@ -34,7 +34,7 @@
 	export let process = 'server';
 	export let rows = [];
 	export let processedRows = [];
-	export let paged = {};
+	export let paged = { paginate: paginate };
 	export let perPage = [10, 20, 30, 40, 50];
 	export let defaultPerPage = null;
 	export let exactSearch = false;		
@@ -108,26 +108,68 @@
 		}
 	}
 
-	var processor;
+	let processor;
 
 	processor = local;
 	onMount(() => {
-
 		// let grid;
 		// if (process== 'server') {
 		// 	grid = server.oncreate.call(this, server);
 		// } else {
 		// 	grid = local.oncreate.call(this, local);
 		// }
+		if (process== 'server') {
 		
+		}
+		 _instance = instance;
 		setPerPageOptions();
 	});
 
+	export let getList;
+	let _instance;
+	function getPagedServer(props, pred) {
+		console.log('getPagedServer ', props );
+		if (getList && (!pred || pred(paginate))) {
+			const p = Object.assign({}, paginate, props);
+			getList(p).then(data => {
+				console.log('getPagedServer ', data );
+				instance.$set({ paged: data });
+			});		
+		}
+	}
+	
+	let prevPaged;
+	$: if (paged && paged !== prevPaged) {
+		const { paginate, rows, getList } = paged;
+		const d = {
+			paginate,
+			rowCount: paginate.total,
+			pageCount: paginate.pages,
+			// paginated: rows,
+			selectedPage: paginate ? (paginate.page - 1) : 0
+		}
+		if (getList) {
+			d.getList = getList;
+		}
+		if (instance) {
+			instance.$set(d);
+			paginated.update($paginated => {
+				$paginated.rows = rows;
+				console.log('server - $paginated.rows ', $paginated.rows );			
+			});
+		}		
+		prevPaged = paged;
+	}
+
 	$: if (process === 'local' && rows) getPaged({ rows, size: currentPerPage });
-	$: getPaged({ size: currentPerPage }); 
-	$: getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
+	$: _instance && getPaged({ size: currentPerPage }); 
+	$: _instance && getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
 
 	function getPaged(props, pred) {
+		if (process === 'server') {
+			getPagedServer(props, pred);
+			return;
+		}
 		const values = processor.getPaged(props, pred, {	
 			paginate, selectedPage,
 			currentPage, currentPerPage,
@@ -139,8 +181,7 @@
 
 		paginated.update($paginated => {
 			$paginated.rows = values.rows;
-			console.log('$values', values);
-			console.log('instance', instance);			
+			console.log('$values', values);			
 		});
 
 		({	paginate, selectedPage,

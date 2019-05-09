@@ -8,14 +8,15 @@ export function getPaged(props, pred, paginated) {
 			props.currentPage = props.page;
 		}
 
-		if (props.selectedPage !== undefined)
-			paginated.selectedPage = props.selectedPage;
-		if (props.currentPage !== undefined)	
-			paginated.currentPage = props.currentPage;
-		if (props.currentPerPage !== undefined)
-			paginated.currentPerPage = props.currentPerPage;
-		if (props.paginate !== undefined)
-			paginated.paginate = props.paginate;
+		paginated = Object.assign({}, paginated, props);		
+		// if (props.selectedPage !== undefined)
+		// 	paginated.selectedPage = props.selectedPage;
+		// if (props.currentPage !== undefined)	
+		// 	paginated.currentPage = props.currentPage;
+		// if (props.currentPerPage !== undefined)
+		// 	paginated.currentPerPage = props.currentPerPage;
+		// if (props.paginate !== undefined)
+		// 	paginated.paginate = props.paginate;
 		
 		processRows(props.rows || paginated.rows, props.searchText, paginated);
 
