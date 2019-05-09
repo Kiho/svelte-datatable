@@ -4,7 +4,7 @@
 
 	import Paginate from './paginate.html';
 	import { debounce } from './debounce';
-	import local from './local';
+	import * as local from './local';
 	// import server from './server';
 	import { collect, exportExcel, print } from './data-grid';
 
@@ -107,7 +107,11 @@
 		}
 	}
 
+	var processor;
+
+	processor = local;
 	onMount(() => {
+
 		// let grid;
 		// if (process== 'server') {
 		// 	grid = server.oncreate.call(this, server);
@@ -118,7 +122,6 @@
 		setPerPageOptions();
 	});
 
-	const processor = local(paginated);
 	$: if (process === 'local' && rows) getPaged({ rows, size: currentPerPage });
 	$: getPaged({ size: currentPerPage }); 
 	$: getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
@@ -137,7 +140,7 @@
 			$paginated.rows = values.rows;
 			console.log('$values', values);
 		});
-		
+
 		({	paginate, selectedPage,
 			currentPage, currentPerPage,
             sortable, sortColumn, sortType,
