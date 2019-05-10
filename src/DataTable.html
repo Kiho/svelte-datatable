@@ -31,7 +31,7 @@
 	export let currentPage = 1;
 	export let rowCount = 0;
 	export let pageCount = 0;
-	export let selectedPage = 0;
+	export let selected = 0;
 	export let perPage = [10, 20, 30, 40, 50];
 	export let defaultPerPage = null;
 	export let exactSearch = false;		
@@ -117,6 +117,36 @@
 		setPerPageOptions();
 	});
 
+	function getPagedLocal(props, pred) { 		
+		const values = local.getPaged(props, pred, {	
+			paginate, selected,
+			currentPage, currentPerPage,
+            sortable, sortColumn, sortType, 
+			searchInput, exactSearch,
+			rowCount, pageCount, 
+			rows, columns	
+		});
+		({	paginate, selected,
+			currentPage, currentPerPage,
+            sortable, sortColumn, sortType,
+			searchInput, exactSearch,
+			rowCount, pageCount	
+		} = values);
+		paginated.update($paginated => {
+			$paginated.rows = values.rows;
+			console.log('values', values);			
+		});
+	}
+
+	function getPaged(props, pred) {
+		console.log('props', props);
+		if (isServerProcess) {
+			getPagedServer(props, pred, { paginate, getList });
+		} else {
+			getPagedLocal(props, pred);
+		}	
+	}
+	
 	let prevPaged;
 	$: if (instance && paged.rows && paged !== prevPaged) {
 		prevPaged = watchServer(paged);
@@ -125,6 +155,7 @@
             console.log('server - $paginated.rows ', $paginated.rows );			
         });
 	}
+
 	let prevRows = rows;
 	$: if (instance  && !isServerProcess && rows !== prevRows) {
 		prevRows = rows;
@@ -135,33 +166,11 @@
 		prevSize = currentPerPage;
 		getPaged({ size: currentPerPage });
 	}
-	// $: instance && getPaged({ size: currentPerPage }); 
-	$: instance && getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
-
-	function getPaged(props, pred) {
-		if (isServerProcess) {
-			getPagedServer(props, pred, { paginate, getList });
-			return;
-		}
-		console.log('props', props);
-		const values = local.getPaged(props, pred, {	
-			paginate, selectedPage,
-			currentPage, currentPerPage,
-            sortable, sortColumn, sortType, 
-			searchInput, exactSearch,
-			rowCount, pageCount, 
-			rows, columns	
-		});
-		({	paginate, selectedPage,
-			currentPage, currentPerPage,
-            sortable, sortColumn, sortType,
-			searchInput, exactSearch,
-			rowCount, pageCount	
-		} = values);
-		paginated.update($paginated => {
-			$paginated.rows = values.rows;
-			console.log('values', values);			
-		});
+	$: selectedPage =  selected + 1;
+	let prevPage = selected + 1;
+	$: if (instance && prevPage != selectedPage) {
+		prevPage = selectedPage;
+		getPaged({ page: selectedPage }, x => x.page != selectedPage);
 	}
 
 	let prevSearchInput = '';
@@ -288,7 +297,7 @@
 				pageLinkClass="waves-effect btn-flat"
 				prevLinkClass="waves-effect btn-flat nopadding"
 				nextLinkClass="waves-effect btn-flat nopadding"
-				bind:selected="{selectedPage}"
+				bind:selected="{selected}"
 				activeClass="active"
 				>
 				<i class="material-icons" slot="prevContent">chevron_left</i>
