@@ -125,8 +125,17 @@
             console.log('server - $paginated.rows ', $paginated.rows );			
         });
 	}
-	$: if (!isServerProcess && rows) getPaged({ rows, size: currentPerPage });
-	$: instance && getPaged({ size: currentPerPage }); 
+	let prevRows = rows;
+	$: if (instance  && !isServerProcess && rows !== prevRows) {
+		prevRows = rows;
+		getPaged({ rows });
+	}
+	let prevSize = currentPerPage;
+	$: if (instance && prevSize != currentPerPage) {
+		prevSize = currentPerPage;
+		getPaged({ size: currentPerPage });
+	}
+	// $: instance && getPaged({ size: currentPerPage }); 
 	$: instance && getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
 
 	function getPaged(props, pred) {
@@ -134,6 +143,7 @@
 			getPagedServer(props, pred, { paginate, getList });
 			return;
 		}
+		console.log('props', props);
 		const values = local.getPaged(props, pred, {	
 			paginate, selectedPage,
 			currentPage, currentPerPage,
@@ -142,18 +152,16 @@
 			rowCount, pageCount, 
 			rows, columns	
 		});
-
-		paginated.update($paginated => {
-			$paginated.rows = values.rows;
-			console.log('$values', values);			
-		});
-
 		({	paginate, selectedPage,
 			currentPage, currentPerPage,
             sortable, sortColumn, sortType,
 			searchInput, exactSearch,
 			rowCount, pageCount	
 		} = values);
+		paginated.update($paginated => {
+			$paginated.rows = values.rows;
+			console.log('values', values);			
+		});
 	}
 
 	let prevSearchInput = '';

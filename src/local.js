@@ -7,7 +7,7 @@ export function getPaged(props, pred, paginated) {
 		if (props.page) {
 			props.currentPage = props.page;
 		}
-		paginated = Object.assign({}, paginated, props);
+		paginated = Object.assign(paginated, props);
 		processRows(props.rows || paginated.rows, props.searchText, paginated);
 		return paginated;
 	}
