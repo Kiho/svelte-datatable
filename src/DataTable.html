@@ -5,24 +5,26 @@
 	import Paginate from './paginate.html';
 	import { debounce } from './debounce';
 	import * as local from './local';
-	// import server from './server';
+	import server from './server';
 	import { collect, exportExcel, print } from './data-grid';
 
 	import { immerStore } from './stores';
 
 	export let title = '';
 	export let customButtons = [];
+	export let clickable = true;
 	export let printable = true;
 	export let exportable = true;
 	export let searchable = true;
 	export let searching = false;
 	export let searchInputRef = null;
 	export let searchInput = '';
-	export let columns = [];
+
 	export let sortable = true;
 	export let sortColumn = -1;
+	export let sortIndex = -1;
 	export let sortType = 'asc';
-	export let clickable = true;
+
 	export let paginate = {};
 	export let currentPerPage = 10;
 	export let perPageOptions = [];
@@ -30,18 +32,21 @@
 	export let rowCount = 0;
 	export let pageCount = 0;
 	export let selectedPage = 0;
-	export let sortIndex = -1;
-	export let process = 'server';
-	export let rows = [];
-	export let processedRows = [];
-	export let paged = { paginate: paginate };
 	export let perPage = [10, 20, 30, 40, 50];
 	export let defaultPerPage = null;
 	export let exactSearch = false;		
+
+	export let columns = [];
 	export let instance = null;
+	export let process = 'server';
+	// local
+	export let rows = [];
+	// server
+	export let paged = { paginate: paginate };
+	export let getList = null;
 
 	const dispatch = createEventDispatcher();
-
+	const isServerProcess = process === 'server';
 	const paginated = immerStore({ 
 		rows: [],
 	});
@@ -67,24 +72,18 @@
 
 	export function setPerPageOptions() {
 		let options = perPage;
-	
 		// Force numbers
-		options = options.map( v => parseInt(v));
-		
+		options = options.map( v => parseInt(v));		
 		// Set current page to first value
-		currentPerPage = options[0];
-	
+		currentPerPage = options[0];	
 		// Sort options
-		options.sort((a,b) => a - b);
-	
+		options.sort((a,b) => a - b);	
 		// And add "All"
-		options.push(-1);
-	
+		options.push(-1);	
 		// If defaultPerPage is provided and it's a valid option, set as current per page
 		if (options.indexOf(defaultPerPage) > -1) {
 			currentPerPage = parseInt(defaultPerPage);
-		}
-	
+		}	
 		console.log('currentPerPage', currentPerPage, options);
 		currentPerPage = currentPerPage, perPageOptions = options;
 	}
@@ -108,69 +107,34 @@
 		}
 	}
 
-	let processor;
-
-	processor = local;
+	let getPagedServer;
+	let watchServer;
 	onMount(() => {
-		// let grid;
-		// if (process== 'server') {
-		// 	grid = server.oncreate.call(this, server);
-		// } else {
-		// 	grid = local.oncreate.call(this, local);
-		// }
-		if (process== 'server') {
-		
+		if (isServerProcess) {
+			getPagedServer = server.getPaged.bind(instance);
+			watchServer = server.watch.bind(instance);
 		}
-		 _instance = instance;
 		setPerPageOptions();
 	});
 
-	export let getList;
-	let _instance;
-	function getPagedServer(props, pred) {
-		console.log('getPagedServer ', props );
-		if (getList && (!pred || pred(paginate))) {
-			const p = Object.assign({}, paginate, props);
-			getList(p).then(data => {
-				console.log('getPagedServer ', data );
-				instance.$set({ paged: data });
-			});		
-		}
-	}
-	
 	let prevPaged;
-	$: if (paged && paged !== prevPaged) {
-		const { paginate, rows, getList } = paged;
-		const d = {
-			paginate,
-			rowCount: paginate.total,
-			pageCount: paginate.pages,
-			// paginated: rows,
-			selectedPage: paginate ? (paginate.page - 1) : 0
-		}
-		if (getList) {
-			d.getList = getList;
-		}
-		if (instance) {
-			instance.$set(d);
-			paginated.update($paginated => {
-				$paginated.rows = rows;
-				console.log('server - $paginated.rows ', $paginated.rows );			
-			});
-		}		
-		prevPaged = paged;
+	$: if (instance && paged.rows && paged !== prevPaged) {
+		prevPaged = watchServer(paged);
+		paginated.update($paginated => {
+            $paginated.rows = paged.rows;
+            console.log('server - $paginated.rows ', $paginated.rows );			
+        });
 	}
-
-	$: if (process === 'local' && rows) getPaged({ rows, size: currentPerPage });
-	$: _instance && getPaged({ size: currentPerPage }); 
-	$: _instance && getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
+	$: if (!isServerProcess && rows) getPaged({ rows, size: currentPerPage });
+	$: instance && getPaged({ size: currentPerPage }); 
+	$: instance && getPaged({ page: selectedPage + 1 }, x => x.page != selectedPage + 1);
 
 	function getPaged(props, pred) {
-		if (process === 'server') {
-			getPagedServer(props, pred);
+		if (isServerProcess) {
+			getPagedServer(props, pred, { paginate, getList });
 			return;
 		}
-		const values = processor.getPaged(props, pred, {	
+		const values = local.getPaged(props, pred, {	
 			paginate, selectedPage,
 			currentPage, currentPerPage,
             sortable, sortColumn, sortType, 
@@ -206,6 +170,7 @@
 	});
 </script>
 
+<svelte:options accessors={true} />
 <div class="material-table">
 	<div class="table-header">
 		<span class="table-title">{title}</span>

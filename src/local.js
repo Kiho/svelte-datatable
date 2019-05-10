@@ -7,41 +7,34 @@ export function getPaged(props, pred, paginated) {
 		if (props.page) {
 			props.currentPage = props.page;
 		}
-
-		paginated = Object.assign({}, paginated, props);		
-		// if (props.selectedPage !== undefined)
-		// 	paginated.selectedPage = props.selectedPage;
-		// if (props.currentPage !== undefined)	
-		// 	paginated.currentPage = props.currentPage;
-		// if (props.currentPerPage !== undefined)
-		// 	paginated.currentPerPage = props.currentPerPage;
-		// if (props.paginate !== undefined)
-		// 	paginated.paginate = props.paginate;
-		
+		paginated = Object.assign({}, paginated, props);
 		processRows(props.rows || paginated.rows, props.searchText, paginated);
-
 		return paginated;
 	}
 } 
 
-const paginateRows = function(rows, paginated) {
+function paginateRows(rows, paginated) {
 	let paginatedRows = rows;
 	const { currentPerPage, currentPage, paginate } = paginated;
-	if (paginate)
+	if (paginate) {
 		paginatedRows = paginatedRows.slice((currentPage - 1) * currentPerPage, currentPerPage === -1 ? 
-			paginatedRows.length + 1 : currentPage * currentPerPage);
+			paginatedRows.length + 1 : 
+			currentPage * currentPerPage);
+	}
 	paginated.rows = paginatedRows;
 }
 
-const processRows = function(rows, searchText, paginated) {
+function processRows(rows, searchText, paginated) {
 	let computedRows = rows;
-	const { currentPage, currentPerPage, columns,
+	const { currentPerPage, columns,
 		sortable, sortColumn, sortType, 
-		searchInput, exactSearch } = paginated;				
+		searchInput, exactSearch } = paginated;	
+
 	if (!searchText) {
 		searchText = searchInput;
-	}	
-	if (sortable !== false && sortColumn > -1 && columns)
+	}
+
+	if (sortable !== false && sortColumn > -1 && columns) {
 		computedRows = computedRows.sort((x, y) => {
 			if (!columns[sortColumn])
 				return 0;
@@ -61,13 +54,14 @@ const processRows = function(rows, searchText, paginated) {
 
 			return (x < y ? -1 : (x > y ? 1 : 0)) * (sortType === 'desc' ? -1 : 1);
 		});
+	}
 
 	if (searchText) {
 		const searchConfig = { keys: columns.map(c => c.field) }
 
 		// Enable searching of numbers (non-string)
 		// Temporary fix of https://github.com/krisk/Fuse/issues/144
-			searchConfig.getFn = function (obj, path) {
+		searchConfig.getFn = function (obj, path) {
 			if(Number.isInteger(obj[path]))
 			return JSON.stringify(obj[path]);
 				return obj[path];
@@ -83,7 +77,6 @@ const processRows = function(rows, searchText, paginated) {
 	}
 
 	paginated.pageCount = Math.ceil(computedRows.length / currentPerPage);
-	paginated.processedRows = computedRows;
 	paginated.rowCount = computedRows.length;
 	paginateRows(computedRows, paginated);
 }
