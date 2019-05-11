@@ -21,7 +21,7 @@ function paginateRows(rows, paginated) {
 			paginatedRows.length + 1 : 
 			currentPage * currentPerPage);
 	}
-	paginated.rows = paginatedRows;
+	paginated.paginatedRows = paginatedRows;
 }
 
 function processRows(rows, searchText, paginated) {

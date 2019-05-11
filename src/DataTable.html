@@ -41,14 +41,18 @@
 	export let process = 'server';
 	// local
 	export let rows = [];
+	export let paginatedRows = [];
 	// server
 	export let paged = { paginate: paginate };
 	export let getList = null;
 
 	const dispatch = createEventDispatcher();
 	const isServerProcess = process === 'server';
-	const paginated = immerStore({ 
-		rows: [],
+	const paginated = immerStore({
+		paginatedRows, 
+		rows,
+		size: currentPerPage,
+		page: currentPage,
 	});
 
 	export function search(e) {
@@ -130,12 +134,11 @@
 			currentPage, currentPerPage,
             sortable, sortColumn, sortType,
 			searchInput, exactSearch,
-			rowCount, pageCount	
+			rowCount, pageCount,
+			rows, paginatedRows
 		} = values);
-		paginated.update($paginated => {
-			$paginated.rows = values.rows;
-			console.log('values', values);			
-		});
+		console.log('values', values);
+		update(paginatedRows, currentPerPage, selectedPage);
 	}
 
 	function getPaged(props, pred) {
@@ -146,31 +149,41 @@
 			getPagedLocal(props, pred);
 		}	
 	}
-	
+
+	function update(paginatedRows, size, page) {
+		paginated.update($paginated => {
+			$paginated.paginatedRows = paginatedRows;
+			$paginated.rows = rows;
+			$paginated.size = size;
+			$paginated.page = page;		
+		});
+	}
+
+	$: selectedPage = selected + 1;
+	let previous;
+	$: {
+		// we can check that Immer is creating new objects where
+		// necessary, and preserving others, by logging
+		// referential equality checks
+		if (previous) {
+			if (instance  && !isServerProcess && rows !== previous.rows) {
+				getPaged({ rows });
+			}
+			if (currentPerPage !== previous.size) {
+				getPaged({ size: currentPerPage });
+			}
+			if (selectedPage !== previous.page) {
+				getPaged({ page: selectedPage }, x => x.page != selectedPage);
+			}
+		}
+		previous = $paginated;
+	}
+
 	let prevPaged;
 	$: if (instance && paged.rows && paged !== prevPaged) {
 		prevPaged = watchServer(paged);
-		paginated.update($paginated => {
-            $paginated.rows = paged.rows;
-            console.log('server - $paginated.rows ', $paginated.rows );			
-        });
-	}
-
-	let prevRows = rows;
-	$: if (instance  && !isServerProcess && rows !== prevRows) {
-		prevRows = rows;
-		getPaged({ rows });
-	}
-	let prevSize = currentPerPage;
-	$: if (instance && prevSize != currentPerPage) {
-		prevSize = currentPerPage;
-		getPaged({ size: currentPerPage });
-	}
-	$: selectedPage =  selected + 1;
-	let prevPage = selected + 1;
-	$: if (instance && prevPage != selectedPage) {
-		prevPage = selectedPage;
-		getPaged({ page: selectedPage }, x => x.page != selectedPage);
+		update(paged.rows, paged.size, paged.page);
+		console.log('server - $paginated.rows ', $paginated.paginatedRows );
 	}
 
 	let prevSearchInput = '';
@@ -255,7 +268,7 @@
         </thead>
 
         <tbody>
-            {#each $paginated.rows as row, y}
+            {#each $paginated.paginatedRows as row, y}
                 <tr class="{ clickable ? 'clickable' : '' }" on:click="{() => click(row)}">
                     {#each columns as column, x}
                         <td>
