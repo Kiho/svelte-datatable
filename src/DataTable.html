@@ -162,9 +162,6 @@
 	$: selectedPage = selected + 1;
 	let previous;
 	$: {
-		// we can check that Immer is creating new objects where
-		// necessary, and preserving others, by logging
-		// referential equality checks
 		if (previous) {
 			if (instance  && !isServerProcess && rows !== previous.rows) {
 				getPaged({ rows });
