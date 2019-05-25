@@ -5,7 +5,6 @@
 	import Paginate from './paginate.html';
 	import { debounce } from './debounce';
 	import * as local from './local';
-	import server from './server';
 	import { collect, exportExcel, print } from './data-grid';
 
 	import { immerStore } from './stores';
@@ -25,7 +24,6 @@
 	export let sortIndex = -1;
 	export let sortType = 'asc';
 
-	export let paginate = {};
 	export let currentPerPage = 10;
 	export let perPageOptions = [];
 	export let currentPage = 1;
@@ -33,11 +31,12 @@
 	export let pageCount = 0;
 	export let selected = 0;
 	export let perPage = [10, 20, 30, 40, 50];
+	export let paginate = { size: perPage[0], page: 1 };
 	export let defaultPerPage = null;
 	export let exactSearch = false;		
 
 	export let columns = [];
-	export let instance = null;
+	// export let instance = null;
 	export let process = 'server';
 	// local
 	export let rows = [];
@@ -48,9 +47,11 @@
 
 	const dispatch = createEventDispatcher();
 	const isServerProcess = process === 'server';
+
 	const paginated = immerStore({
 		paginatedRows,
 		rows,
+		paginate,
 		size: currentPerPage,
 		page: currentPage,
 	});
@@ -111,14 +112,8 @@
 		}
 	}
 
-	let getPagedServer;
-	let watchServer;
 	onMount(() => {
-		if (isServerProcess) {
-			getPagedServer = server.getPaged.bind(instance);
-			watchServer = server.watch.bind(instance);
-		}
-		setPerPageOptions();
+		setPerPageOptions();		
 	});
 
 	function getPagedLocal(props, pred) { 		
@@ -141,30 +136,55 @@
 		update(paginatedRows, currentPerPage, selectedPage);
 	}
 
+	function getPagedServer(props, pred, paged, cb) {
+        const { paginate, getList } = paged;
+        if (getList && (!pred || pred(paginate))) {
+            const p = Object.assign({}, paginate, props);
+            getList(p).then(data => {
+                console.log('getPagedServer ', data );
+                cb(data);
+            });		
+        }
+	}
+	
+	function updateServer(paged) {
+		const { paginate } = paged;
+		rowCount = paginate.total;
+		pageCount = paginate.pages;				
+		currentPage = paginate.page;
+		if (paged.getList) {
+			getList = paged.getList;	
+		}
+	}
+
 	function getPaged(props, pred) {
 		console.log('props', props);
 		if (isServerProcess) {
-			getPagedServer(props, pred, { paginate, getList });
+			getPagedServer(props, pred, { paginate, getList }, data => {
+				updateServer(data);
+				update(data.rows, data.paginate.size, data.paginate.page);
+			});
 		} else {
 			getPagedLocal(props, pred);
 		}	
-	}
-
+	}	
+	
+	$: selectedPage = selected + 1;
+	let previous;	
 	function update(paginatedRows, size, page) {
 		paginated.update($paginated => {
 			$paginated.paginatedRows = paginatedRows;
 			$paginated.rows = rows;
 			$paginated.size = size;
-			$paginated.page = page;		
+			$paginated.page = page;
 		});
+		previous = $paginated;
 	}
 
-	$: selectedPage = selected + 1;
-	let previous;
 	$: {
-		console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage );
+		// console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage);
 		if (previous) {
-			if (instance  && !isServerProcess && rows !== previous.rows) {
+			if (!isServerProcess && rows !== previous.rows) {
 				getPaged({ rows });
 			}
 			if (currentPerPage !== previous.size) {
@@ -173,16 +193,20 @@
 			// TODO - need more investigation
 			if ($paginated.page !== previous.page || selectedPage !== previous.page) {
 				getPaged({ page: selectedPage }, x => x.page != selectedPage);
+				paginate.page = selectedPage;
 			}
 		}
 		previous = $paginated;
 	}
 
 	let prevPaged;
-	$: if (instance && paged.rows && paged !== prevPaged) {
-		prevPaged = watchServer(paged);
-		update(paged.rows, paged.paginate.size, paged.paginate.page);
-		console.log('server - paged !== prevPaged ', paged);
+	$: if (paged.rows && paged !== prevPaged) {
+		if (prevPaged == null) {			
+			updateServer(paged);
+			update(paged.rows, paged.paginate.size, paged.paginate.page);
+		}
+		prevPaged = paged;
+		console.log('paged !== prevPaged - $paginated.rows ', $paginated );
 	}
 
 	let prevSearchInput = '';

@@ -61,6 +61,9 @@ function getData(p) {
         data = data.filter(x => searchByName(x, p.searchText));
     }
 
+    if (!p.page) {
+        p.page = 1;
+    }
     const rows = paginateArray(data, p.size, p.page - 1);
     p.total = data.length;
     p.pages = Math.ceil(data.length / p.size);
