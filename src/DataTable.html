@@ -36,7 +36,6 @@
 	export let exactSearch = false;		
 
 	export let columns = [];
-	// export let instance = null;
 	export let process = 'server';
 	// local
 	export let rows = [];
@@ -157,13 +156,15 @@
 		}
 	}
 
+	function updatePaged(data) {
+		updateServer(data);
+		update(data.rows, data.paginate.size, data.paginate.page);
+	}
+
 	function getPaged(props, pred) {
 		console.log('props', props);
 		if (isServerProcess) {
-			getPagedServer(props, pred, { paginate, getList }, data => {
-				updateServer(data);
-				update(data.rows, data.paginate.size, data.paginate.page);
-			});
+			getPagedServer(props, pred, { paginate, getList }, updatePaged);
 		} else {
 			getPagedLocal(props, pred);
 		}	
@@ -190,8 +191,7 @@
 			if (currentPerPage !== previous.size) {
 				getPaged({ size: currentPerPage });
 			}
-			// TODO - need more investigation
-			if ($paginated.page !== previous.page || selectedPage !== previous.page) {
+			if (selectedPage !== previous.page) {
 				getPaged({ page: selectedPage }, x => x.page != selectedPage);
 				paginate.page = selectedPage;
 			}
@@ -202,8 +202,7 @@
 	let prevPaged;
 	$: if (paged.rows && paged !== prevPaged) {
 		if (prevPaged == null) {			
-			updateServer(paged);
-			update(paged.rows, paged.paginate.size, paged.paginate.page);
+			updatePaged(paged);
 		}
 		prevPaged = paged;
 		console.log('paged !== prevPaged - $paginated.rows ', $paginated );
