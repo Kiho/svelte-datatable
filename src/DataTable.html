@@ -201,11 +201,9 @@
 
 	let prevPaged;
 	$: if (paged.rows && paged !== prevPaged) {
-		if (prevPaged == null) {			
-			updatePaged(paged);
-		}
+		updatePaged(paged);
 		prevPaged = paged;
-		console.log('paged !== prevPaged - $paginated.rows ', $paginated );
+		console.log('paged !== prevPaged ', $paginated );
 	}
 
 	let prevSearchInput = '';
