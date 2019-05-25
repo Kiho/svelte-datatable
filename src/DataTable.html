@@ -5,7 +5,6 @@
 	import Paginate from './paginate.html';
 	import { debounce } from './debounce';
 	import * as local from './local';
-	import server from './server';
 	import { collect, exportExcel, print } from './data-grid';
 
 	import { immerStore } from './stores';
@@ -32,12 +31,12 @@
 	export let pageCount = 0;
 	export let selected = 0;
 	export let perPage = [10, 20, 30, 40, 50];
-	export let paginate = { size: perPage[0] };
+	export let paginate = { size: perPage[0], page: 1 };
 	export let defaultPerPage = null;
 	export let exactSearch = false;		
 
 	export let columns = [];
-	export let instance = null;
+	// export let instance = null;
 	export let process = 'server';
 	// local
 	export let rows = [];
@@ -150,9 +149,9 @@
 	
 	function updateServer(paged) {
 		const { paginate } = paged;
-		// selected = (paginate.page || 0) - 1;
 		rowCount = paginate.total;
-		pageCount = paginate.pages;
+		pageCount = paginate.pages;				
+		currentPage = paginate.page;
 		if (paged.getList) {
 			getList = paged.getList;	
 		}
@@ -185,7 +184,7 @@
 	$: {
 		// console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage);
 		if (previous) {
-			if (instance  && !isServerProcess && rows !== previous.rows) {
+			if (!isServerProcess && rows !== previous.rows) {
 				getPaged({ rows });
 			}
 			if (currentPerPage !== previous.size) {
@@ -193,13 +192,14 @@
 			}
 			if (selectedPage !== previous.page) {
 				getPaged({ page: selectedPage }, x => x.page != selectedPage);
+				paginate.page = selectedPage;
 			}
 		}
 		previous = $paginated;
 	}
 
 	let prevPaged;
-	$: if (instance && paged.rows && paged !== prevPaged) {
+	$: if (paged.rows && paged !== prevPaged) {
 		if (prevPaged == null) {			
 			updateServer(paged);
 			update(paged.rows, paged.paginate.size, paged.paginate.page);
