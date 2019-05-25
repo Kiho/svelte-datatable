@@ -52,6 +52,7 @@
 	const paginated = immerStore({
 		paginatedRows, 
 		rows,
+		paginate,
 		size: currentPerPage,
 		page: currentPage,
 	});
@@ -112,14 +113,8 @@
 		}
 	}
 
-	// let getPagedServer;
-	// let watchServer;
 	onMount(() => {
-		// if (isServerProcess) {
-		// 	getPagedServer = server.getPaged.bind(instance);
-		// 	watchServer = server.watch.bind(instance);
-		// }
-		setPerPageOptions();
+		setPerPageOptions();		
 	});
 
 	function getPagedLocal(props, pred) { 		
@@ -153,28 +148,30 @@
         }
 	}
 	
-	function getPaged(props, pred) {
-		console.log('props', props);
-		if (isServerProcess) {
-			getPagedServer(props, pred, { paginate, getList }, values => {
-				({ size, page, rows } = values);
-			});
-		} else {
-			getPagedLocal(props, pred);
-		}	
-	}
-	
 	function updateServer(paged) {
 		const { paginate } = paged;
-		selected = paginate.page - 1;
+		// selected = (paginate.page || 0) - 1;
 		rowCount = paginate.total;
 		pageCount = paginate.pages;
 		if (paged.getList) {
 			getList = paged.getList;	
 		}
-		return paged;
 	}
 
+	function getPaged(props, pred) {
+		console.log('props', props);
+		if (isServerProcess) {
+			getPagedServer(props, pred, { paginate, getList }, data => {
+				updateServer(data);
+				update(data.rows, data.paginate.size, data.paginate.page);
+			});
+		} else {
+			getPagedLocal(props, pred);
+		}	
+	}	
+	
+	$: selectedPage = selected + 1;
+	let previous;	
 	function update(paginatedRows, size, page) {
 		paginated.update($paginated => {
 			$paginated.paginatedRows = paginatedRows;
@@ -182,11 +179,11 @@
 			$paginated.size = size;
 			$paginated.page = page;
 		});
+		previous = $paginated;
 	}
 
-	$: selectedPage = selected + 1;
-	let previous;
 	$: {
+		// console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage);
 		if (previous) {
 			if (instance  && !isServerProcess && rows !== previous.rows) {
 				getPaged({ rows });
@@ -203,10 +200,12 @@
 
 	let prevPaged;
 	$: if (instance && paged.rows && paged !== prevPaged) {
-		updateServer(paged);
-		update(paged.rows, paged.size, paged.page);
+		if (prevPaged == null) {			
+			updateServer(paged);
+			update(paged.rows, paged.paginate.size, paged.paginate.page);
+		}
 		prevPaged = paged;
-		console.log('server - $paginated.rows ', $paginated.paginatedRows );
+		console.log('paged !== prevPaged - $paginated.rows ', $paginated );
 	}
 
 	let prevSearchInput = '';
