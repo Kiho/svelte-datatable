@@ -49,7 +49,7 @@
 	const dispatch = createEventDispatcher();
 	const isServerProcess = process === 'server';
 	const paginated = immerStore({
-		paginatedRows, 
+		paginatedRows,
 		rows,
 		size: currentPerPage,
 		page: currentPage,
@@ -162,9 +162,7 @@
 	$: selectedPage = selected + 1;
 	let previous;
 	$: {
-		// we can check that Immer is creating new objects where
-		// necessary, and preserving others, by logging
-		// referential equality checks
+		console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage );
 		if (previous) {
 			if (instance  && !isServerProcess && rows !== previous.rows) {
 				getPaged({ rows });
@@ -172,7 +170,8 @@
 			if (currentPerPage !== previous.size) {
 				getPaged({ size: currentPerPage });
 			}
-			if (selectedPage !== previous.page) {
+			// TODO - need more investigation
+			if ($paginated.page !== previous.page || selectedPage !== previous.page) {
 				getPaged({ page: selectedPage }, x => x.page != selectedPage);
 			}
 		}
@@ -182,8 +181,8 @@
 	let prevPaged;
 	$: if (instance && paged.rows && paged !== prevPaged) {
 		prevPaged = watchServer(paged);
-		update(paged.rows, paged.size, paged.page);
-		console.log('server - $paginated.rows ', $paginated.paginatedRows );
+		update(paged.rows, paged.paginate.size, paged.paginate.page);
+		console.log('server - paged !== prevPaged ', paged);
 	}
 
 	let prevSearchInput = '';
