@@ -1,4 +1,4 @@
-import DataTable from './DataTable.html';
+import DataTable from './DataTable.svelte';
 import getList from './data';
 
 export {
