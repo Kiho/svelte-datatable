@@ -2,7 +2,7 @@
 	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 	import Fuse from 'fuse.js';
 
-	import Paginate from './paginate.svelte';
+	import Paginate from './Paginate.svelte';
 	import { debounce } from './debounce';
 	import * as local from './local';
 	import { collect, exportExcel, print } from './data-grid';
