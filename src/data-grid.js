@@ -20,9 +20,9 @@ export function collect(obj, field) {
         return undefined;
 }
 
-export function exportExcel() {
+export function exportExcel(columns, rows, title) {
     const mimeType = 'data:application/vnd.ms-excel';
-    const html = renderTable(this).replace(/ /g, '%20');
+    const html = renderTable(columns, rows).replace(/ /g, '%20');
 
     const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet'
     const d = new Date();
@@ -36,14 +36,14 @@ export function exportExcel() {
     dummy.click();
 }
 
-export function print() {
+export function print(columns, rows) {
     let win = window.open("");
-    win.document.write(renderTable(this));
+    win.document.write(renderTable(columns, rows));
     win.print();
     win.close();
 }
 
-function renderTable() {
+function renderTable(columns, rows) {
     let table = '<table><thead>';
 
     table += '<tr>';

@@ -236,7 +236,7 @@
 			{#if printable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
-				on:click="{print}">
+				on:click="{() => print(columns, rows)}">
 				<i class="material-icons">print</i>
 			</a>
 			{/if}
@@ -244,7 +244,7 @@
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				v-if="this.exportable"
-				on:click="{exportExcel}">
+				on:click="{() => exportExcel(columns, rows, title)}">
 				<i class="material-icons">description</i>
 			</a>
 			{/if}
