@@ -1,250 +1,310 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset='utf8'>
-  <meta name='viewport' content='width=device-width'>
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width" />
 
-  <title>Svelte DataTable</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel='stylesheet' href='app.css'>
+    <title>Svelte DataTable</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="bundle.css" />
     <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            flex-direction: column;
-        }
-        main {
-            flex: 1 0 auto;
-        }
-        /* .brand-logo {
+      body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+      main {
+        flex: 1 0 auto;
+      }
+      /* .brand-logo {
             margin-left: 24px;
         } */
     </style>
-    <script src='app.js'></script>
-</head>
-<body>
+    <script src="bundle.js"></script>
+  </head>
+  <body>
     <nav>
-        <div class="container">
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo">Svelte DataTable</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li id="local"><a href="/">Client Side</a></li>
-                    <li id="server"><a href="/?p=server">Server Side</a></li>
-                </ul>
-            </div>
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo">Svelte DataTable</a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li id="local"><a href="/">Client Side</a></li>
+            <li id="server"><a href="/?p=server">Server Side</a></li>
+          </ul>
         </div>
-    </nav>    
+      </div>
+    </nav>
     <main>
-        <div id="data-table"></div>
+      <div id="data-table"></div>
     </main>
-    <script>   
-    var columndata = [ // Array of objects
+    <script>
+      var columndata = [
+        // Array of objects
         {
-            label: 'First Name', // Column name
-            field: 'fname', // Field name from row
-            numeric: false, // Affects sorting
-            html: false, // Escapes output if false.
-        }, {
-            label: 'Last Name',
-            field: 'lname',
-            numeric: false,
-            html: false,
-        }, {
-            label: 'Age',
-            field: 'age',
-            numeric: true,
-            html: false,
-        }, {
-            label: 'State',
-            field: 'state',
-            numeric: false,
-            html: false,
-        }, {
-            label: 'Action',
-            field: function (data) {
-                    return '<a href="#customers/' + data.id + '" class="waves-effect waves-light btn nopadding">Edit</a>';
-                },
-            numeric: false,
-            html: true,
-        }
-    ];
-
-    var data = [
+          label: "First Name", // Column name
+          field: "fname", // Field name from row
+          numeric: false, // Affects sorting
+          html: false, // Escapes output if false.
+        },
         {
-            "id": 1,
-            "fname": "Gale",
-            "lname": "Mcmyne",
-            "age": 16,
-            "state": "RI"
-        }, {
-            "id": 2,
-            "fname": "Tighe",
-            "lname": "Walls",
-            "age": 43,
-            "state": "AL"
-        }, {
-            "id": 3,
-            "fname": "Anuj",
-            "lname": "Wittcop",
-            "age": 16,
-            "state": "MO"
-        }, {
-            "id": 4,
-            "fname": "Elisha",
-            "lname": "Mahan",
-            "age": 28,
-            "state": "MA"
-        }, {
-            "id": 5,
-            "fname": "Sutman",
-            "lname": "Kiab",
-            "age": 18,
-            "state": "ME"
-        }, {
-            "id": 6,
-            "fname": "Wazir",
-            "lname": "Odonoghue",
-            "age": 27,
-            "state": "ND"
-        }, {
-            "id": 7,
-            "fname": "Renardo",
-            "lname": "Schuessler",
-            "age": 5,
-            "state": "OK"
-        }, {
-            "id": 8,
-            "fname": "Colleen",
-            "lname": "Schotuen",
-            "age": 33,
-            "state": "DE"
-        }, {
-            "id": 9,
-            "fname": "Natalia",
-            "lname": "Sacks",
-            "age": 24,
-            "state": "FL"
-        }, {
-            "id": 10,
-            "fname": "Kamaniee",
-            "lname": "Knaus",
-            "age": 11,
-            "state": "ID"
-        }, {
-            "id": 11,
-            "fname": "Deena",
-            "lname": "Downing",
-            "age": 39,
-            "state": "NM"
-        }, {
-            "id": 12,
-            "fname": "Gueorgui",
-            "lname": "Downing",
-            "age": 22,
-            "state": "LA"
-        }, {
-        "id": 13,
-            "fname": "Toya",
-            "lname": "Wallace",
-            "age": 19,
-            "state": "MD"
-        }, {
-            "id": 14,
-            "fname": "Deborah",
-            "lname": "Morrison",
-            "age": 14,
-            "state": "VT"
-        }, {
-        "id": 15,
-            "fname": "Nerissa",
-            "lname": "Wade",
-            "age": 7,
-            "state": "DE"
-        }, {
-            "id": 16,
-            "fname": "Glenn",
-            "lname": "Bommi",
-            "age": 8,
-            "state": "MO"
-        }, {
-            "id": 17,
-            "fname": "Kate",
-            "lname": "Azcunaga",
-            "age": 25,
-            "state": "ME"
-        }, {
-            "id": 18,
-            "fname": "Jesse",
-            "lname": "Ingham",
-            "age": 50,
-            "state": "OK"
-        }, {
-            "id": 19,
-            "fname": "Gateri",
-            "lname": "Sergent",
-            "age": 50,
-            "state": "MA"
-        }, {
-            "id": 20,
-            "fname": "Marian",
-            "lname": "Malmfeldt",
-            "age": 50,
-            "state": "DC"
-        }, {
-            "id": 21,
-            "fname": "Marian A",
-            "lname": "Malmfeldt",
-            "age": 51,
-            "state": "DC"
-        }];
+          label: "Last Name",
+          field: "lname",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Age",
+          field: "age",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "State",
+          field: "state",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Action",
+          field: function (data) {
+            return (
+              '<a href="#customers/' +
+              data.id +
+              '" class="waves-effect waves-light btn nopadding">Edit</a>'
+            );
+          },
+          numeric: false,
+          html: true,
+        },
+      ];
 
-    var process = window.location.search.indexOf('server') > -1 ? 'server' : 'local';
-    document.querySelector('#' + process).classList.add('active');
+      var data = [
+        {
+          id: 1,
+          fname: "Gale",
+          lname: "Mcmyne",
+          age: 16,
+          state: "RI",
+        },
+        {
+          id: 2,
+          fname: "Tighe",
+          lname: "Walls",
+          age: 43,
+          state: "AL",
+        },
+        {
+          id: 3,
+          fname: "Anuj",
+          lname: "Wittcop",
+          age: 16,
+          state: "MO",
+        },
+        {
+          id: 4,
+          fname: "Elisha",
+          lname: "Mahan",
+          age: 28,
+          state: "MA",
+        },
+        {
+          id: 5,
+          fname: "Sutman",
+          lname: "Kiab",
+          age: 18,
+          state: "ME",
+        },
+        {
+          id: 6,
+          fname: "Wazir",
+          lname: "Odonoghue",
+          age: 27,
+          state: "ND",
+        },
+        {
+          id: 7,
+          fname: "Renardo",
+          lname: "Schuessler",
+          age: 5,
+          state: "OK",
+        },
+        {
+          id: 8,
+          fname: "Colleen",
+          lname: "Schotuen",
+          age: 33,
+          state: "DE",
+        },
+        {
+          id: 9,
+          fname: "Natalia",
+          lname: "Sacks",
+          age: 24,
+          state: "FL",
+        },
+        {
+          id: 10,
+          fname: "Kamaniee",
+          lname: "Knaus",
+          age: 11,
+          state: "ID",
+        },
+        {
+          id: 11,
+          fname: "Deena",
+          lname: "Downing",
+          age: 39,
+          state: "NM",
+        },
+        {
+          id: 12,
+          fname: "Gueorgui",
+          lname: "Downing",
+          age: 22,
+          state: "LA",
+        },
+        {
+          id: 13,
+          fname: "Toya",
+          lname: "Wallace",
+          age: 19,
+          state: "MD",
+        },
+        {
+          id: 14,
+          fname: "Deborah",
+          lname: "Morrison",
+          age: 14,
+          state: "VT",
+        },
+        {
+          id: 15,
+          fname: "Nerissa",
+          lname: "Wade",
+          age: 7,
+          state: "DE",
+        },
+        {
+          id: 16,
+          fname: "Glenn",
+          lname: "Bommi",
+          age: 8,
+          state: "MO",
+        },
+        {
+          id: 17,
+          fname: "Kate",
+          lname: "Azcunaga",
+          age: 25,
+          state: "ME",
+        },
+        {
+          id: 18,
+          fname: "Jesse",
+          lname: "Ingham",
+          age: 50,
+          state: "OK",
+        },
+        {
+          id: 19,
+          fname: "Gateri",
+          lname: "Sergent",
+          age: 50,
+          state: "MA",
+        },
+        {
+          id: 20,
+          fname: "Marian",
+          lname: "Malmfeldt",
+          age: 50,
+          state: "DC",
+        },
+        {
+          id: 21,
+          fname: "Marian A",
+          lname: "Malmfeldt",
+          age: 51,
+          state: "DC",
+        },
+      ];
 
-    var el = document.querySelector('#data-table');        
-    var dataTable = new app.DataTable({
+      var process =
+        window.location.search.indexOf("server") > -1 ? "server" : "local";
+      document.querySelector("#" + process).classList.add("active");
+
+      var el = document.querySelector("#data-table");
+      var dataTable = new app.DataTable({
         target: el,
         props: {
-            title: 'Customers',
-            columns: columndata,
-            process: process
-        }
-    });
-    
-    if (process ==='server') {        
-        app.getList().then(function(data){
-            console.log('data', data)
-            dataTable.$set(data);
-        });	
-    } else {
-        dataTable.$set({rows: data});
-    }  
+          title: "Customers",
+          columns: columndata,
+          process: process,
+        },
+      });
 
-    // dataTable.innerHTML = '<data-table columns=' + JSON.stringify(columndata) + ' rows=[] ></data-table>';
+      if (process === "server") {
+        app.getList().then(function (data) {
+          console.log("data", data);
+          dataTable.$set(data);
+        });
+      } else {
+        dataTable.$set({ rows: data });
+      }
+
+      // dataTable.innerHTML = '<data-table columns=' + JSON.stringify(columndata) + ' rows=[] ></data-table>';
     </script>
     <footer class="page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">Svelte DataTable</h5>
+            <p class="grey-text text-lighten-4">
+              DataTable for Svelte with Materialize
+            </p>
+          </div>
+          <div class="col l4 offset-l2 s12">
+            <ul>
+              <li>
+                <a class="grey-text text-lighten-3" href="/">Client Side</a>
+              </li>
+              <li>
+                <a class="grey-text text-lighten-3" href="/?p=server"
+                  >Server Side</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
         <div class="container">
-            <div class="row">
-            <div class="col l6 s12">
-                <h5 class="white-text">Svelte DataTable</h5>
-                <p class="grey-text text-lighten-4">DataTable for Svelte with Materialize</p>
-            </div>
-            <div class="col l4 offset-l2 s12">
-                <ul>
-                <li><a class="grey-text text-lighten-3" href="/">Client Side</a></li>
-                <li><a class="grey-text text-lighten-3" href="/?p=server">Server Side</a></li>
-                </ul>
-            </div>
-            </div>
+          <a
+            class="grey-text text-lighten-4 right"
+            href="https://github.com/Kiho/svelte-datatable"
+          >
+            <svg
+              height="32"
+              class="octicon octicon-mark-github"
+              viewBox="0 0 16 16"
+              version="1.1"
+              width="32"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+              ></path>
+            </svg>
+          </a>
         </div>
-        <div class="footer-copyright">
-            <div class="container">            
-            <a class="grey-text text-lighten-4 right" href="https://github.com/Kiho/svelte-datatable">
-                <svg height="32" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-            </a>
-            </div>
-        </div>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
