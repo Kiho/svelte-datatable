@@ -75,7 +75,7 @@
           label: "Action",
           field: function (data) {
             return (
-              '<a href="#customers/' +
+              '<a name="edit_button" href="#customers/' +
               data.id +
               '" class="waves-effect waves-light btn nopadding">Edit</a>'
             );
@@ -257,6 +257,11 @@
       } else {
         dataTable.$set({ rows: data });
       }
+
+      var off = dataTable.$on('row-click', e => {        
+        console.log('dataTable - row-click : ', e.detail.target.name, e.detail.row);
+      });
+      // off();
 
       // dataTable.innerHTML = '<data-table columns=' + JSON.stringify(columndata) + ' rows=[] ></data-table>';
     </script>

@@ -289,7 +289,7 @@
 
         <tbody>
             {#each $paginated.paginatedRows as row, y}
-                <tr class="{ clickable ? 'clickable' : '' }" on:click="{() => click(row)}">
+                <tr class="{ clickable ? 'clickable' : '' }" on:click="{(e) => click({target: e.target, row})}">
                     {#each columns as column, x}
                         <td>
                             {#if column.html}
