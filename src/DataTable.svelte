@@ -173,14 +173,12 @@
 	$: selectedPage = selected + 1;
 	let previous;	
 	function update(paginatedRows, size, page) {
-		console.log('update', $paginated);
 		paginated.update($paginated => {
 			$paginated.paginatedRows = paginatedRows;
 			$paginated.rows = rows;
 			$paginated.size = size;
 			$paginated.page = page;
 		});
-		console.log('$paginated', $paginated);
 		previous = $paginated;
 	}
 
@@ -194,7 +192,7 @@
 				getPaged({ size: currentPerPage });
 			}
 			if (selectedPage !== previous.page) {
-				getPaged({ page: selectedPage }, x => x.page != selectedPage);
+				getPaged({ page: selectedPage });
 				paginated.update($paginated => {
 					$paginated.page = selectedPage;
 				});
