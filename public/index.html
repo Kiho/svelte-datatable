@@ -235,9 +235,9 @@
         },
       ];
 
-      var process =
+      var processMode =
         window.location.search.indexOf("server") > -1 ? "server" : "local";
-      document.querySelector("#" + process).classList.add("active");
+      document.querySelector("#" + processMode).classList.add("active");
 
       var el = document.querySelector("#data-table");
       var dataTable = new app.DataTable({
@@ -245,11 +245,11 @@
         props: {
           title: "Customers",
           columns: columndata,
-          process: process,
+          processMode: processMode,
         },
       });
 
-      if (process === "server") {
+      if (processMode === "server") {
         app.getList().then(function (data) {
           console.log("data", data);
           dataTable.$set(data);

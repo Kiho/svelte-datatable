@@ -36,7 +36,7 @@
 	export let exactSearch = false;		
 
 	export let columns = [];
-	export let process = 'server';
+	export let processMode = 'server';
 	// local
 	export let rows = [];
 	export let paginatedRows = [];
@@ -45,7 +45,7 @@
 	export let getList = null;
 
 	const dispatch = createEventDispatcher();
-	const isServerProcess = process === 'server';
+	const isServerProcess = processMode === 'server';
 
 	const paginated = immerStore({
 		paginatedRows,
@@ -173,12 +173,14 @@
 	$: selectedPage = selected + 1;
 	let previous;	
 	function update(paginatedRows, size, page) {
+		console.log('update', $paginated);
 		paginated.update($paginated => {
 			$paginated.paginatedRows = paginatedRows;
 			$paginated.rows = rows;
 			$paginated.size = size;
 			$paginated.page = page;
 		});
+		console.log('$paginated', $paginated);
 		previous = $paginated;
 	}
 
@@ -193,7 +195,9 @@
 			}
 			if (selectedPage !== previous.page) {
 				getPaged({ page: selectedPage }, x => x.page != selectedPage);
-				paginate.page = selectedPage;
+				paginated.update($paginated => {
+					$paginated.page = selectedPage;
+				});
 			}
 		}
 		previous = $paginated;
