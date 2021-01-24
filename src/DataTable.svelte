@@ -185,18 +185,19 @@
 	$: {
 		// console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage);
 		if (previous) {
+			let changed = false;
 			if (!isServerProcess && rows !== previous.rows) {
-				getPaged({ rows });
+				changed =true;
 			}
 			if (currentPerPage !== previous.size) {
-				getPaged({ size: currentPerPage });
+				changed =true;
 			}
 			if (selectedPage !== previous.page) {
-				getPaged({ page: selectedPage });
-				paginated.update($paginated => {
-					$paginated.page = selectedPage;
-				});
+				changed =true;
 			}
+			if (changed) {
+				getPaged({ rows, size: currentPerPage, page: selectedPage });
+			}			
 		}
 		previous = $paginated;
 	}

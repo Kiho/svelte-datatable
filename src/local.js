@@ -25,7 +25,7 @@ function paginateRows(rows, paginated) {
 }
 
 function processRows(rows, searchText, paginated) {
-	let computedRows = rows;
+	let computedRows = rows.slice(0);
 	const { currentPerPage, columns,
 		sortable, sortColumn, sortType, 
 		searchInput, exactSearch } = paginated;	
