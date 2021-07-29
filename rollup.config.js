@@ -1,10 +1,12 @@
 import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import replace from '@rollup/plugin-replace';
 import { terser } from "rollup-plugin-terser";
 import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
+const mode = production ? 'production' : 'development';
 
 export default {
   input: "src/main.js",
@@ -15,6 +17,10 @@ export default {
     file: "public/bundle.js",
   },
   plugins: [
+    replace({
+      // Replace it for immer.js esm (see https://github.com/immerjs/immer/issues/557)
+      'process.env.NODE_ENV': JSON.stringify(mode),
+    }),
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production
