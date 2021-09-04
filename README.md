@@ -6,7 +6,7 @@ Data Table component was converted to Svelte from [MicroDroid/vue-materialize-da
 
 Paginate component was converted to Svelte from [https://github.com/lokyoung/vuejs-paginate](https://github.com/lokyoung/vuejs-paginate) project.
 
-[See demo here at Heroku(slow)](https://safe-springs-35306.herokuapp.com/)
+[See demo here at Heroku(it's slow to up and may not work if free time runs out for month.)](https://safe-springs-35306.herokuapp.com/)
 
 ## Features
  - Sorting, with numerical sorting
